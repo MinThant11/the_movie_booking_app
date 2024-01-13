@@ -436,7 +436,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
 
         /// Divider
         const Divider(
-          color: kBottomNavigationUnSelectedColor,
+          color: kUnSelectedColor,
         ),
       ],
     );

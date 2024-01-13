@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/seat_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
@@ -90,53 +92,66 @@ class SeatsView extends StatefulWidget {
 class _SeatsViewState extends State<SeatsView> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 12,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 10,
-          ),
-          itemBuilder: (context, index) {
-            SeatVO seat = seatList[index];
-            return GestureDetector(
-              onTap: () {},
-              child: Stack(
-                children: [
-                  Visibility(
-                    visible:
-                        seat.type == "taken" || seat.type == "available",
-                    child: Image.asset(
-                      kSeatIcon,
-                      width: kMargin30,
-                      height: kMargin30,
-                      color: seat.type == "available" ? Colors.white : null,
+    return InteractiveViewer(
+      maxScale: 5,
+      child: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 12,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              SeatVO seat = seatList[index];
+              return GestureDetector(
+                onTap: () {
+                },
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: seat.type == "available",
+                      child: Image.asset(
+                        kSeatIcon,
+                        width: kMargin30,
+                        height: kMargin30,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Visibility(
-                      visible: seat.type == "text",
-                      child: Text(
-                        seat.text,
-                        style: const TextStyle(
-                          color: kLoginPageDividerColor,
-                          fontSize: 12,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
+                    Visibility(
+                      visible:
+                          seat.type == "taken",
+                      child: Image.asset(
+                        kSeatIcon,
+                        width: kMargin30,
+                        height: kMargin30,
+                        color: null,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Visibility(
+                        visible: seat.type == "text",
+                        child: Text(
+                          seat.text,
+                          style: const TextStyle(
+                            color: kLoginPageDividerColor,
+                            fontSize: 12,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-          itemCount: seatList.length,
+                  ],
+                ),
+              );
+            },
+            itemCount: seatList.length,
+          ),
         ),
       ),
     );
@@ -161,21 +176,21 @@ class SeatBottomView extends StatelessWidget {
             children: [
               StatusView(
                 label: "Available",
-                color: kBottomNavigationUnSelectedColor,
+                color: kUnSelectedColor,
                 isHasBorder: true,
                 circleColor: Colors.white,
                 isHasContainer: true,
               ),
               StatusView(
                 label: "Taken",
-                color: kBottomNavigationUnSelectedColor,
+                color: kUnSelectedColor,
                 isHasBorder: true,
                 circleColor: kLoginPageDividerColor,
                 isHasContainer: true,
               ),
               StatusView(
                 label: "Your Selection",
-                color: kBottomNavigationUnSelectedColor,
+                color: kUnSelectedColor,
                 isHasBorder: true,
                 circleColor: kPrimaryColor,
                 isHasContainer: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/pages/choose_time_and_cinema_page.dart';
 
 import '../utils/colors.dart';
 
@@ -7,14 +8,12 @@ class CinemasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: Center(
-        child: Text(
-          "Cinemas Screen",
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+      body: ListView.builder(
+          itemBuilder: (context, index) {
+            return const ChooseCinema();
+          }),
     );
   }
 }

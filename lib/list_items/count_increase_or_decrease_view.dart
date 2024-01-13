@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/utils/colors.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 
 class CountIncreaseOrDecrease extends StatefulWidget {
-  const CountIncreaseOrDecrease({super.key});
+  const CountIncreaseOrDecrease({super.key,});
 
   @override
   State<CountIncreaseOrDecrease> createState() => _CountIncreaseOrDecreaseState();
 }
 
 class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
-  var count = 1;
+
+  int count = 1;
+
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
+        /// Minus
         InkWell(
           onTap: (){
             setState(() {
@@ -23,50 +29,54 @@ class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
             });
           },
           child: Container(
-            width: 23.30,
-            height: 23.30,
+            width: kPlusMinusContainerSize,
+            height: kPlusMinusContainerSize,
             decoration: const ShapeDecoration(
-              color: Color(0xFF00FF6A),
+              color: kPrimaryColor,
               shape: OvalBorder(),
               shadows: [
                 BoxShadow(
-                  color: Color(0x3F000000),
-                  blurRadius: 4.66,
-                  offset: Offset(0, 11.65),
+                  color: kBoxShadowColor,
+                  blurRadius: kMargin5,
+                  offset: Offset(0, kMarginMedium),
                   spreadRadius: 0,
                 )
               ],
             ),
-            child: const Text(
-              '-',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF555555),
-                fontSize: 16.31,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
-                height: 0,
-                letterSpacing: -0.39,
+            child: const Center(
+              child: Text(
+                '-',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kPlusMinusColor,
+                  fontSize: kTextRegular2x,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
         ),
+        /// Spacer
         const SizedBox(
-          width: 14,
+          width: kMarginCardMedium2,
         ),
+        /// Count
         Text(
           "$count",
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: Color(0xFF00FF6A),
-            fontSize: 14.91,
+            color: kPrimaryColor,
+            fontSize: kTextRegular1x,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w700,
           ),
         ),
+        /// Spacer
         const SizedBox(
-          width: 14,
+          width: kMarginCardMedium2,
         ),
+        /// Plus
         InkWell(
           onTap: (){
             setState(() {
@@ -74,28 +84,30 @@ class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
             });
           },
           child: Container(
-            width: 23.30,
-            height: 23.30,
+            width: kPlusMinusContainerSize,
+            height: kPlusMinusContainerSize,
             decoration: const ShapeDecoration(
-              color: Color(0xFF00FF6A),
+              color: kPrimaryColor,
               shape: OvalBorder(),
               shadows: [
                 BoxShadow(
-                  color: Color(0x3F000000),
-                  blurRadius: 4.66,
-                  offset: Offset(0, 11.65),
+                  color: kBoxShadowColor,
+                  blurRadius: kMargin5,
+                  offset: Offset(0, kMarginMedium),
                   spreadRadius: 0,
                 )
               ],
             ),
-            child: const Text(
-              '+',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF555555),
-                fontSize: 16.31,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
+            child: const Center(
+              child: Text(
+                '+',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kPlusMinusColor,
+                  fontSize: kTextRegular2x,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),

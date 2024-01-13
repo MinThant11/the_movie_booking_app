@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 
 import '../utils/colors.dart';
 import '../utils/images.dart';
+import 'date_time_location_with_icon_view.dart';
 
 class MiniTicketView extends StatelessWidget {
   const MiniTicketView({
@@ -13,18 +15,18 @@ class MiniTicketView extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+          margin: const EdgeInsets.symmetric(horizontal: kMarginMedium4, vertical: kMarginMedium1),
           width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(kMarginMedium),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF616161),
-                Color(0x00262626),
-                Color(0x72272727),
-                Color(0xFF333333),
+                kMiniTicketColor1,
+                kMiniTicketColor2,
+                kMiniTicketColor3,
+                kMiniTicketColor4,
               ],
             ),
           ),
@@ -36,15 +38,21 @@ class MiniTicketView extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Row(
                     children: [
-                      Image.network(
-                        "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
-                        width: 96,
-                        height: 120,
-                        fit: BoxFit.cover,
+                      /// Image
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(kMarginSmall),
+                        child: Image.network(
+                          "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
+                          width: kMiniTicketImageWidth,
+                          height: kMiniTicketImageHeight,
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                      /// Spacer
                       const SizedBox(
-                        width: 20,
+                        width: kMarginMedium3,
                       ),
+                      /// Info
                       Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,19 +65,15 @@ class MiniTicketView extends StatelessWidget {
                                   text: 'Black Widow ',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
-                                    fontFamily: 'DM Sans',
+                                    fontSize: kTextRegular2x,
                                     fontWeight: FontWeight.w700,
-                                    height: 0,
-                                    letterSpacing: -0.33,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '(3D) (U/A)',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: 'DM Sans',
+                                    fontSize: kTextRegular2x,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -80,22 +84,22 @@ class MiniTicketView extends StatelessWidget {
 
                           /// Spacer
                           const SizedBox(
-                            height: 8,
+                            height: kMarginMedium,
                           ),
 
                           /// Cinema
                           const Text(
                             'JCGV : Junction City ',
                             style: TextStyle(
-                              color: Color(0xFF00FF6A),
-                              fontSize: 14,
+                              color: kPrimaryColor,
+                              fontSize: kTextRegular,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
 
                           /// Spacer
                           const SizedBox(
-                            height: 16,
+                            height: kMarginMedium2,
                           ),
 
                           /// M-Tickets
@@ -105,25 +109,25 @@ class MiniTicketView extends StatelessWidget {
                                 TextSpan(
                                   text: 'M-Ticket ( ',
                                   style: TextStyle(
-                                    color: Color(0xFFAAAAAA),
+                                    color: kA6Color,
                                     fontFamily: 'DM Sans',
-                                    fontSize: 14,
+                                    fontSize: kTextRegular,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '2',
                                   style: TextStyle(
-                                    color: Color(0xFF00FF6A),
-                                    fontSize: 14,
+                                    color: kPrimaryColor,
+                                    fontSize: kTextRegular,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 TextSpan(
                                   text: ' )',
                                   style: TextStyle(
-                                    color: Color(0xFFAAAAAA),
-                                    fontSize: 14,
+                                    color: kA6Color,
+                                    fontSize: kTextRegular,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -134,7 +138,7 @@ class MiniTicketView extends StatelessWidget {
 
                           /// Spacer
                           const SizedBox(
-                            height: 16,
+                            height: kMarginMedium2,
                           ),
 
                           /// Seat
@@ -145,15 +149,15 @@ class MiniTicketView extends StatelessWidget {
                                   text: 'Gold-G8,G7',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: kTextRegular2x,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 TextSpan(
                                   text: '(SCREEN 2)',
                                   style: TextStyle(
-                                    color: Color(0xFFAAAAAA),
-                                    fontSize: 14,
+                                    color: kA6Color,
+                                    fontSize: kTextRegular,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -164,114 +168,61 @@ class MiniTicketView extends StatelessWidget {
                         ],
                       ),
                     ],
-                  )),
+                  ),
+              ),
 
               /// Ticket Divider
-              Stack(
-                children: [
-                  const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '- - - - - - - - - - - - - - - - - - - - - - - - - - - -',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: kLoginPageDividerColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          height: 2,
-                        ),
-                      )),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset(
-                      kTicketStart,
-                      height: 30,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      kTicketEnd,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
+              const TicketDividerView(),
 
               /// Details
               const Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Sat, 18 Jun, 2022',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '3:30PM',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Q5H3+JPP, Corner \nof, Bogyoke Lann, \nYangon',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                padding: EdgeInsets.all(kMarginMedium2),
+                child: DateTimeLocationWithIconsView(),
               )
             ],
           ),
         ),
+      ],
+    );
+  }
+}
+
+class TicketDividerView extends StatelessWidget {
+  const TicketDividerView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        const Align(
+          alignment: Alignment.center,
+          child: Text(
+            '- - - - - - - - - - - - - - - - - - - - - - - - - - - -',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: kLoginPageDividerColor,
+              fontSize: kTextRegular2x,
+              fontWeight: FontWeight.w500,
+              height: kMarginXSmall,
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Image.asset(
+            kTicketStart,
+            height: kMargin30,
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Image.asset(
+            kTicketEnd,
+            height: kMargin30,
+          ),
+        )
       ],
     );
   }

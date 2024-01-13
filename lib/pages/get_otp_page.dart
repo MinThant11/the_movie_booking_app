@@ -45,7 +45,7 @@ class GetOtpPage extends StatelessWidget {
                       "We’ve sent OTP Code",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: kTextRegular4x,
+                        fontSize: kTextRegular5x,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -59,7 +59,7 @@ class GetOtpPage extends StatelessWidget {
                       "Please enter 6-digit OTP code that\n sent to your phone number.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: kBottomNavigationUnSelectedColor,
+                        color: kUnSelectedColor,
                         fontSize: kTextRegular,
                         fontWeight: FontWeight.w400,
                       ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/list_items/date_time_location_with_icon_view.dart';
+import 'package:the_movie_booking_app/list_items/mini_ticket_view.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 
 import '../utils/colors.dart';
 import '../utils/images.dart';
@@ -20,9 +23,9 @@ class TicketDetailsView extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFF444444),
-            Color(0xFF222222),
-            Color(0xFF444444)
+            kTicketDetailsColor1,
+            kTicketDetailsColor2,
+            kTicketDetailsColor3,
           ],
         ),
       ),
@@ -44,19 +47,15 @@ class TicketDetailsView extends StatelessWidget {
                         text: 'Black Widow ',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'DM Sans',
+                          fontSize: kTextRegular3x,
                           fontWeight: FontWeight.w700,
-                          height: 0,
-                          letterSpacing: -0.33,
                         ),
                       ),
                       TextSpan(
                         text: '(3D) (U/A)',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'DM Sans',
+                          fontSize: kTextRegular2x,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -67,7 +66,7 @@ class TicketDetailsView extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 8,
+                  height: kMarginMedium,
                 ),
 
                 /// Cinema
@@ -77,16 +76,16 @@ class TicketDetailsView extends StatelessWidget {
                       TextSpan(
                         text: 'JCGV : Junction City ',
                         style: TextStyle(
-                          color: Color(0xFF00FF6A),
-                          fontSize: 16,
+                          color: kPrimaryColor,
+                          fontSize: kTextRegular2x,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       TextSpan(
                         text: '(SCREEN 2)',
                         style: TextStyle(
-                          color: Color(0xFFAAAAAA),
-                          fontSize: 14,
+                          color: kA6Color,
+                          fontSize: kTextRegular,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -97,81 +96,15 @@ class TicketDetailsView extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 30,
+                  height: kMargin30,
                 ),
 
                 /// Details
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Sat, 18 Jun, 2022',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.access_time,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '3:30PM',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Q5H3+JPP, Corner \nof, Bogyoke Lann, \nYangon',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                const DateTimeLocationWithIconsView(),
 
                 /// Spacer
                 const SizedBox(
-                  height: 16,
+                  height: kMarginMedium2,
                 ),
 
                 /// M-Tickets
@@ -181,24 +114,24 @@ class TicketDetailsView extends StatelessWidget {
                       TextSpan(
                         text: 'M-Ticket ( ',
                         style: TextStyle(
-                          color: Color(0xFFAAAAAA),
-                          fontFamily: 'DM Sans',
+                          color: kA6Color,
+                          fontSize: kTextRegular,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       TextSpan(
                         text: '2',
                         style: TextStyle(
-                          color: Color(0xFF00FF6A),
-                          fontSize: 14,
+                          color: kPrimaryColor,
+                          fontSize: kTextRegular,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       TextSpan(
                         text: ' )',
                         style: TextStyle(
-                          color: Color(0xFFAAAAAA),
-                          fontSize: 14,
+                          color: kA6Color,
+                          fontSize: kTextRegular,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -209,10 +142,10 @@ class TicketDetailsView extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 16,
+                  height: kMarginMedium2,
                 ),
 
-                /// Seat
+                /// Seat Number
                 const Row(
                   children: [
                     Text(
@@ -220,7 +153,7 @@ class TicketDetailsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: kTextRegular2x,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -230,7 +163,7 @@ class TicketDetailsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: kTextRegular2x,
                         fontWeight: FontWeight.w700,
                       ),
                     )
@@ -239,17 +172,17 @@ class TicketDetailsView extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 8,
+                  height: kMarginMedium,
                 ),
 
                 /// Divider
                 const Divider(
-                  color: kBottomNavigationUnSelectedColor,
+                  color: kUnSelectedColor,
                 ),
 
                 /// Spacer
                 const SizedBox(
-                  height: 8,
+                  height: kMarginMedium,
                 ),
 
                 /// Food And Beverage
@@ -259,39 +192,10 @@ class TicketDetailsView extends StatelessWidget {
           ),
 
           /// Ticket Divider
-          Stack(
-            children: [
-              const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    '- - - - - - - - - - - - - - - - - - - - - - - - - -',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: kLoginPageDividerColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      height: 2,
-                    ),
-                  )),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  kTicketStart,
-                  height: 30,
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Image.asset(
-                  kTicketEnd,
-                  height: 30,
-                ),
-              )
-            ],
-          ),
+          const TicketDividerView(),
 
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(kMarginLarge),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -304,14 +208,14 @@ class TicketDetailsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: kTextRegular2x,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
 
                     /// Spacer
                     SizedBox(
-                      width: 8,
+                      width: kMarginMedium,
                     ),
 
                     /// Icon
@@ -329,7 +233,7 @@ class TicketDetailsView extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: kTextRegular2x,
                         fontWeight: FontWeight.w500,
                       ),
                     )
@@ -341,14 +245,14 @@ class TicketDetailsView extends StatelessWidget {
                     ticketCancellationPolicy(context);
                   },
                   child: Container(
-                    height: 28,
+                    // height: 28,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                        horizontal: kMargin10, vertical: kMarginSmall),
                     margin: const EdgeInsets.symmetric(vertical: 18),
                     decoration: ShapeDecoration(
-                      color: (cancellationPolicyColor) != null ? cancellationPolicyColor : const Color(0xFFFF6B00),
+                      color: (cancellationPolicyColor) != null ? cancellationPolicyColor : kTicketCancellationButtonColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(kMarginMedium3),
                       ),
                     ),
                     child: const Row(
@@ -357,15 +261,15 @@ class TicketDetailsView extends StatelessWidget {
                         Icon(
                           Icons.info_outline,
                           color: Colors.white,
-                          size: 20,
+                          size: kTextRegular4x,
                         ),
-                        SizedBox(width: 4),
+                        SizedBox(width: kMarginSmall),
                         Text(
                           'Ticket Cancellation policy',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: kTextRegular,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -374,23 +278,25 @@ class TicketDetailsView extends StatelessWidget {
                   ),
                 ),
 
+                /// Divider
                 const Divider(
-                  color: kBottomNavigationUnSelectedColor,
+                  color: kUnSelectedColor,
                 ),
 
                 /// Spacer
                 const SizedBox(
-                  height: 8,
+                  height: kMarginMedium,
                 ),
 
+                /// Total - Price
                 const Row(
                   children: [
                     Text(
                       'Total',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xFF00FF6A),
-                        fontSize: 18,
+                        color: kPrimaryColor,
+                        fontSize: kTextRegular3x,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                       ),
@@ -400,8 +306,8 @@ class TicketDetailsView extends StatelessWidget {
                       '22500Ks',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Color(0xFF00FF6A),
-                        fontSize: 18,
+                        color: kPrimaryColor,
+                        fontSize: kTextRegular3x,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                       ),
@@ -423,46 +329,45 @@ class TicketDetailsView extends StatelessWidget {
           return Dialog(
               backgroundColor: kBackgroundColor,
               child: Container(
-                width: 320,
-                height: 464,
-                padding: const EdgeInsets.all(22),
+                width: kTicketCancellationDialogWidth,
+                height: kTicketCancellationDialogHeight,
+                padding: const EdgeInsets.all(kMarginMedium4),
                 decoration: BoxDecoration(
                   color: kBackgroundColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(kMarginMedium),
                   // border: Border.all(width: 1, color: Color(0xFF00FF6A)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    /// Text
                     const Text(
                       'Ticket Cancellation Policy',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: kTextRegular,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
                     const SizedBox(
-                      height: 14,
+                      height: kMarginMedium2,
                     ),
-
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// Online Food icon
                         Image.asset(
                           kOnlineFoodIcon,
-                          width: 20,
-                          height: 20,
+                          width: kTextRegular4x,
+                          height: kTextRegular4x,
                         ),
 
                         /// Spacer
                         const SizedBox(
-                          width: 8,
+                          width: kMarginMedium,
                         ),
 
                         /// Text
@@ -471,31 +376,29 @@ class TicketDetailsView extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: kTextRegular2x,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                           ),
                         )
                       ],
                     ),
-
                     const SizedBox(
-                      height: 14,
+                      height: kMarginMedium1,
                     ),
-
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// Ticket icon
                         Image.asset(
                           kTicketIcon,
-                          width: 20,
-                          height: 20,
+                          width: kTextRegular4x,
+                          height: kTextRegular4x,
                         ),
 
                         /// Spacer
                         const SizedBox(
-                          width: 8,
+                          width: kMarginMedium,
                         ),
 
                         /// Text
@@ -504,62 +407,66 @@ class TicketDetailsView extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: kTextRegular2x,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                           ),
                         )
                       ],
                     ),
-
                     const SizedBox(
-                      height: 14,
+                      height: kMarginMedium1,
                     ),
-
                     const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         /// Spacer
                         SizedBox(
-                          width: 28,
+                          width: kMarginLarge,
                         ),
 
                         /// Text
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '-75% refund until 2 hours before \nshow start time',
-                              style: TextStyle(
-                                color: Color(0xFF888888),
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '-75% refund until 2 hours before show start time',
+                                style: TextStyle(
+                                  color: kUnSelectedColor,
+                                  fontSize: kTextRegular,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-
-                            SizedBox(
-                              height: 8,
-                            ),
-
-                            Text(
-                              '-50% refund between 2 hours and \n20 minutes before show start time',
-                              style: TextStyle(
-                                color: Color(0xFF888888),
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
+                          
+                              SizedBox(
+                                height: kMarginMedium,
                               ),
-                            )
-                          ],
+                          
+                              Text(
+                                '-50% refund between 2 hours and 20 minutes before show start time',
+                                style: TextStyle(
+                                  color: kUnSelectedColor,
+                                  fontSize: kTextRegular,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
 
+                    /// Spacer
                     const SizedBox(
-                      height: 36,
+                      height: kMargin36,
                     ),
 
+                    /// Policy
                     const Text(
                       '1. Refund not available for Convenience fees,Vouchers, Gift Cards, Taxes etc.',
                       style: TextStyle(
@@ -569,42 +476,42 @@ class TicketDetailsView extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
                     const SizedBox(
-                      height: 12,
+                      height: kMarginCardMedium2,
                     ),
-
                     const Text(
                       '2. No cancellation within 20minute of show start time.',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: kTextRegular,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
 
+                    /// Spacer
                     const SizedBox(
-                      height: 36,
+                      height: kMargin36,
                     ),
 
+                    /// Close Button
                     GestureDetector(
                       onTap: (){
                         Navigator.pop(context);
                       },
                       child: Container(
-                        width: 283,
-                        height: 39,
+                        width: double.infinity,
+                        height: kMargin38,
                         decoration: BoxDecoration(
                           color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(kMarginMedium),
                         ),
                         child: const Center(
                           child: Text(
                             'Close',
                             style: TextStyle(
-                              color: Color(0xFF111111),
-                              fontSize: 16,
+                              color: kBackgroundColor,
+                              fontSize: kTextRegular2x,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w600,
                             ),
@@ -647,13 +554,13 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
               /// Online Food icon
               Image.asset(
                 kOnlineFoodIcon,
-                width: 20,
-                height: 20,
+                width: kTextRegular4x,
+                height: kTextRegular4x,
               ),
 
               /// Spacer
               const SizedBox(
-                width: 4,
+                width: kMarginSmall,
               ),
 
               /// Title
@@ -662,14 +569,14 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: kTextRegular3x,
                   fontWeight: FontWeight.w700,
                 ),
               ),
 
               /// Spacer
               const SizedBox(
-                width: 8,
+                width: kMarginMedium,
               ),
 
               /// Icon
@@ -689,7 +596,7 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: kTextRegular2x,
                   fontWeight: FontWeight.w700,
                 ),
               )
@@ -702,7 +609,7 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
             children: [
               /// Spacer
               const SizedBox(
-                height: 18,
+                height: kMargin10 + kMarginMedium,
               ),
 
               Row(
@@ -710,22 +617,22 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                   /// Cross icon
                   Image.asset(
                     kCrossIcon,
-                    width: 20,
-                    height: 20,
+                    width: kTextRegular4x,
+                    height: kTextRegular4x,
                   ),
 
                   /// Spacer
                   const SizedBox(
-                    width: 4,
+                    width: kMarginSmall,
                   ),
 
                   /// Item
                   const Text(
-                    'Potatoe Chips (Qt. 1)',
+                    'Potato Chips (Qt. 1)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF888888),
-                      fontSize: 14,
+                      color: kUnSelectedColor,
+                      fontSize: kTextRegular,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -738,8 +645,8 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                     '1000Ks',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF888888),
-                      fontSize: 14,
+                      color: kUnSelectedColor,
+                      fontSize: kTextRegular,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -748,7 +655,7 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
 
               /// Spacer
               const SizedBox(
-                height: 12,
+                height: kMarginCardMedium2,
               ),
 
               Row(
@@ -756,22 +663,22 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                   /// Cross icon
                   Image.asset(
                     kCrossIcon,
-                    width: 20,
-                    height: 20,
+                    width: kTextRegular4x,
+                    height: kTextRegular4x,
                   ),
 
                   /// Spacer
                   const SizedBox(
-                    width: 4,
+                    width: kMarginSmall,
                   ),
 
                   /// Item
                   const Text(
-                    'Cocala Large(Qt. 1)',
+                    'Coca Cola Large (Qt. 1)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF888888),
-                      fontSize: 14,
+                      color: kUnSelectedColor,
+                      fontSize: kTextRegular,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -784,8 +691,8 @@ class _FoodAndBeverageViewState extends State<FoodAndBeverageView> {
                     '1000Ks',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Color(0xFF888888),
-                      fontSize: 14,
+                      color: kUnSelectedColor,
+                      fontSize: kTextRegular,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

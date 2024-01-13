@@ -46,7 +46,7 @@ class LogInPage extends StatelessWidget {
                         "Verify Your Phone Number",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: kTextRegular4x,
+                          fontSize: kTextRegular5x,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -60,7 +60,7 @@ class LogInPage extends StatelessWidget {
                         "We will send 6-digit sms code to \nverify your phone number",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: kBottomNavigationUnSelectedColor,
+                          color: kUnSelectedColor,
                           fontSize: kTextRegular,
                           fontWeight: FontWeight.w400,
                         ),
@@ -80,7 +80,7 @@ class LogInPage extends StatelessWidget {
                             child: Text(
                               "Country Code",
                               style: TextStyle(
-                                color: kBottomNavigationUnSelectedColor,
+                                color: kUnSelectedColor,
                                 fontSize: kTextSmall,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -105,7 +105,7 @@ class LogInPage extends StatelessWidget {
                                           color: Colors.white, width: 2.0)),
                                   hintText: "Mobile Number",
                                   hintStyle: TextStyle(
-                                    color: kBottomNavigationUnSelectedColor,
+                                    color: kUnSelectedColor,
                                   ),
                                 ),
                                 style: TextStyle(

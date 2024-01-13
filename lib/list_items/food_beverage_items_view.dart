@@ -1,119 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/list_items/count_increase_or_decrease_view.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
+import 'package:the_movie_booking_app/utils/strings.dart';
 
-class FoodBeverageItemsView extends StatefulWidget {
-  const FoodBeverageItemsView({super.key});
+class FoodBeverageGridView extends StatefulWidget {
+  const FoodBeverageGridView({super.key});
 
   @override
-  State<FoodBeverageItemsView> createState() => _FoodBeverageItemsViewState();
+  State<FoodBeverageGridView> createState() => _FoodBeverageGridViewState();
 }
 
-class _FoodBeverageItemsViewState extends State<FoodBeverageItemsView> {
+class _FoodBeverageGridViewState extends State<FoodBeverageGridView> {
   bool isHasCount = false;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 5,
+      height: MediaQuery.of(context).size.height,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 24,
-          mainAxisSpacing: 24,
-          mainAxisExtent: 220,
+          crossAxisSpacing: kMarginLarge,
+          mainAxisSpacing: kMarginMedium4,
+          mainAxisExtent: kFoodItemHeight,
         ),
         itemBuilder: (context, index) {
-          return Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xCC666666), Color(0x66333333)],
-                )),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    kOnlineFoodIcon,
-                    width: 104,
-                    height: 104,
-                  ),
-                ),
-                const Positioned(
-                  bottom: 58,
-                  child: Text(
-                    'Potatoes Chips',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                const Positioned(
-                  bottom: 38,
-                  child: Text(
-                    '1000KS',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: 12,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: !isHasCount,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isHasCount = true;
-                        });
-                      },
-                      child: Container(
-                        width: 150,
-                        height: 27,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "ADD",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isHasCount,
-                  child: const Align(
-                    alignment: Alignment.bottomRight,
-                    child: CountIncreaseOrDecrease(),
-                  ),
-                )
-              ],
-            ),
-          );
+          return const FoodBeverageItemView();
         },
+        itemCount: 10,
       ),
     );
   }
 }
+
+class FoodBeverageItemView extends StatefulWidget {
+  const FoodBeverageItemView({super.key});
+
+  @override
+  State<FoodBeverageItemView> createState() => _FoodBeverageItemViewState();
+}
+
+class _FoodBeverageItemViewState extends State<FoodBeverageItemView> {
+  bool isHasCount = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(kMargin10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kMarginMedium),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [kFoodItemBackgroundTL, kFoodItemBackgroundBR],
+          )),
+      child: Stack(
+        children: [
+          /// Image
+          Align(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              kOnlineFoodIcon,
+              width: kFoodImageSize,
+              height: kFoodImageSize,
+            ),
+          ),
+          /// Name
+          const Positioned(
+            bottom: kMargin58,
+            child: Text(
+              'Potatoes Chips',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: kTextSmall,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          /// Price
+          const Positioned(
+            bottom: kMargin38,
+            child: Text(
+              '1000KS',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: kTextSmall,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          /// Add Button
+          Visibility(
+            visible: !isHasCount,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isHasCount = true;
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: kAddContainerHeight,
+                  decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      kAddLabel,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: kTextRegular,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          /// Count Changes
+          Visibility(
+            visible: isHasCount,
+            child: const Align(
+              alignment: Alignment.bottomRight,
+              child: CountIncreaseOrDecrease(),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+

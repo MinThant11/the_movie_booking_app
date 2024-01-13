@@ -32,21 +32,21 @@ class StatusView extends StatelessWidget {
             child: Image.asset(
               (!isHasContainer) ? icon! : "",
               color: circleColor,
-              width: 16,
-              height: 16,
+              width: kMarginMedium2,
+              height: kMarginMedium2,
             ),
           ),
           Visibility(
             visible: isHasContainer,
             child: Container(
-              width: 9,
-              height: 9,
+              width: kMarginSmall + kMargin5,
+              height: kMarginSmall + kMargin5,
               decoration: BoxDecoration(
                 color: (isHasBorder!) ? circleColor : color,
                 shape: BoxShape.circle,
                 border: (isHasBorder!)
                     ? Border.all(
-                        color: kBottomNavigationUnSelectedColor, width: 1)
+                        color: kUnSelectedColor, width: 1)
                     : null,
               ),
             ),

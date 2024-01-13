@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage> {
 
   int currentIndex = 0;
 
-  List<Widget> screenWidgets = [const HomePage(), const ChooseTimeAndCinemaPage(), const TicketsPage(), const ProfilePage()];
+  List<Widget> screenWidgets = [const HomePage(), const CinemasPage(), const TicketsPage(), const ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: kPrimaryColor,
-        unselectedItemColor: kBottomNavigationUnSelectedColor,
+        unselectedItemColor: kUnSelectedColor,
         selectedFontSize: kTextSmall,
         unselectedFontSize: kTextSmall,
         showUnselectedLabels: true,

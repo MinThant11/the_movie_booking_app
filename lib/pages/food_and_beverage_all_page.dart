@@ -18,8 +18,8 @@ class FoodAndBeverageAllPage extends StatelessWidget {
         children: [
           /// Grid
           const Padding(
-            padding: EdgeInsets.only(top: 130, right: 24, bottom: 80, left: 24),
-            child: FoodBeverageItemsView(),
+            padding: EdgeInsets.only(top: 124, right: 24, bottom: 90, left: 24),
+            child: FoodBeverageGridView(),
           ),
 
           /// App Bar
@@ -32,6 +32,7 @@ class FoodAndBeverageAllPage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  /// App Bar
                   Row(
                     children: [
                       GestureDetector(
@@ -90,10 +91,12 @@ class FoodAndBeverageAllPage extends StatelessWidget {
                       )
                     ],
                   ),
+                  /// Spacer
                   const SizedBox(
                     height: 8,
                   ),
-                  const SegmentView(),
+                  /// Tab Bar
+                  const CustomTabBarView(),
                 ],
               ),
             ),
@@ -110,64 +113,46 @@ class FoodAndBeverageAllPage extends StatelessWidget {
   }
 }
 
-class SegmentView extends StatefulWidget {
-  const SegmentView({super.key});
+/// Tab Bar
+class CustomTabBarView extends StatefulWidget {
+  const CustomTabBarView({super.key});
 
   @override
-  State<SegmentView> createState() => _SegmentViewState();
+  State<CustomTabBarView> createState() => _CustomTabBarViewState();
 }
 
-class _SegmentViewState extends State<SegmentView> {
+class _CustomTabBarViewState extends State<CustomTabBarView> {
 
-  var lists = ["All", "Combo", "Snack", "Pop Corn", "Beverage"];
-
-  var currentIndex = 0;
-  var selectedIndex = "";
-  bool isSelected = false;
+  var tabs = ["All", "Combo", "Snack", "Pop Corn", "Beverage"];
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 60,
-      child: ListView.builder(
-        itemExtent: 79,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          selectedIndex = lists[index];
-          return GestureDetector(
-            onTap: (){
-              setState(() {
-                currentIndex = index;
-                isSelected = selectedIndex == lists[currentIndex];
-              });
-            },
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 4, color: (isSelected) ? kPrimaryColor : kBackgroundColor),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  lists[index],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-        itemCount: lists.length,
-      ),
+    return DefaultTabController(
+        length: 5,
+        child: TabBar(
+                // isScrollable: true,
+                automaticIndicatorColorAdjustment: false,
+                indicatorColor: kPrimaryColor,
+                indicatorSize: TabBarIndicatorSize.tab,
+                dividerColor: Colors.transparent,
+                tabAlignment: TabAlignment.center,
+                tabs: tabs.map((tab){
+                  return Expanded(
+                    child: Text(
+                      tab,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        height: 3
+                      ),
+                    ),
+                  );
+                }).toList()),
     );
   }
 }
+
 
 /// Bottom Button And Bottom Sheet
 class BottomButtonView extends StatefulWidget {
@@ -227,7 +212,8 @@ class _BottomButtonViewState extends State<BottomButtonView> {
                         /// Count
                         const Align(
                             alignment: Alignment.center,
-                            child: CountIncreaseOrDecrease()),
+                            child: CountIncreaseOrDecrease()
+                        ),
 
                         /// Price
                         const Align(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 
 import '../utils/colors.dart';
 import '../utils/images.dart';
@@ -11,27 +12,27 @@ class TicketButtonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 226,
+      width: kTicketButtonWidth,
       child: Stack(
         children: [
           Image.asset(
             kBuyTicketButton,
             color: (buttonColor) != null ? buttonColor : kPrimaryColor,
-            width: 226,
-            height: 49,
+            width: kTicketButtonWidth,
+            height: kTicketButtonHeight,
           ),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-                width: 200,
-                height: 49,
+                width: kTicketContainerWidth,
+                height: kTicketButtonHeight,
                 color:  (buttonColor) != null ? buttonColor : kPrimaryColor,
                 child: Center(
                   child: Text(
                     buttonName,
                     style: TextStyle(
                       color: (buttonColor) != null ? Colors.white : Colors.black,
-                      fontSize: 16,
+                      fontSize: kTextRegular2x,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 
 import '../pages/choose_seat_page.dart';
 
@@ -24,12 +25,12 @@ class TimeSelectView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 240,
+      height: kTimeSelectViewHeight,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+          crossAxisSpacing: kMarginMedium3,
+          mainAxisSpacing: kMarginMedium3,
         ),
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -42,7 +43,7 @@ class TimeSelectView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: sections[index].color, width: 1),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(kMarginSmall),
                 color: sections[index].color.withOpacity(0.1),
               ),
               child: Center(
@@ -51,7 +52,7 @@ class TimeSelectView extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: kTextRegular,
                     fontWeight: FontWeight.w600,
                     height: 1.5,
                   ),
