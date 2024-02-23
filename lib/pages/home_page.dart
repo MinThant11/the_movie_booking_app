@@ -142,17 +142,15 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
     super.initState();
 
     /// Now Playing Movies From Database
-    _model.getNowPlayingFromDatabase().then((nowPlayingMoviesFromDatabase) {
-      setState(() {
-        nowPlayingMovies = nowPlayingMoviesFromDatabase;
-        movieToShow = nowPlayingMoviesFromDatabase;
-      });
+    List<MovieVO> nowPlayingMoviesFromDatabase = _model.getNowPlayingFromDatabase();
+    setState(() {
+      nowPlayingMovies = nowPlayingMoviesFromDatabase;
+      movieToShow = nowPlayingMoviesFromDatabase;
     });
 
     /// Coming Soon Movies From Database
-    _model.getComingSoonMovieFromDatabase().then((comingSoonMoviesFromDatabase) {
-      comingSoonMovies = comingSoonMoviesFromDatabase;
-    });
+    List<MovieVO> comingSoonMoviesFromDatabase = _model.getComingSoonMovieFromDatabase();
+    comingSoonMovies = comingSoonMoviesFromDatabase;
 
     /// Now Playing Movies From Network
     _model.getNowPlayingMovies().then((nowPlayingMovies) {

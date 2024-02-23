@@ -33,12 +33,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   void initState() {
     super.initState();
-    
+
     /// Get Movie Details From Database
-    _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0")).then((movie) {
-      setState(() {
-        movieDetails = movie;
-      });
+    MovieVO? movieDetailsFromDatabase = _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0"));
+    setState(() {
+      movieDetails = movieDetailsFromDatabase;
     });
 
     /// Get Movie Details From Network

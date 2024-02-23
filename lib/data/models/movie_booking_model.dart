@@ -1,6 +1,6 @@
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/network/data_agents/retrofit_data_agent_impl.dart';
-import 'package:the_movie_booking_app/persistence/movie_booking_database.dart';
+import 'package:the_movie_booking_app/persistence/movie_dao.dart';
 import '../../network/data_agents/the_movie_booking_data_agent.dart';
 import '../vos/credit_vo.dart';
 
@@ -14,19 +14,21 @@ class MovieBookingModel {
 
   MovieBookingModel._internal();
 
+  ///Dao
+  final MovieDao _movieDao = MovieDao();
+
   /// Data Agent
   TheMovieBookingDataAgent mDataAgent = RetrofitDataAgentImpl();
 
   /// Now Playing Movie
   Future<List<MovieVO>> getNowPlayingMovies() {
     return mDataAgent.getNowPlayingMovies(1.toString()).then((nowPlayingMovieList) async {
-      var database = await MovieBookingDatabase.getMovieBookingDatabase;
 
       for (var movie in nowPlayingMovieList) {
         movie.type = kMovieTypeNowPlaying;
       }
 
-      database.movieDao.insertMovieList(nowPlayingMovieList);
+      _movieDao.saveMovie(nowPlayingMovieList);
 
       return nowPlayingMovieList;
     });
@@ -35,13 +37,12 @@ class MovieBookingModel {
   /// Coming Soon Movie
   Future<List<MovieVO>> getComingSoonMovies() {
     return mDataAgent.getComingSoonMovies(1.toString()).then((comingSoonMovieList) async {
-      var database = await MovieBookingDatabase.getMovieBookingDatabase;
 
       for (var movie in comingSoonMovieList) {
         movie.type = kMovieTypeComingSoon;
       }
 
-      database.movieDao.insertMovieList(comingSoonMovieList);
+      _movieDao.saveMovie(comingSoonMovieList);
 
       return comingSoonMovieList;
     });
@@ -50,9 +51,8 @@ class MovieBookingModel {
   /// Movie Details
   Future<MovieVO> getMovieDetails(String movieId) {
     return mDataAgent.getMovieDetails(movieId).then((movie) async {
-      var database = await MovieBookingDatabase.getMovieBookingDatabase;
 
-      database.movieDao.insertMovie(movie);
+      _movieDao.saveSingleMovie(movie);
 
       return movie;
     });
@@ -64,24 +64,18 @@ class MovieBookingModel {
   }
 
   /// Get Now Playing Movie From Database
-  Future<List<MovieVO>> getNowPlayingFromDatabase() async {
-    var database = await MovieBookingDatabase.getMovieBookingDatabase;
-
-    return database.movieDao.getMoviesByType(kMovieTypeNowPlaying);
+  List<MovieVO> getNowPlayingFromDatabase() {
+    return _movieDao.getMovieByType(kMovieTypeNowPlaying);
   }
 
   /// Get Coming Soon Movie From Database
-  Future<List<MovieVO>> getComingSoonMovieFromDatabase() async {
-    var database = await MovieBookingDatabase.getMovieBookingDatabase;
-
-    return database.movieDao.getMoviesByType(kMovieTypeComingSoon);
+  List<MovieVO> getComingSoonMovieFromDatabase() {
+    return _movieDao.getMovieByType(kMovieTypeComingSoon);
   }
 
-  /// Get Movie By Id From Database
-  Future<MovieVO?> getMovieByIdFromDatabase(int movieId) async {
-    var database = await MovieBookingDatabase.getMovieBookingDatabase;
-
-    return database.movieDao.getMovieById(movieId);
+  /// Get Movie Details From Database
+  MovieVO? getMovieByIdFromDatabase(int movieId) {
+    return _movieDao.getMovieById(movieId);
   }
 
 }
