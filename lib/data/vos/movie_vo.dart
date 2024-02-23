@@ -15,6 +15,7 @@ part 'movie_vo.g.dart';
 class MovieVO {
   @JsonKey(name: "adult")
   @ColumnInfo(name: "adult")
+  /// hive
   bool? adult;
 
   @JsonKey(name: "backdrop_path")
