@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
-import 'package:the_movie_booking_app/pages/coming_soon_movie_details_page.dart';
 import 'package:the_movie_booking_app/pages/location_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
 import 'package:the_movie_booking_app/pages/search_moving_page.dart';
@@ -9,6 +9,8 @@ import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
+
+import '../data/vos/movie_vo.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,6 +23,7 @@ class HomePage extends StatelessWidget {
         centerTitle: false,
         automaticallyImplyLeading: false,
         backgroundColor: kBackgroundColor,
+        surfaceTintColor: kBackgroundColor,
         title: GestureDetector(
           onTap: () {
             Navigator.push(
@@ -119,8 +122,58 @@ class HomeScreenBodyView extends StatefulWidget {
 }
 
 class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
+  /// Model
+  final MovieBookingModel _model = MovieBookingModel();
+
   /// Now Showing Or Coming Soon
   String selectedText = kNowShowingLabel;
+
+  /// Now Playing Movies
+  List<MovieVO> nowPlayingMovies = [];
+
+  /// Coming Soon Movies
+  List<MovieVO> comingSoonMovies = [];
+
+  /// Movies To Show
+  List<MovieVO> movieToShow = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// Now Playing Movies From Database
+    _model.getNowPlayingFromDatabase().then((nowPlayingMoviesFromDatabase) {
+      setState(() {
+        nowPlayingMovies = nowPlayingMoviesFromDatabase;
+        movieToShow = nowPlayingMoviesFromDatabase;
+      });
+    });
+
+    /// Coming Soon Movies From Database
+    _model.getComingSoonMovieFromDatabase().then((comingSoonMoviesFromDatabase) {
+      comingSoonMovies = comingSoonMoviesFromDatabase;
+    });
+
+    /// Now Playing Movies From Network
+    _model.getNowPlayingMovies().then((nowPlayingMovies) {
+      setState(() {
+        this.nowPlayingMovies = nowPlayingMovies;
+        movieToShow = nowPlayingMovies;
+      });
+    }).catchError((error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(error.toString()),
+        ),
+      );
+    });
+
+    /// Coming Soon Movies From Network
+    _model.getComingSoonMovies().then((comingSoonMovies) {
+      this.comingSoonMovies = comingSoonMovies;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +187,7 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
         /// Spacer
         const SliverToBoxAdapter(
           child: SizedBox(
-            height: kMargin30,
+            height: kMarginLarge,
           ),
         ),
 
@@ -144,7 +197,15 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
             selectedText: selectedText,
             onTapNowShowingOrComingSoon: (text) {
               setState(() {
+                /// Set Now Playing Or Coming Soon
                 selectedText = text;
+
+                /// Set Movies
+                if (text == kNowShowingLabel) {
+                  movieToShow = nowPlayingMovies;
+                } else {
+                  movieToShow = comingSoonMovies;
+                }
               });
             },
           ),
@@ -153,47 +214,62 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
         /// Spacer
         const SliverToBoxAdapter(
           child: SizedBox(
-            height: kMargin30,
+            height: kMarginLarge,
           ),
         ),
 
         /// Movie List GridView
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
-          sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return GestureDetector(
-                    onTap: () {
-                      if (selectedText == kComingSoonLabel) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const ComingSoonMovieDetailsPage()),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MovieDetailsPage()),
-                        );
-                      }
+        (movieToShow.isEmpty)
+            ? const SliverToBoxAdapter(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                ),
+              )
+            : SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
+                sliver: SliverGrid(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MovieDetailsPage(
+                                  movieId:
+                                      movieToShow[index].id?.toString() ?? "",
+                                  isComingSoonSelected:
+                                      selectedText == kComingSoonLabel,
+                                ),
+                              ),
+                            );
+                          },
+                          child: MovieListItemView(
+                            isComingSoonSelected:
+                                selectedText == kComingSoonLabel,
+                            movie: movieToShow[index],
+                          ),
+                      );
                     },
-                    child: MovieListItemView(
-                      isComingSoonSelected: selectedText == kComingSoonLabel,
-                    ));
-              },
-              childCount: 10,
-            ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: kMovieListItemHeight,
-              mainAxisSpacing: kMarginMedium3,
-              crossAxisSpacing: kMarginMedium3,
-            ),
+                    childCount: movieToShow.length,
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: kMovieListItemHeight,
+                    mainAxisSpacing: kMarginMedium3,
+                    crossAxisSpacing: kMarginMedium3,
+                  ),
+                ),
+              ),
+
+        /// Spacer
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: kMarginLarge,
           ),
-        )
+        ),
       ],
     );
   }
@@ -306,15 +382,15 @@ class NowShowingAndComingSoonTabBar extends StatelessWidget {
   }
 }
 
-bool nowShowingOrComingSoon() {
-  bool isNowShowing = false;
-  NowShowingAndComingSoonTabBar(
-    onTapNowShowingOrComingSoon: (text) {
-      isNowShowing = kComingSoonLabel == text;
-    },
-  );
-  return isNowShowing;
-}
+// bool nowShowingOrComingSoon() {
+//   bool isNowShowing = false;
+//   NowShowingAndComingSoonTabBar(
+//     onTapNowShowingOrComingSoon: (text) {
+//       isNowShowing = kComingSoonLabel == text;
+//     },
+//   );
+//   return isNowShowing;
+// }
 
 class NowShowingOrComingSoonButtonView extends StatelessWidget {
   final bool isSelected;

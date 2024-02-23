@@ -3,9 +3,13 @@ import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
 
+import '../data/vos/movie_vo.dart';
+
 class MovieListItemView extends StatelessWidget {
   final bool isComingSoonSelected;
-  const MovieListItemView({super.key, required this.isComingSoonSelected});
+  final MovieVO movie;
+
+  const MovieListItemView({super.key, required this.isComingSoonSelected, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class MovieListItemView extends StatelessWidget {
                   topRight: Radius.circular(kMarginMedium),
                 ),
                 child: Image.network(
-                  "https://m.media-amazon.com/images/M/MV5BMzU3YTc1ZjMtZTAyOC00ZTI1LWE0MzItMTllN2M2YWI4MWZmXkEyXkFqcGdeQXVyMDA4NzMyOA@@._V1_.jpg",
+                  movie.getPosterPathWithBaseUrl(),
                   fit: BoxFit.cover,
                   height: kMovieListItemImageHeight,
                   width: double.infinity,
@@ -85,7 +89,9 @@ class MovieListItemView extends StatelessWidget {
           ),
 
           /// Movie Name and IMDB View
-          const MovieNameAndIMDBView(),
+          MovieNameAndIMDBView(
+            movie: movie,
+          ),
 
           /// Spacer
           const SizedBox(
@@ -102,7 +108,8 @@ class MovieListItemView extends StatelessWidget {
 
 /// Movie Name And Imdb View
 class MovieNameAndIMDBView extends StatelessWidget {
-  const MovieNameAndIMDBView({super.key});
+  final MovieVO movie;
+  const MovieNameAndIMDBView({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -111,11 +118,15 @@ class MovieNameAndIMDBView extends StatelessWidget {
       child: Row(
         children: [
           /// Name
-          const Text(
-            "Venom II",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: kTextSmall,
+          Expanded(
+            child: Text(
+              movie.title ?? "",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: kTextSmall,
+              ),
             ),
           ),
 
@@ -130,9 +141,9 @@ class MovieNameAndIMDBView extends StatelessWidget {
           ),
 
           /// Rating
-          const Text(
-            "9.0",
-            style: TextStyle(
+          Text(
+            movie.getRatingTwoDecimals(),
+            style: const TextStyle(
               color: Colors.white,
               fontStyle: FontStyle.italic,
               fontSize: kTextSmall,

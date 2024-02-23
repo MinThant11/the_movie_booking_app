@@ -38,3 +38,7 @@ const Color kTicketCancellationButtonColor = Color(0xFFFF6B00);
 const Color kTicketDetailsColor1 = Color(0xFF444444);
 const Color kTicketDetailsColor2 = Color(0xFF222222);
 const Color kTicketDetailsColor3 = Color(0xFF444444);
+
+const Color kAvailableColor = Color(0xFF00FFA3);
+const Color kFillingFastColor= Color(0xFFFF7A00);
+const Color kAlmostFullColor = Color(0xFFFF00B7);

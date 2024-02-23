@@ -27,7 +27,7 @@ class CinemaDetailsPage extends StatelessWidget {
                 child: const Icon(
                   Icons.chevron_left,
                   color: Colors.white,
-                  size: 30,
+                  size: kLocationIconSize,
                 ),
               ),
             ),
@@ -38,7 +38,7 @@ class CinemaDetailsPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: kTextRegular4x,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -55,7 +55,7 @@ class CinemaDetailsPage extends StatelessWidget {
         children: [
           /// Image
           SizedBox(
-            height: 200,
+            height: kMovieDetailsTopImageHeight,
             child: Stack(
               children: [
                 Image.asset(
@@ -65,8 +65,8 @@ class CinemaDetailsPage extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: Container(
-                    width: 50,
-                    height: 50,
+                    width: kMargin50,
+                    height: kMargin50,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white.withOpacity(0.5),
@@ -75,7 +75,7 @@ class CinemaDetailsPage extends StatelessWidget {
                       child: Icon(
                         Icons.play_arrow_rounded,
                         color: Colors.white,
-                        size: 36,
+                        size: kMargin36,
                       ),
                     ),
                   ),
@@ -86,12 +86,12 @@ class CinemaDetailsPage extends StatelessWidget {
 
           /// Spacer
           const SizedBox(
-            height: 14,
+            height: kMarginMedium1,
           ),
 
           /// Details
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: kMarginMedium3),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -101,7 +101,7 @@ class CinemaDetailsPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: kMarginMedium2,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
                   ),
@@ -109,19 +109,20 @@ class CinemaDetailsPage extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 14,
+                  height: kMarginMedium1,
                 ),
 
                 /// Location
                 Row(
                   children: [
                     const SizedBox(
-                      width: 280,
+                      /// ToDo: check w : 280
+                      width: kMovieListItemHeight,
                       child: Text(
                         'Q5H3+JPP, Corner of, Bogyoke Lann, Yangon ',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: kTextRegular3x,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
                         ),
@@ -139,7 +140,7 @@ class CinemaDetailsPage extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 40,
+                  height: kMargin40,
                 ),
 
                 /// Facilities
@@ -147,7 +148,7 @@ class CinemaDetailsPage extends StatelessWidget {
 
                 /// Spacer
                 const SizedBox(
-                  height: 40,
+                  height: kMargin40,
                 ),
 
                 /// Safety
@@ -182,7 +183,7 @@ class _FavoriteActionViewState extends State<FavoriteActionView> {
       },
       child: Icon(
         (!isSelected) ? Icons.star_border_rounded : Icons.star_rounded,
-        size: 30,
+        size: kMargin30,
         color: (!isSelected) ? Colors.white : kPrimaryColor,
       ),
     );
@@ -202,7 +203,7 @@ class FacilitiesView extends StatelessWidget {
           'Facilities',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: kTextRegular3x,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w600,
           ),
@@ -210,10 +211,10 @@ class FacilitiesView extends StatelessWidget {
 
         /// Spacer
         SizedBox(
-          height: 12,
+          height: kMarginCardMedium2,
         ),
 
-        /// Icons And Labelf
+        /// Icons And Label
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -252,7 +253,7 @@ class FacilitiesView extends StatelessWidget {
 
         /// Spacer
         SizedBox(
-          height: 12,
+          height: kMarginCardMedium2,
         ),
 
         /// Ticket Cancellation
@@ -293,13 +294,13 @@ class SafetyItemsView extends StatelessWidget {
           'Safety',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: kTextRegular3x,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(
-          height: 20,
+          height: kMarginMedium3,
         ),
         Wrap(
           spacing: kMarginMedium,
@@ -309,7 +310,7 @@ class SafetyItemsView extends StatelessWidget {
                 (item) => Container(
                   decoration: BoxDecoration(
                     color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(kMarginSmall),
                   ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: kMarginMedium, vertical: kMarginSmall),

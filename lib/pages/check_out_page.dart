@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
 import 'package:the_movie_booking_app/pages/ticket_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
-import 'package:the_movie_booking_app/utils/images.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
+import 'package:the_movie_booking_app/utils/strings.dart';
 
 import '../list_items/ticket_details_view.dart';
 
@@ -28,18 +29,18 @@ class CheckOutPage extends StatelessWidget {
                 child: const Icon(
                   Icons.chevron_left,
                   color: Colors.white,
-                  size: 30,
+                  size: kMargin30,
                 ),
               ),
             ),
             const Align(
               alignment: Alignment.center,
               child: Text(
-                'Checkout',
+                kCheckOutLabel,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: kTextRegular4x,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -63,12 +64,12 @@ class CheckOutScreenView extends StatelessWidget {
       child: Stack(
         children: [
           const Padding(
-            padding: EdgeInsets.only(left: 22, top: 12, right: 22),
+            padding: EdgeInsets.only(left: kMarginMedium4, top: kMarginCardMedium2, right: kMarginMedium4),
             child: TicketDetailsView(),
           ),
           Positioned(
-            left: 90,
-            bottom: 32,
+            left: kMargin90,
+            bottom: kMarginXLarge,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -76,7 +77,7 @@ class CheckOutScreenView extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const TicketPage()),
                 );
               },
-              child: const TicketButtonView(buttonName: "Continue"),
+              child: const TicketButtonView(buttonName: kCinemasLabel),
             ),
           ),
         ],

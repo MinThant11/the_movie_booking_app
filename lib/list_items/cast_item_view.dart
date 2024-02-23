@@ -1,22 +1,33 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
+import 'package:the_movie_booking_app/network/api_constants.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 
 class CastItemView extends StatelessWidget {
-  const CastItemView({super.key});
+  final CreditVO? credit;
+  const CastItemView({super.key, required this.credit});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ClipOval(
-          child: Image.network(
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvO0k8a2aLiNx0F882Hi047R6zZc5N5qmJNCthuCP_QvCYPUPPf01Rz9wp4I266IBk2_w&usqp=CAU",
-            width: kMargin60,
-            height: kMargin60,
-            fit: BoxFit.cover,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(150),
+          child: CachedNetworkImage(
+            imageUrl: kImageBaseUrl + (credit?.profilePath ?? ""),
+            imageBuilder: (context, image) => CircleAvatar(
+              backgroundImage: image,
+              maxRadius: 30,
+            ),
+            errorWidget: (_, __, ___) => Image.network(
+              "https://media.istockphoto.com/id/1332100919/vector/man-icon-black-icon-person-symbol.jpg?s=612x612&w=0&k=20&c=AVVJkvxQQCuBhawHrUhDRTCeNQ3Jgt0K1tXjJsFy1eg=",
+              width: kMargin60,
+              height: kMargin60,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-
         const SizedBox(
           width: kMarginMedium2,
         )

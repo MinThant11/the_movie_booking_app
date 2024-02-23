@@ -1,14 +1,14 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:the_movie_booking_app/data/seat_vo.dart';
+import 'package:the_movie_booking_app/data/vos/seat_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
 import 'package:the_movie_booking_app/pages/food_and_beverage_all_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
-import 'package:zoom_widget/zoom_widget.dart';
+import 'package:the_movie_booking_app/utils/strings.dart';
 
 class ChooseSeatPage extends StatelessWidget {
   const ChooseSeatPage({super.key});
@@ -42,11 +42,12 @@ class SeatScreenView extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 child: const Padding(
-                  padding: EdgeInsets.only(top: 8, left: 8),
+                  padding:
+                      EdgeInsets.only(top: kMarginMedium, left: kMarginMedium),
                   child: Icon(
                     Icons.chevron_left,
                     color: Colors.white,
-                    size: 28,
+                    size: kIMDBHeight,
                   ),
                 ),
               ),
@@ -59,19 +60,25 @@ class SeatScreenView extends StatelessWidget {
                 child: Text(
                   'Normal (4500ks)',
                   style: TextStyle(
-                    color: Color(0xFF888888),
-                    fontSize: 16,
+                    color: kUnSelectedColor,
+                    fontSize: kTextRegular2x,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
+
+              /// Spacer
               const SizedBox(
-                height: 20,
+                height: kMarginMedium3,
               ),
+
+              /// Seats
               const SeatsView(),
             ],
           ),
         ),
+
+        /// Seat Bottom
         const Align(
           alignment: Alignment.bottomCenter,
           child: SeatBottomView(),
@@ -93,23 +100,22 @@ class _SeatsViewState extends State<SeatsView> {
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
-      maxScale: 5,
+      maxScale: kMargin5,
       child: SizedBox(
         width: double.infinity,
         height: MediaQuery.of(context).size.height * 0.5,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: kMarginMedium3),
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 12,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: kMargin5,
+              mainAxisSpacing: kMargin10,
             ),
             itemBuilder: (context, index) {
               SeatVO seat = seatList[index];
               return GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: Stack(
                   children: [
                     Visibility(
@@ -122,8 +128,7 @@ class _SeatsViewState extends State<SeatsView> {
                       ),
                     ),
                     Visibility(
-                      visible:
-                          seat.type == "taken",
+                      visible: seat.type == "taken",
                       child: Image.asset(
                         kSeatIcon,
                         width: kMargin30,
@@ -139,7 +144,7 @@ class _SeatsViewState extends State<SeatsView> {
                           seat.text,
                           style: const TextStyle(
                             color: kLoginPageDividerColor,
-                            fontSize: 12,
+                            fontSize: kTextSmall,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
                           ),
@@ -170,7 +175,7 @@ class SeatBottomView extends StatelessWidget {
         /// Status
         Container(
           color: kStatusBackgroundColor,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: kMarginCardMedium2),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -200,46 +205,32 @@ class SeatBottomView extends StatelessWidget {
         ),
 
         const SizedBox(
-          height: 24,
+          height: kMarginLarge,
         ),
 
         /// Zoom Control
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               '-',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFF888888),
-                fontSize: 20,
+                color: kUnSelectedColor,
+                fontSize: kTextRegular4x,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            Container(
-              width: 250,
-              decoration: const ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    width: 1,
-                    strokeAlign: BorderSide.strokeAlignCenter,
-                    color: Color(0xFF888888),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            const Text(
+
+            /// Slider Widget View
+            SliderWidgetView(),
+
+            Text(
               '+',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFF888888),
-                fontSize: 20,
+                color: kUnSelectedColor,
+                fontSize: kTextRegular4x,
                 fontWeight: FontWeight.w700,
               ),
             )
@@ -253,6 +244,32 @@ class SeatBottomView extends StatelessWidget {
   }
 }
 
+/// Slider Widget View
+class SliderWidgetView extends StatefulWidget {
+  const SliderWidgetView({super.key});
+
+  @override
+  State<SliderWidgetView> createState() => _SliderWidgetViewState();
+}
+
+class _SliderWidgetViewState extends State<SliderWidgetView> {
+  double currentSliderValue = 20;
+  @override
+  Widget build(BuildContext context) {
+    return Slider.adaptive(
+        value: currentSliderValue,
+        max: 100,
+        divisions: 10,
+        label: currentSliderValue.round().toString(),
+        onChanged: (double value) {
+          setState(() {
+            currentSliderValue = value;
+          });
+        }
+    );
+  }
+}
+
 /// Buy Ticket
 class BuyTicketView extends StatelessWidget {
   const BuyTicketView({super.key});
@@ -260,7 +277,8 @@ class BuyTicketView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 34),
+      padding: const EdgeInsets.symmetric(
+          horizontal: kMarginMedium4, vertical: kMargin34),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -269,18 +287,21 @@ class BuyTicketView extends StatelessWidget {
               text: const TextSpan(
                 children: [
                   TextSpan(
-                    text: "2 Tickets\n",
+                    text: "2 Tickets",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: kTextRegular3x,
                       fontWeight: FontWeight.w700,
                     ),
+                  ),
+                  TextSpan(
+                    text: "\n",
                   ),
                   TextSpan(
                     text: "17000KS",
                     style: TextStyle(
                       color: kPrimaryColor,
-                      fontSize: 20,
+                      fontSize: kTextRegular4x,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -297,7 +318,7 @@ class BuyTicketView extends StatelessWidget {
               );
             },
             child: const TicketButtonView(
-              buttonName: "Buy Ticket",
+              buttonName: kBuyTicketLabel,
             ),
           ),
         ],

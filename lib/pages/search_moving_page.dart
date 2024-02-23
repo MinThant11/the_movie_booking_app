@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
 import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
@@ -7,7 +8,7 @@ import '../utils/dimens.dart';
 import '../utils/images.dart';
 
 class SearchMovingPage extends StatelessWidget {
-  const SearchMovingPage({super.key,});
+  const SearchMovingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,10 @@ class SearchMovingPage extends StatelessWidget {
         child: Stack(
           children: [
             /// Filter Movie
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 104),
-              child: FilterMovieView(),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.only(left: 20, right: 20, top: 104),
+            //   child: FilterMovieView(),
+            // ),
             Container(
               color: kBackgroundColor,
               child: Column(
@@ -196,27 +197,29 @@ class DropDownView extends StatelessWidget {
   }
 }
 
-class FilterMovieView extends StatelessWidget {
-  const FilterMovieView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisExtent: kMovieListItemHeight,
-        mainAxisSpacing: kMarginMedium3,
-        crossAxisSpacing: kMarginMedium3,
-      ),
-      itemCount: 1,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {},
-          child: MovieListItemView(
-            isComingSoonSelected: nowShowingOrComingSoon(),
-          ),
-        );
-      },
-    );
-  }
-}
+/// TODO: Filter
+// class FilterMovieView extends StatelessWidget {
+//   const FilterMovieView({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GridView.builder(
+//       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//         crossAxisCount: 2,
+//         mainAxisExtent: kMovieListItemHeight,
+//         mainAxisSpacing: kMarginMedium3,
+//         crossAxisSpacing: kMarginMedium3,
+//       ),
+//       itemCount: 1,
+//       itemBuilder: (context, index) {
+//         return GestureDetector(
+//           onTap: () {},
+//           child: MovieListItemView(
+//             isComingSoonSelected: nowShowingOrComingSoon(),
+//             movie: null,
+//           )
+//         );
+//       },
+//     );
+//   }
+// }

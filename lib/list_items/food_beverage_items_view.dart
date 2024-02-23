@@ -110,7 +110,7 @@ class _FoodBeverageItemViewState extends State<FoodBeverageItemView> {
                   height: kAddContainerHeight,
                   decoration: BoxDecoration(
                     color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(kMarginSmall),
                   ),
                   child: const Center(
                     child: Text(

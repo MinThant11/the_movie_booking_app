@@ -4,6 +4,7 @@ import 'package:the_movie_booking_app/list_items/time_select_view.dart';
 import 'package:the_movie_booking_app/pages/cinema_details_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
+import 'package:the_movie_booking_app/utils/strings.dart';
 
 import '../utils/images.dart';
 
@@ -18,6 +19,7 @@ class ChooseTimeAndCinemaPage extends StatelessWidget {
         centerTitle: false,
         automaticallyImplyLeading: false,
         backgroundColor: kBackgroundColor,
+        surfaceTintColor: kBackgroundColor,
         title: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
@@ -25,7 +27,7 @@ class ChooseTimeAndCinemaPage extends StatelessWidget {
           child: const Icon(
             Icons.chevron_left,
             color: Colors.white,
-            size: 28,
+            size: kIMDBHeight,
           ),
         ),
         actions: [
@@ -44,23 +46,23 @@ class ChooseTimeAndCinemaPage extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 26,
+            width: kMargin26,
           ),
           const Icon(
             Icons.search,
             color: Colors.white,
-            size: 24,
+            size: kMarginLarge,
           ),
           const SizedBox(
-            width: 24,
+            width: kMarginLarge,
           ),
           Image.asset(
             kFilterIcon,
-            width: 17,
-            height: 17,
+            width: kFilterIconSize,
+            height: kFilterIconSize,
           ),
           const SizedBox(
-            width: 24,
+            width: kMarginLarge,
           ),
         ],
       ),
@@ -136,21 +138,21 @@ class _ChooseDateViewState extends State<ChooseDateView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: 95,
+        padding: const EdgeInsets.symmetric(horizontal: kMargin10),
+        height: kMargin95,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: kMarginMedium2),
               child: Stack(
                 children: [
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Image.asset(
                       kChooseDateBottom,
-                      width: 72,
-                      height: 40,
+                      width: kMargin72,
+                      height: kMargin40,
                       fit: BoxFit.fill,
                       color: (isSelected) ? kPrimaryColor : kChooseDateColor,
                     ),
@@ -158,8 +160,8 @@ class _ChooseDateViewState extends State<ChooseDateView> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: Container(
-                      width: 72,
-                      height: 66,
+                      width: kMargin72,
+                      height: kMargin66,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(kMarginMedium),
@@ -173,17 +175,17 @@ class _ChooseDateViewState extends State<ChooseDateView> {
                     top: 6,
                     left: 24.5,
                     child: Container(
-                      width: 22,
-                      height: 5,
+                      width: kMarginMedium4,
+                      height: kMargin5,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(kMarginMedium),
                           color: kBackgroundColor),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: kMarginMedium3),
                     child: SizedBox(
-                      width: 72,
+                      width: kMargin72,
                       child: Text(
                         items[index],
                         textAlign: TextAlign.center,
@@ -214,7 +216,7 @@ class QualityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: kMarginCardMedium2, vertical: kMargin30),
       child: Wrap(
         spacing: kMarginMedium,
         runSpacing: kMarginMedium,
@@ -223,12 +225,12 @@ class QualityView extends StatelessWidget {
               (quality) => Container(
                 decoration: BoxDecoration(
                   color: kNowPlayingAndComingSoonUnSelectedTextColor,
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(kMargin5),
                   border: Border.all(width: 1, color: Colors.white),
                 ),
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
-                margin: const EdgeInsets.symmetric(horizontal: 8),
+                    const EdgeInsets.symmetric(horizontal: kMarginCardMedium2, vertical: kMargin5),
+                margin: const EdgeInsets.symmetric(horizontal: kMarginMedium),
                 child: Text(
                   quality,
                   style: const TextStyle(
@@ -261,20 +263,20 @@ class ChooseCinemaStatusView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           StatusView(
-            label: "Available",
-            color: Color(0xFF00FFA3),
+            label: kAvailableLabel,
+            color: kAvailableColor,
             isHasBorder: false,
             isHasContainer: true,
           ),
           StatusView(
-            label: "Filling Fast",
-            color: Color(0xFFFF7A00),
+            label: kFillingFastLabel,
+            color: kFillingFastColor,
             isHasBorder: false,
             isHasContainer: true,
           ),
           StatusView(
-            label: "Almost Full",
-            color: Color(0xFFFF00B7),
+            label: kAlmostFullLabel,
+            color: kAlmostFullColor,
             isHasBorder: false,
             isHasContainer: true,
           ),
@@ -309,7 +311,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
             });
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: kMarginLarge, vertical: kMarginMedium3),
             child: Column(
               children: [
                 /// Label
@@ -330,7 +332,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const CinemaDetailsPage()),);
                       },
                       child: const Text(
-                        'See Details',
+                        kSeeDetailsLabel,
                         style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: kTextRegular2x,
@@ -345,7 +347,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
 
                 /// Spacer
                 const SizedBox(
-                  height: 21,
+                  height: kMarginMedium3,
                 ),
 
                 /// Icon
@@ -353,7 +355,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     StatusView(
-                      label: "Parking",
+                      label: kParkingLabel,
                       color: kA6Color,
                       isHasBorder: false,
                       isHasContainer: false,
@@ -363,7 +365,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                       width: kMarginMedium2,
                     ),
                     StatusView(
-                      label: "Online Food",
+                      label: kOnlineFoodLabel,
                       color: kA6Color,
                       isHasBorder: false,
                       isHasContainer: false,
@@ -373,7 +375,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                       width: kMarginMedium2,
                     ),
                     StatusView(
-                      label: "Wheel Chair",
+                      label: kWheelChairLabel,
                       color: kA6Color,
                       isHasBorder: false,
                       isHasContainer: false,
@@ -393,12 +395,12 @@ class _ChooseCinemaState extends State<ChooseCinema> {
             children: [
               /// Time Select
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
                 child: TimeSelectView(),
               ),
 
               const SizedBox(
-                height: 24,
+                height: kMarginLarge,
               ),
 
               /// Information
@@ -407,12 +409,12 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const SizedBox(
-                    width: 24,
+                    width: kMarginLarge,
                   ),
                   Image.asset(
                     kInformationCircleIcon,
-                    width: 16,
-                    height: 16,
+                    width: kTextRegular2x,
+                    height: kTextRegular2x,
                   ),
                   const SizedBox(
                     width: kMarginMedium,
@@ -428,7 +430,7 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height: kMarginMedium3,
               ),
             ],
           ),
