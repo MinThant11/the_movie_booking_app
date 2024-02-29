@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/time_select_view.dart';
 import 'package:the_movie_booking_app/pages/cinema_details_page.dart';
@@ -117,22 +118,13 @@ class ChooseDateView extends StatefulWidget {
 }
 
 class _ChooseDateViewState extends State<ChooseDateView> {
-  var items = [
-    "Today\nJan\n14",
-    "Tomorrow\nJan\n15",
-    "TUE\nJan\n16",
-    "WED\nJan\n17",
-    "THU\nJan\n18",
-    "FRI\nJan\n19",
-    "SAT\nJan\n20"
-  ];
-  dynamic selectedItem;
-  bool isSelected = false;
+  dynamic currentIndex;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    selectedItem = items.first;
+    currentIndex = 0;
   }
 
   @override
@@ -143,67 +135,100 @@ class _ChooseDateViewState extends State<ChooseDateView> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: kMarginMedium2),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Image.asset(
-                      kChooseDateBottom,
-                      width: kMargin72,
-                      height: kMargin40,
-                      fit: BoxFit.fill,
-                      color: (isSelected) ? kPrimaryColor : kChooseDateColor,
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+              /// Date Time Ticket View
+              child: Padding(
+                padding: const EdgeInsets.only(right: kMarginMedium2),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Image.asset(
+                        kChooseDateBottom,
+                        width: kMargin72,
+                        height: kMargin40,
+                        fit: BoxFit.fill,
+                        color: (index == currentIndex) ? kPrimaryColor : kChooseDateColor,
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      width: kMargin72,
-                      height: kMargin66,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(kMarginMedium),
-                          topRight: Radius.circular(kMarginMedium),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        width: kMargin72,
+                        height: kMargin66,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(kMarginMedium),
+                            topRight: Radius.circular(kMarginMedium),
+                          ),
+                          color: (index == currentIndex) ? kPrimaryColor : kChooseDateColor,
                         ),
-                        color: (isSelected) ? kPrimaryColor : kChooseDateColor,
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 6,
-                    left: 24.5,
-                    child: Container(
-                      width: kMarginMedium4,
-                      height: kMargin5,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(kMarginMedium),
-                          color: kBackgroundColor),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: kMarginMedium3),
-                    child: SizedBox(
-                      width: kMargin72,
-                      child: Text(
-                        items[index],
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: kTextRegular,
-                            fontWeight: FontWeight.w700,
-                            height: 1.5),
+                    Positioned(
+                      top: 6,
+                      left: 24.5,
+                      child: Container(
+                        width: kMarginMedium4,
+                        height: kMargin5,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(kMarginMedium),
+                            color: kBackgroundColor),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: kMarginMedium3),
+                      child: SizedBox(
+                        width: kMargin72,
+                        child: Text(
+                          datesForTwoWeek()[index],
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: kTextRegular,
+                              fontWeight: FontWeight.w900,
+                              height: 1.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
-          itemCount: items.length,
+          itemCount: datesForTwoWeek().length,
         ));
+  }
+
+  List<String> datesForTwoWeek() {
+    List<String> twoWeek = [];
+    final now = DateTime.now();
+    for (int i = 0; i < 14; i++) {
+      if (i == 0) {
+        twoWeek.add("Today${DateFormat('\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,))}");
+      } else if (i == 1) {
+        twoWeek.add("Tomorrow${DateFormat('\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,))}");
+      } else {
+        twoWeek.add(DateFormat('E\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,)));
+      }
+      // twoWeek.add(DateFormat('yyyy-mm-dd').format(DateTime(now.year, now.month, now.day + i)));
+    }
+    return twoWeek;
+  }
+
+  List<String> simpleDatesForTwoWeek() {
+    List<String> twoWeek = [];
+    final now = DateTime.now();
+    for (int i = 0; i < 14; i++) {
+      twoWeek.add(DateFormat('yyyy-MM-dd').format(DateTime(now.year, now.month, now.day + i)));
+    }
+    return twoWeek;
   }
 }
 

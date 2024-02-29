@@ -23,6 +23,7 @@ void main() async {
   Hive.registerAdapter(SpokenLanguageVOAdapter());
 
   await Hive.openBox<MovieVO>(kBoxNameMovieVO);
+
   runApp(const MovieBookingApp());
 }
 

@@ -25,6 +25,8 @@ const Color kA6Color = Color(0xFFAAAAAA);
 const Color kBoxShadowColor = Color(0x3F000000);
 const Color kPlusMinusColor = Color(0xFF555555);
 
+const Color kSnackPageBackgroundColor = Color(0xFF161616);
+
 const Color kFoodItemBackgroundTL = Color(0xCC666666);
 const Color kFoodItemBackgroundBR = Color(0x66333333);
 
@@ -42,3 +44,5 @@ const Color kTicketDetailsColor3 = Color(0xFF444444);
 const Color kAvailableColor = Color(0xFF00FFA3);
 const Color kFillingFastColor= Color(0xFFFF7A00);
 const Color kAlmostFullColor = Color(0xFFFF00B7);
+
+const Color kNoTiCircleColor = Color(0xFFFF0000);

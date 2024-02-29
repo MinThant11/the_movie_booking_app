@@ -1,151 +1,28 @@
-class SeatVO{
-  String text = "";
-  String type = "";
+import 'package:json_annotation/json_annotation.dart';
 
-  SeatVO(this.text, this.type);
+part 'seat_vo.g.dart';
+
+@JsonSerializable()
+class SeatVO {
+
+  @JsonKey(name: "id")
+  int? id;
+
+  @JsonKey(name: "type")
+  String? type;
+
+  @JsonKey(name: "seat_name")
+  String? seatName;
+
+  @JsonKey(name: "symbol")
+  String? symbol;
+
+  @JsonKey(name: "price")
+  int? price;
+
+  SeatVO(this.id, this.type, this.seatName, this.symbol, this.price);
+
+  factory SeatVO.fromJson(Map<String, dynamic> json) => _$SeatVOFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SeatVOToJson(this);
 }
-
-List<SeatVO> seatList = [
-  SeatVO("A", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("A", "text"),
-
-  SeatVO("B", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("B", "text"),
-
-  SeatVO("C", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("C", "text"),
-
-  SeatVO("D", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("D", "text"),
-
-  SeatVO("E", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("E", "text"),
-
-  SeatVO("F", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("F", "text"),
-
-  SeatVO("G", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("G", "text"),
-
-  SeatVO("H", "text"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("H", "text"),
-
-  SeatVO("I", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("I", "text"),
-
-  SeatVO("J", "text"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("J", "text"),
-
-  SeatVO("K", "text"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "available"),
-  SeatVO("", "space"),
-  SeatVO("", "space"),
-  SeatVO("", "taken"),
-  SeatVO("", "taken"),
-  SeatVO("", "available"),
-  SeatVO("", "taken"),
-  SeatVO("K", "text"),
-];

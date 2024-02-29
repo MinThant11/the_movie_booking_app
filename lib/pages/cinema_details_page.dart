@@ -162,6 +162,7 @@ class CinemaDetailsPage extends StatelessWidget {
   }
 }
 
+/// Favorite Action
 class FavoriteActionView extends StatefulWidget {
   const FavoriteActionView({
     super.key,
@@ -190,6 +191,7 @@ class _FavoriteActionViewState extends State<FavoriteActionView> {
   }
 }
 
+/// Facilities
 class FacilitiesView extends StatelessWidget {
   const FacilitiesView({super.key});
 
@@ -270,6 +272,7 @@ class FacilitiesView extends StatelessWidget {
   }
 }
 
+/// Safety Items
 class SafetyItemsView extends StatelessWidget {
   SafetyItemsView({
     super.key,

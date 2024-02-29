@@ -7,7 +7,8 @@ import '../utils/images.dart';
 import 'location_page.dart';
 
 class GetOtpPage extends StatelessWidget {
-  const GetOtpPage({super.key});
+  final dynamic mobileNumber;
+  const GetOtpPage({super.key, this.mobileNumber});
 
   @override
   Widget build(BuildContext context) {

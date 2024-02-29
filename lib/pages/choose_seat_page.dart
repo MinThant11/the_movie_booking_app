@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/vos/seat_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
-import 'package:the_movie_booking_app/pages/food_and_beverage_all_page.dart';
+import 'package:the_movie_booking_app/network/responses/get_seating_plan_response.dart';
+import 'package:the_movie_booking_app/pages/snack_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
@@ -97,6 +98,7 @@ class SeatsView extends StatefulWidget {
 }
 
 class _SeatsViewState extends State<SeatsView> {
+  GetSeatingPlanResponse? seats;
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
@@ -113,7 +115,10 @@ class _SeatsViewState extends State<SeatsView> {
               mainAxisSpacing: kMargin10,
             ),
             itemBuilder: (context, index) {
-              SeatVO seat = seatList[index];
+
+              // TODO:
+              dynamic seat;
+              seats?.data?.map((e) => e.map((ee) => seat = ee).toList()).toList();
               return GestureDetector(
                 onTap: () {},
                 child: Stack(
@@ -155,7 +160,8 @@ class _SeatsViewState extends State<SeatsView> {
                 ),
               );
             },
-            itemCount: seatList.length,
+            // TODO:
+            // itemCount: seats?.length,
           ),
         ),
       ),
@@ -314,7 +320,7 @@ class BuyTicketView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const FoodAndBeverageAllPage()),
+                    builder: (context) => const SnackPage()),
               );
             },
             child: const TicketButtonView(

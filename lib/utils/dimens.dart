@@ -2,7 +2,7 @@
 const double kMarginXSmall = 2;
 const double kMarginSmall = 4;
 const double kMarginMedium = 8;
-const double kMarginCardMedium2 = 12.0;
+const double kMarginCardMedium2 = 12;
 const double kMarginMedium1 = 14;
 const double kMarginMedium2 = 16;
 const double kMarginMedium3 = 20;
@@ -14,6 +14,7 @@ const double kMarginXXLarge = 48;
 
 const double kMargin5 = 5;
 const double kMargin10 = 10;
+const double kMargin25 = 25;
 const double kMargin26 = 26;
 const double kMargin34 = 34;
 const double kMargin36 = 36;
@@ -27,11 +28,17 @@ const double kMargin64 = 64;
 const double kMargin66 = 66;
 const double kMargin72 = 72;
 const double kMargin80 = 80;
+const double kMargin86 = 86;
 const double kMargin90 = 90;
 const double kMargin95 = 95;
+const double kMargin100 = 100;
 
+
+/// Text
+const double kTextXXSmall = 8;
 const double kTextXSmall = 10;
 const double kTextSmall = 12;
+const double kTextSmall2x = 13;
 const double kTextRegular = 14;
 const double kTextRegular1x = 15;
 const double kTextRegular2x = 16;
@@ -65,7 +72,7 @@ const double kGoogleLogoSize = 25;
 
 const double kPlusMinusContainerSize = 23.30;
 
-const double kFoodItemHeight = 220;
+const double kFoodItemHeight = 242;
 const double kFoodImageSize = 104;
 const double kAddContainerHeight = 27;
 
@@ -84,3 +91,5 @@ const double kTimeSelectViewHeight = 240;
 const double kZoomCtrlWidth = 250;
 
 const double kFilterIconSize = 18;
+
+const double kFoodBeverageTop = 110;

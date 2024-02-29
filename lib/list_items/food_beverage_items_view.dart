@@ -19,17 +19,20 @@ class _FoodBeverageGridViewState extends State<FoodBeverageGridView> {
     return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: kMarginLarge,
-          mainAxisSpacing: kMarginMedium4,
-          mainAxisExtent: kFoodItemHeight,
+      child: Padding(
+        padding: const EdgeInsets.only(top: kMarginXXLarge, bottom: kMargin86),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: kMarginLarge,
+            // mainAxisSpacing: kMarginMedium4,
+            mainAxisExtent: kFoodItemHeight,
+          ),
+          itemBuilder: (context, index) {
+            return const FoodBeverageItemView();
+          },
+          itemCount: 10,
         ),
-        itemBuilder: (context, index) {
-          return const FoodBeverageItemView();
-        },
-        itemCount: 10,
       ),
     );
   }
@@ -48,6 +51,7 @@ class _FoodBeverageItemViewState extends State<FoodBeverageItemView> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(kMargin10),
+      margin: const EdgeInsets.only(top: kMarginCardMedium2, bottom: kMarginCardMedium2),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(kMarginMedium),
           gradient: const LinearGradient(
