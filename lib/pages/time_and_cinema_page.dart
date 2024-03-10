@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
+import 'package:the_movie_booking_app/data/vos/choose_date_vo.dart';
+import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/time_select_view.dart';
 import 'package:the_movie_booking_app/pages/cinema_details_page.dart';
@@ -9,8 +12,8 @@ import 'package:the_movie_booking_app/utils/strings.dart';
 
 import '../utils/images.dart';
 
-class ChooseTimeAndCinemaPage extends StatelessWidget {
-  const ChooseTimeAndCinemaPage({super.key});
+class TimeAndCinemaPage extends StatelessWidget {
+  const TimeAndCinemaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +76,47 @@ class ChooseTimeAndCinemaPage extends StatelessWidget {
 }
 
 /// ScreenViewList
-class ScreenBodyView extends StatelessWidget {
-  const ScreenBodyView({super.key});
+class ScreenBodyView extends StatefulWidget {
+  const ScreenBodyView({
+    super.key,
+  });
+
+  @override
+  State<ScreenBodyView> createState() => _ScreenBodyViewState();
+}
+
+class _ScreenBodyViewState extends State<ScreenBodyView> {
+  /// Model
+  final TmbaModel _model = TmbaModel();
+
+  /// Cinema
+  List<CinemaVO> cinemaToShow = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    UserVO? userDataFromDatabase = _model.getUserDataFromDatabase();
+
+    var date = chooseDate().map((e) => (e.isSelected = true) ? e.date : '');
+
+    /// Cinema From Network
+    /// With Default Date
+    _model
+        .getCinema(userDataFromDatabase?.token ?? '', "2024-3-10")
+        .then((cinemaList) {
+      setState(() {
+        cinemaToShow = cinemaList;
+      });
+    });
+
+    ///
+    print(chooseDate().first.date);
+    print("bookingDate : ${date.toString()}");
+    print("isSelected : ${chooseDate().first.isSelected}");
+    print("bearerToken : ${userDataFromDatabase?.token}");
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +141,13 @@ class ScreenBodyView extends StatelessWidget {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return const ChooseCinema();
+              return ChooseCinema(
+                cinema: cinemaToShow[index],
+                /// Default Date
+                bookingDate: "2024-3-10",
+              );
             },
-            childCount: 7,
+            childCount: cinemaToShow.length,
           ),
         )
       ],
@@ -111,20 +157,24 @@ class ScreenBodyView extends StatelessWidget {
 
 /// Choose Date
 class ChooseDateView extends StatefulWidget {
-  const ChooseDateView({super.key});
+  const ChooseDateView({
+    super.key,
+  });
 
   @override
   State<ChooseDateView> createState() => _ChooseDateViewState();
 }
 
 class _ChooseDateViewState extends State<ChooseDateView> {
-  dynamic currentIndex;
+
+  /// State
+  dynamic selectedIndex;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    currentIndex = 0;
+    selectedIndex = 0;
+    chooseDate().first.isSelected = true;
   }
 
   @override
@@ -135,12 +185,27 @@ class _ChooseDateViewState extends State<ChooseDateView> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
+            // chooseDate?.map((e) {
+            //   if (index == 0) {
+            //     e.date =
+            //         "Today${DateFormat('\nMMM\nd').format(e.date as DateTime)}";
+            //   } else if (index == 1) {
+            //     e.date =
+            //         "Tomorrow${DateFormat('\nMMM\nd').format(e.date as DateTime)}";
+            //   } else {
+            //     e.date = DateFormat('E\nMMM\nd').format(e.date as DateTime);
+            //   }
+            // });
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  currentIndex = index;
+                  selectedIndex = index;
+                  if (selectedIndex == index) {
+                    chooseDate()[selectedIndex].isSelected = true;
+                  }
                 });
               },
+
               /// Date Time Ticket View
               child: Padding(
                 padding: const EdgeInsets.only(right: kMarginMedium2),
@@ -153,7 +218,9 @@ class _ChooseDateViewState extends State<ChooseDateView> {
                         width: kMargin72,
                         height: kMargin40,
                         fit: BoxFit.fill,
-                        color: (index == currentIndex) ? kPrimaryColor : kChooseDateColor,
+                        color: (index == selectedIndex)
+                            ? kPrimaryColor
+                            : kChooseDateColor,
                       ),
                     ),
                     Align(
@@ -166,7 +233,9 @@ class _ChooseDateViewState extends State<ChooseDateView> {
                             topLeft: Radius.circular(kMarginMedium),
                             topRight: Radius.circular(kMarginMedium),
                           ),
-                          color: (index == currentIndex) ? kPrimaryColor : kChooseDateColor,
+                          color: (index == selectedIndex)
+                              ? kPrimaryColor
+                              : kChooseDateColor,
                         ),
                       ),
                     ),
@@ -186,7 +255,7 @@ class _ChooseDateViewState extends State<ChooseDateView> {
                       child: SizedBox(
                         width: kMargin72,
                         child: Text(
-                          datesForTwoWeek()[index],
+                          chooseDate()[index].date,
                           textAlign: TextAlign.center,
                           softWrap: true,
                           style: const TextStyle(
@@ -202,33 +271,8 @@ class _ChooseDateViewState extends State<ChooseDateView> {
               ),
             );
           },
-          itemCount: datesForTwoWeek().length,
+          itemCount: chooseDate().length,
         ));
-  }
-
-  List<String> datesForTwoWeek() {
-    List<String> twoWeek = [];
-    final now = DateTime.now();
-    for (int i = 0; i < 14; i++) {
-      if (i == 0) {
-        twoWeek.add("Today${DateFormat('\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,))}");
-      } else if (i == 1) {
-        twoWeek.add("Tomorrow${DateFormat('\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,))}");
-      } else {
-        twoWeek.add(DateFormat('E\nMMM\nd').format(DateTime(now.year, now.month, now.day + i,)));
-      }
-      // twoWeek.add(DateFormat('yyyy-mm-dd').format(DateTime(now.year, now.month, now.day + i)));
-    }
-    return twoWeek;
-  }
-
-  List<String> simpleDatesForTwoWeek() {
-    List<String> twoWeek = [];
-    final now = DateTime.now();
-    for (int i = 0; i < 14; i++) {
-      twoWeek.add(DateFormat('yyyy-MM-dd').format(DateTime(now.year, now.month, now.day + i)));
-    }
-    return twoWeek;
   }
 }
 
@@ -241,7 +285,8 @@ class QualityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kMarginCardMedium2, vertical: kMargin30),
+      padding: const EdgeInsets.symmetric(
+          horizontal: kMarginCardMedium2, vertical: kMargin30),
       child: Wrap(
         spacing: kMarginMedium,
         runSpacing: kMarginMedium,
@@ -253,8 +298,8 @@ class QualityView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(kMargin5),
                   border: Border.all(width: 1, color: Colors.white),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: kMarginCardMedium2, vertical: kMargin5),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kMarginCardMedium2, vertical: kMargin5),
                 margin: const EdgeInsets.symmetric(horizontal: kMarginMedium),
                 child: Text(
                   quality,
@@ -313,14 +358,16 @@ class ChooseCinemaStatusView extends StatelessWidget {
 
 /// Choose Cinema
 class ChooseCinema extends StatefulWidget {
-  const ChooseCinema({super.key});
+  final CinemaVO cinema;
+  final String bookingDate;
+  const ChooseCinema(
+      {super.key, required this.cinema, required this.bookingDate});
 
   @override
   State<ChooseCinema> createState() => _ChooseCinemaState();
 }
 
 class _ChooseCinemaState extends State<ChooseCinema> {
-
   bool isHidden = false;
 
   @override
@@ -336,16 +383,17 @@ class _ChooseCinemaState extends State<ChooseCinema> {
             });
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kMarginLarge, vertical: kMarginMedium3),
+            padding: const EdgeInsets.symmetric(
+                horizontal: kMarginLarge, vertical: kMarginMedium3),
             child: Column(
               children: [
                 /// Label
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'JCGV : Junction City',
-                        style: TextStyle(
+                        widget.cinema.cinema ?? '',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: kTextRegular2x,
                           fontWeight: FontWeight.w600,
@@ -353,8 +401,12 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                       ),
                     ),
                     InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const CinemaDetailsPage()),);
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CinemaDetailsPage()),
+                        );
                       },
                       child: const Text(
                         kSeeDetailsLabel,
@@ -421,7 +473,10 @@ class _ChooseCinemaState extends State<ChooseCinema> {
               /// Time Select
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
-                child: TimeSelectView(),
+                child: TimeSelectView(
+                  timeSlot: widget.cinema.timeSlots ?? [],
+                  bookingDate: widget.bookingDate,
+                ),
               ),
 
               const SizedBox(
