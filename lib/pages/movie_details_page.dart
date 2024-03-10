@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
 import 'package:the_movie_booking_app/list_items/cast_item_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
-import 'package:the_movie_booking_app/pages/choose_time_and_cinema_page.dart';
+import 'package:the_movie_booking_app/pages/time_and_cinema_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
@@ -305,7 +305,7 @@ class MovieInfoAndGenresView extends StatelessWidget {
               spacing: kMarginMedium,
               runSpacing: kMarginMedium,
               children: movie?.genres
-                      ?.take(5)
+                      ?.take(4)
                       .map((genre) => genre.name ?? "")
                       .map(
                         (genre) => Container(
@@ -538,7 +538,7 @@ class BookingButton extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const ChooseTimeAndCinemaPage()));
+                builder: (context) => const TimeAndCinemaPage()));
       },
       child: const SizedBox(
         height: kBookingButtonHeight,

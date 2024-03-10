@@ -8,7 +8,6 @@ const double kMarginMedium2 = 16;
 const double kMarginMedium3 = 20;
 const double kMarginMedium4 = 22;
 const double kMarginLarge = 24;
-const double kMargin30 = 30;
 const double kMarginXLarge = 32;
 const double kMarginXXLarge = 48;
 
@@ -16,6 +15,7 @@ const double kMargin5 = 5;
 const double kMargin10 = 10;
 const double kMargin25 = 25;
 const double kMargin26 = 26;
+const double kMargin30 = 30;
 const double kMargin34 = 34;
 const double kMargin36 = 36;
 const double kMargin38 = 38;
@@ -86,7 +86,8 @@ const double kTicketContainerWidth = 200;
 const double kTicketCancellationDialogWidth = 320;
 const double kTicketCancellationDialogHeight = 464;
 
-const double kTimeSelectViewHeight = 240;
+///240
+const double kTimeSelectViewHeight = 120;
 
 const double kZoomCtrlWidth = 250;
 

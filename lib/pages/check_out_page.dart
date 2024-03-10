@@ -77,7 +77,7 @@ class CheckOutScreenView extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const TicketPage()),
                 );
               },
-              child: const TicketButtonView(buttonName: kCinemasLabel),
+              child: const TicketButtonView(buttonName: kContinueLabel),
             ),
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
-import 'package:the_movie_booking_app/pages/choose_seat_page.dart';
+import 'package:the_movie_booking_app/pages/seats_page.dart';
 
 class ZoomableView extends StatelessWidget {
   const ZoomableView({super.key});
@@ -17,7 +17,7 @@ class ZoomableView extends StatelessWidget {
           builder: (ctx, child) {
             return Transform(
               transform: notifier.value,
-              child: const SeatsView(),
+              child: const SeatsView(timeSlotId: 0, bookingDate: '',),
             );
           },
         ),

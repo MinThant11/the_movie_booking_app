@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:the_movie_booking_app/network/api_constants.dart';
 
 part 'snacks_vo.g.dart';
 
@@ -23,18 +24,23 @@ class SnacksVO {
   @JsonKey(name: "image")
   String? image;
 
-  /// In CheckOut
-  @JsonKey(name: "unit_price")
-  double? unitPrice;
-
   @JsonKey(name: "quantity")
   int? quantity;
 
-
   SnacksVO(this.id, this.name, this.description, this.price, this.categoryId,
-      this.image, this.unitPrice, this.quantity);
+      this.image,  this.quantity);
 
   factory SnacksVO.fromJson(Map<String, dynamic> json) => _$SnacksVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$SnacksVOToJson(this);
+
+  /// Sub Total
+  double subTotal() {
+    return (price ?? 0) * (quantity ?? 0);
+  }
+
+  /// Snack Image
+  String snackImage() {
+    return kTmbaImageBaseUrl + (image ?? "");
+  }
 }

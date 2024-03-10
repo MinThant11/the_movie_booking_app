@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/pages/get_otp_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
@@ -53,6 +54,18 @@ class LogInScreenBodyView extends StatefulWidget {
 }
 
 class _LogInScreenBodyViewState extends State<LogInScreenBodyView> {
+  
+  /// Model
+  final TmbaModel _model = TmbaModel();
+
+  var countryCodes = ["+95", "+81", "+977", "+968", "+92", "+970", "+63"];
+  var selectedCode = "";
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCode = countryCodes.first;
+  }
 
   final controller = TextEditingController();
 
@@ -116,7 +129,7 @@ class _LogInScreenBodyViewState extends State<LogInScreenBodyView> {
         /// Input
         Stack(
           children: [
-            /// Country Code
+            /// Country Code Label
             const Positioned(
               left: 0,
               top: -4,
@@ -130,9 +143,32 @@ class _LogInScreenBodyViewState extends State<LogInScreenBodyView> {
               ),
             ),
 
-            const Align(
+            /// Country Code
+            Align(
               alignment: Alignment.bottomLeft,
-              child: CountryCodeView(),
+              child: SizedBox(
+                width: 76,
+                child: DropdownButton(
+                  value: selectedCode,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: kTextRegular2x,
+                  ),
+                  dropdownColor: kBackgroundColor,
+                  icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                  isExpanded: true,
+                  itemHeight: 55.7,
+                  menuMaxHeight: kMovieDetailsTopImageHeight,
+                  items: countryCodes
+                      .map((code) => DropdownMenuItem(value: code, child: Text(code)))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCode = value ?? "";
+                    });
+                  },
+                ),
+              ),
             ),
 
             /// Input
@@ -174,10 +210,13 @@ class _LogInScreenBodyViewState extends State<LogInScreenBodyView> {
           height: 49,
           child: ElevatedButton(
             onPressed: () {
+              String mobileNumber = controller.text;
+              _model.getOtp(mobileNumber);
+              debugPrint(mobileNumber);
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => GetOtpPage(mobileNumber: controller,)));
+                      builder: (context) => GetOtpPage(mobileNumber: mobileNumber, )));
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimaryColor,
@@ -271,51 +310,6 @@ class _LogInScreenBodyViewState extends State<LogInScreenBodyView> {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Country Code
-class CountryCodeView extends StatefulWidget {
-  const CountryCodeView({super.key});
-
-  @override
-  State<CountryCodeView> createState() => _CountryCodeViewState();
-}
-
-class _CountryCodeViewState extends State<CountryCodeView> {
-  var countryCodes = ["+95", "+81", "+977", "+968", "+92", "+970", "+63"];
-  var selectedCode = "";
-  @override
-  void initState() {
-    super.initState();
-    selectedCode = countryCodes.first;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 76,
-      child: DropdownButton(
-        value: selectedCode,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: kTextRegular2x,
-        ),
-        dropdownColor: kBackgroundColor,
-        icon: const Icon(Icons.keyboard_arrow_down_sharp),
-        isExpanded: true,
-        itemHeight: 55.7,
-        menuMaxHeight: kMovieDetailsTopImageHeight,
-        items: countryCodes
-            .map((code) => DropdownMenuItem(value: code, child: Text(code)))
-            .toList(),
-        onChanged: (value) {
-          setState(() {
-            selectedCode = value ?? "";
-          });
-        },
-      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
 import 'package:the_movie_booking_app/pages/location_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
@@ -13,7 +14,8 @@ import 'package:the_movie_booking_app/utils/strings.dart';
 import '../data/vos/movie_vo.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String? city;
+  const HomePage({super.key, this.city});
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,9 @@ class HomePage extends StatelessWidget {
               const SizedBox(
                 width: kMarginMedium,
               ),
-              const Text(
-                "Yangon",
-                style: TextStyle(
+              Text(
+                city ?? '',
+                style: const TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w700,

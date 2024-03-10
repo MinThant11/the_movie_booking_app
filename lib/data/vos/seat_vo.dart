@@ -4,7 +4,6 @@ part 'seat_vo.g.dart';
 
 @JsonSerializable()
 class SeatVO {
-
   @JsonKey(name: "id")
   int? id;
 
@@ -20,7 +19,11 @@ class SeatVO {
   @JsonKey(name: "price")
   int? price;
 
-  SeatVO(this.id, this.type, this.seatName, this.symbol, this.price);
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool? isSelected;
+
+  SeatVO(this.id, this.type, this.seatName, this.symbol, this.price,
+      {isSelected = false});
 
   factory SeatVO.fromJson(Map<String, dynamic> json) => _$SeatVOFromJson(json);
 

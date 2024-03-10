@@ -1,28 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'snack_category_vo.dart';
+part of 'payment_type_vo.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SnackCategoryVO _$SnackCategoryVOFromJson(Map<String, dynamic> json) =>
-    SnackCategoryVO(
+PaymentTypeVO _$PaymentTypeVOFromJson(Map<String, dynamic> json) =>
+    PaymentTypeVO(
       json['id'] as int?,
       json['title'] as String?,
-      json['title_mm'] as String?,
-      json['is_active'] as int?,
+      json['icon'] as String?,
       json['created_at'] as String?,
       json['updated_at'] as String?,
       json['deleted_at'] as String?,
     );
 
-Map<String, dynamic> _$SnackCategoryVOToJson(SnackCategoryVO instance) =>
+Map<String, dynamic> _$PaymentTypeVOToJson(PaymentTypeVO instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'title_mm': instance.titleMM,
-      'is_active': instance.isActive,
+      'icon': instance.icon,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'deleted_at': instance.deletedAt,

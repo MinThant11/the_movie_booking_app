@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie_booking_app/pages/choose_time_and_cinema_page.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
+import 'package:the_movie_booking_app/data/vos/choose_date_vo.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
+import 'package:the_movie_booking_app/pages/time_and_cinema_page.dart';
 
+import '../data/vos/cinema_vo.dart';
 import '../utils/colors.dart';
 import '../utils/dimens.dart';
 import '../utils/images.dart';
@@ -8,7 +12,7 @@ import 'home_page.dart';
 import 'location_page.dart';
 
 class CinemasPage extends StatelessWidget {
-  const CinemasPage({super.key});
+  const CinemasPage({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +62,53 @@ class CinemasPage extends StatelessWidget {
           )
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return const ChooseCinema();
-        },
-        itemCount: 10,
-      ),
+      body: const CinemaScreenBodyView(),
+    );
+  }
+}
+
+class CinemaScreenBodyView extends StatefulWidget {
+  const CinemaScreenBodyView({
+    super.key,
+  });
+
+  @override
+  State<CinemaScreenBodyView> createState() => _CinemaScreenBodyViewState();
+}
+
+class _CinemaScreenBodyViewState extends State<CinemaScreenBodyView> {
+
+  /// Model
+  final TmbaModel _tmbaModel = TmbaModel();
+
+  /// State
+  ChooseDateVO? chooseDateVO;
+
+  /// Cinema
+  List<CinemaVO> cinemaToShow = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
+
+    /// Cinema From Network
+    _tmbaModel
+        .getCinema(userDataFromDatabase?.token ?? '', chooseDateVO?.date ?? '')
+        .then((cinemaList) {
+      setState(() {
+        cinemaToShow = cinemaList;
+      });
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return ChooseCinema(cinema: cinemaToShow[index], bookingDate: '',);
+      },
+      itemCount: 10,
     );
   }
 }

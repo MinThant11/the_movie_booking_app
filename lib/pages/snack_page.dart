@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:matrix_gesture_detector/matrix_gesture_detector.dart';
 import 'package:the_movie_booking_app/list_items/count_increase_or_decrease_view.dart';
 import 'package:the_movie_booking_app/list_items/food_beverage_items_view.dart';
 import 'package:the_movie_booking_app/pages/check_out_page.dart';

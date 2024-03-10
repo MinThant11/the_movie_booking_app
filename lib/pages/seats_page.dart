@@ -1,25 +1,33 @@
 import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/data/vos/seat_vo.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
-import 'package:the_movie_booking_app/network/responses/get_seating_plan_response.dart';
 import 'package:the_movie_booking_app/pages/snack_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
 
-class ChooseSeatPage extends StatelessWidget {
-  const ChooseSeatPage({super.key});
+class SeatsPage extends StatelessWidget {
+  final int timeSlotId;
+  final String bookingDate;
+  const SeatsPage(
+      {super.key, required this.timeSlotId, required this.bookingDate});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: SeatScreenView(),
+        child: SeatScreenView(
+          timeSlotId: timeSlotId,
+          bookingDate: bookingDate,
+        ),
       ),
     );
   }
@@ -27,7 +35,10 @@ class ChooseSeatPage extends StatelessWidget {
 
 /// Seat Screen
 class SeatScreenView extends StatelessWidget {
-  const SeatScreenView({super.key});
+  final int timeSlotId;
+  final String bookingDate;
+  const SeatScreenView(
+      {super.key, required this.timeSlotId, required this.bookingDate});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +85,10 @@ class SeatScreenView extends StatelessWidget {
               ),
 
               /// Seats
-              const SeatsView(),
+              SeatsView(
+                timeSlotId: timeSlotId,
+                bookingDate: bookingDate,
+              ),
             ],
           ),
         ),
@@ -91,14 +105,49 @@ class SeatScreenView extends StatelessWidget {
 
 /// Seats
 class SeatsView extends StatefulWidget {
-  const SeatsView({super.key});
+  final int timeSlotId;
+  final String bookingDate;
+  const SeatsView(
+      {super.key, required this.timeSlotId, required this.bookingDate});
 
   @override
   State<SeatsView> createState() => _SeatsViewState();
 }
 
 class _SeatsViewState extends State<SeatsView> {
-  GetSeatingPlanResponse? seats;
+
+  /// TODO : To Page Level Widget
+  /// Model
+  final TmbaModel _tmbaModel = TmbaModel();
+
+  /// Seats
+  dynamic seatFlatten;
+  List<SeatVO>? seat;
+
+  HashSet selectedSeat = HashSet();
+
+  @override
+  void initState() {
+    super.initState();
+
+    print(widget.timeSlotId);
+    print(widget.bookingDate);
+
+    UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
+
+    /// Seating Plan
+    _tmbaModel
+        .getSeatingPlan(userDataFromDatabase?.token ?? '', widget.timeSlotId,
+            widget.bookingDate)
+        .then((seatList) {
+      seatFlatten = seatList.flattened;
+      seat?.add(seatFlatten);
+      setState(() {
+
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
@@ -109,60 +158,71 @@ class _SeatsViewState extends State<SeatsView> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: kMarginMedium3),
           child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 12,
-              crossAxisSpacing: kMargin5,
-              mainAxisSpacing: kMargin10,
-            ),
-            itemBuilder: (context, index) {
-
-              // TODO:
-              dynamic seat;
-              seats?.data?.map((e) => e.map((ee) => seat = ee).toList()).toList();
-              return GestureDetector(
-                onTap: () {},
-                child: Stack(
-                  children: [
-                    Visibility(
-                      visible: seat.type == "available",
-                      child: Image.asset(
-                        kSeatIcon,
-                        width: kMargin30,
-                        height: kMargin30,
-                        color: Colors.white,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 14,
+                crossAxisSpacing: kMargin5,
+                mainAxisSpacing: kMargin10,
+              ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (selectedSeat.contains(index)) {
+                        selectedSeat.remove(index);
+                      } else {
+                        selectedSeat.add(index);
+                      }
+                    });
+                  },
+                  child: Stack(
+                    children: [
+                      Visibility(
+                        visible: seat?[index].type == "available",
+                        child: Image.asset(
+                          kSeatIcon,
+                          width: kMargin30,
+                          height: kMargin30,
+                          color: selectedSeat.contains(index)
+                              ? kPrimaryColor
+                              : Colors.white,
+                        ),
                       ),
-                    ),
-                    Visibility(
-                      visible: seat.type == "taken",
-                      child: Image.asset(
-                        kSeatIcon,
-                        width: kMargin30,
-                        height: kMargin30,
-                        color: null,
+                      Visibility(
+                        visible: seat?[index].type == "taken",
+                        child: Image.asset(
+                          kSeatIcon,
+                          width: kMargin30,
+                          height: kMargin30,
+                          color: null,
+                        ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Visibility(
-                        visible: seat.type == "text",
-                        child: Text(
-                          seat.text,
-                          style: const TextStyle(
-                            color: kLoginPageDividerColor,
-                            fontSize: kTextSmall,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
+                      Visibility(
+                        visible: seat?[index].type == "space",
+                        child: const SizedBox(
+                          width: kMargin30,
+                          height: kMargin30,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Visibility(
+                          visible: seat?[index].type == "text",
+                          child: Text(
+                            seat?[index].seatName ?? '',
+                            style: const TextStyle(
+                              color: kLoginPageDividerColor,
+                              fontSize: kTextSmall,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-            // TODO:
-            // itemCount: seats?.length,
-          ),
+                    ],
+                  ),
+                );
+              },
+              itemCount: seat?.length),
         ),
       ),
     );
@@ -271,15 +331,19 @@ class _SliderWidgetViewState extends State<SliderWidgetView> {
           setState(() {
             currentSliderValue = value;
           });
-        }
-    );
+        });
   }
 }
 
 /// Buy Ticket
-class BuyTicketView extends StatelessWidget {
+class BuyTicketView extends StatefulWidget {
   const BuyTicketView({super.key});
 
+  @override
+  State<BuyTicketView> createState() => _BuyTicketViewState();
+}
+
+class _BuyTicketViewState extends State<BuyTicketView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -293,6 +357,7 @@ class BuyTicketView extends StatelessWidget {
               text: const TextSpan(
                 children: [
                   TextSpan(
+                    /// TODO:
                     text: "2 Tickets",
                     style: TextStyle(
                       color: Colors.white,
@@ -319,8 +384,7 @@ class BuyTicketView extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const SnackPage()),
+                MaterialPageRoute(builder: (context) => const SnackPage()),
               );
             },
             child: const TicketButtonView(

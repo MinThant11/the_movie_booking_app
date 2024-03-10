@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
+import 'package:the_movie_booking_app/data/vos/city_vo.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/pages/main_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
@@ -7,7 +10,7 @@ import 'package:the_movie_booking_app/utils/images.dart';
 import '../utils/dimens.dart';
 
 class LocationPage extends StatelessWidget {
-  const LocationPage({super.key});
+  const LocationPage({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +84,18 @@ class LocationPage extends StatelessWidget {
                           const SizedBox(
                             width: kMarginMedium3,
                           ),
+
+                          /// Icon
                           GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MainPage()),
-                              );
-                            },
+                            // onTap: () {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => const MainPage(
+                            //               city: '', bearerToken: '',
+                            //             )),
+                            //   );
+                            // },
                             child: Container(
                               height: 50,
                               padding: const EdgeInsets.all(kMarginMedium),
@@ -138,7 +145,7 @@ class LocationPage extends StatelessWidget {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.63,
-                  child: CitiesListView(),
+                  child: const CitiesListView(),
                 ),
               ],
             ),
@@ -149,16 +156,37 @@ class LocationPage extends StatelessWidget {
   }
 }
 
-class CitiesListView extends StatelessWidget {
-  CitiesListView({super.key});
+class CitiesListView extends StatefulWidget {
+  const CitiesListView({super.key,});
 
-  final List<String> cityList = [
-    "Yangon",
-    "Mandalay",
-    "Naypyidaw",
-    "Bago",
-    "Mawlamyine",
-  ];
+  @override
+  State<CitiesListView> createState() => _CitiesListViewState();
+}
+
+class _CitiesListViewState extends State<CitiesListView> {
+  /// Model
+  final TmbaModel _model = TmbaModel();
+
+  /// State
+  List<CityVO> cityList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// Cities From Network
+    _model.getCities().then((citiesList) {
+      setState(() {
+        cityList = citiesList;
+      });
+    });
+
+    /// Cities From Database
+    List<CityVO> citiesFromDatabase = _model.getCitiesFromDatabase();
+    setState(() {
+      cityList = citiesFromDatabase;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +196,10 @@ class CitiesListView extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const MainPage()),
+              MaterialPageRoute(
+                  builder: (context) => MainPage(
+                        city: cityList[index].name ?? "",
+                      )),
             );
           },
           child: Container(
@@ -183,7 +214,7 @@ class CitiesListView extends StatelessWidget {
               ),
             ),
             child: Text(
-              cityList[index],
+              cityList[index].name ?? "",
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,

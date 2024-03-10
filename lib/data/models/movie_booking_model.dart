@@ -63,6 +63,8 @@ class MovieBookingModel {
     return mDataAgent.getCreditsByMovie(movieId);
   }
 
+  /// --------------------- GET DAO --------------------------- ///
+
   /// Get Now Playing Movie From Database
   List<MovieVO> getNowPlayingFromDatabase() {
     return _movieDao.getMovieByType(kMovieTypeNowPlaying);

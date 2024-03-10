@@ -1,23 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_snack_category_response.dart';
+part of 'get_cities_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetSnackCategoryResponse _$GetSnackCategoryResponseFromJson(
-        Map<String, dynamic> json) =>
-    GetSnackCategoryResponse(
+GetCitiesResponse _$GetCitiesResponseFromJson(Map<String, dynamic> json) =>
+    GetCitiesResponse(
       json['code'] as int?,
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
-          ?.map((e) => SnackCategoryVO.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => CityVO.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$GetSnackCategoryResponseToJson(
-        GetSnackCategoryResponse instance) =>
+Map<String, dynamic> _$GetCitiesResponseToJson(GetCitiesResponse instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,

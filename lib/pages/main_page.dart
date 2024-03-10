@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie_booking_app/pages/choose_time_and_cinema_page.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/cinemas_page.dart';
 import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/pages/profile_page.dart';
@@ -10,7 +10,9 @@ import 'package:the_movie_booking_app/utils/images.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final String? city;
+  final UserVO? userData;
+  const MainPage({super.key, this.city, this.userData});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -20,10 +22,23 @@ class _MainPageState extends State<MainPage> {
 
   int currentIndex = 0;
 
-  List<Widget> screenWidgets = [const HomePage(), const CinemasPage(), const TicketsPage(), const ProfilePage()];
+  // List<Widget> screenWidgets = [
+  //   const HomePage(),
+  //   const CinemasPage(),
+  //   const TicketsPage(),
+  //   const ProfilePage()
+  // ];
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> screenWidgets = [
+      HomePage(
+        city: widget.city ?? '',
+      ),
+      const CinemasPage(),
+      const TicketsPage(),
+      const ProfilePage()
+    ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,

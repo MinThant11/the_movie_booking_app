@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:the_movie_booking_app/data/vos/city_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
-import 'package:the_movie_booking_app/pages/main_page.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
+import 'package:the_movie_booking_app/pages/logo_page.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/fonts.dart';
@@ -13,6 +15,7 @@ import 'data/vos/production_country_vo.dart';
 import 'data/vos/spoken_language_vo.dart';
 
 void main() async {
+
   await Hive.initFlutter();
 
   Hive.registerAdapter(MovieVOAdapter());
@@ -21,10 +24,15 @@ void main() async {
   Hive.registerAdapter(ProductionCompanyVOAdapter());
   Hive.registerAdapter(ProductionCountryVOAdapter());
   Hive.registerAdapter(SpokenLanguageVOAdapter());
+  Hive.registerAdapter(UserVOAdapter());
+  Hive.registerAdapter(CityVOAdapter());
 
   await Hive.openBox<MovieVO>(kBoxNameMovieVO);
+  await Hive.openBox<UserVO>(kBoxNameUserVO);
+  await Hive.openBox<CityVO>(kBoxNameCityVO);
 
   runApp(const MovieBookingApp());
+
 }
 
 class MovieBookingApp extends StatelessWidget {
@@ -37,7 +45,7 @@ class MovieBookingApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
         fontFamily: kInter,
       ),
-      home: const MainPage(),
+      home: const LogoPage(),
     );
   }
 }

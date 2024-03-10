@@ -22,3 +22,6 @@ const String kSeeDetailsLabel = "See Details";
 const String kAvailableLabel = "Available";
 const String kFillingFastLabel = "Filling Fast";
 const String kAlmostFullLabel = "Almost Full";
+
+const String kNetworkCallForDate = "networkCall";
+const String kTicketViewForDate = "ticketView";

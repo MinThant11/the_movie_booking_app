@@ -13,7 +13,6 @@ SnacksVO _$SnacksVOFromJson(Map<String, dynamic> json) => SnacksVO(
       (json['price'] as num?)?.toDouble(),
       json['category_id'] as int?,
       json['image'] as String?,
-      (json['unit_price'] as num?)?.toDouble(),
       json['quantity'] as int?,
     );
 
@@ -24,6 +23,5 @@ Map<String, dynamic> _$SnacksVOToJson(SnacksVO instance) => <String, dynamic>{
       'price': instance.price,
       'category_id': instance.categoryId,
       'image': instance.image,
-      'unit_price': instance.unitPrice,
       'quantity': instance.quantity,
     };

@@ -26,13 +26,8 @@ class SnackCategoryVO {
   @JsonKey(name: "deleted_at")
   String? deletedAt;
 
-  /// For payment type
-  @JsonKey(name: "icon")
-  String? icon;
-
-
   SnackCategoryVO(this.id, this.title, this.titleMM, this.isActive,
-      this.createdAt, this.updatedAt, this.deletedAt, this.icon);
+      this.createdAt, this.updatedAt, this.deletedAt);
 
   factory SnackCategoryVO.fromJson(Map<String, dynamic> json) => _$SnackCategoryVOFromJson(json);
 

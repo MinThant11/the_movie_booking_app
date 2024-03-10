@@ -1,23 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_city_response.dart';
+part of 'get_otp_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GetCityResponse _$GetCityResponseFromJson(Map<String, dynamic> json) =>
-    GetCityResponse(
+GetOtpResponse _$GetOtpResponseFromJson(Map<String, dynamic> json) =>
+    GetOtpResponse(
       json['code'] as int?,
       json['message'] as String?,
-      (json['data'] as List<dynamic>?)
-          ?.map((e) => CityVO.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
-Map<String, dynamic> _$GetCityResponseToJson(GetCityResponse instance) =>
+Map<String, dynamic> _$GetOtpResponseToJson(GetOtpResponse instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,
-      'data': instance.data,
     };
