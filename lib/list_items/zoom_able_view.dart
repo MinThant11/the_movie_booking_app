@@ -17,7 +17,7 @@ class ZoomableView extends StatelessWidget {
           builder: (ctx, child) {
             return Transform(
               transform: notifier.value,
-              child: const SeatsView(timeSlotId: 0, bookingDate: '',),
+              child: const SizedBox()
             );
           },
         ),

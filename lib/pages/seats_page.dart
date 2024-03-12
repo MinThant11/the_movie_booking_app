@@ -34,11 +34,59 @@ class SeatsPage extends StatelessWidget {
 }
 
 /// Seat Screen
-class SeatScreenView extends StatelessWidget {
+class SeatScreenView extends StatefulWidget {
   final int timeSlotId;
   final String bookingDate;
   const SeatScreenView(
       {super.key, required this.timeSlotId, required this.bookingDate});
+
+  @override
+  State<SeatScreenView> createState() => _SeatScreenViewState();
+}
+
+class _SeatScreenViewState extends State<SeatScreenView> {
+  /// Model
+  final TmbaModel _tmbaModel = TmbaModel();
+
+  /// Seat List
+  List<SeatVO> seatsList = [];
+
+  /// State
+  int? columCount;
+  int ticketCount = 0;
+  int totalPrice = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// User Data From Database
+    UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
+
+    /// Get Seating Plan From Network
+    _tmbaModel
+        .getSeatingPlan(
+            userDataFromDatabase?.token ?? '', widget.timeSlotId, "2024-3-10")
+        .then((twoDimensionalSeatList) {
+      columCount = twoDimensionalSeatList.first.length;
+      setState(() {
+        seatsList =
+            twoDimensionalSeatList.expand((element) => element).toList();
+      });
+    });
+  }
+
+  void calculateSelectedSeatCount() {
+    ticketCount = seatsList.where((seat) => seat.isSelected == true).length;
+  }
+
+  void calculateSelectedSeatTotalPrice() {
+    totalPrice = seatsList
+            .where((seat) => seat.isSelected == true)
+            .map((seat) => seat.price)
+            .reduce((value1, value2) => (value1 ?? 0) + (value2 ?? 0)) ??
+        0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +97,7 @@ class SeatScreenView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Icon
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -63,11 +112,15 @@ class SeatScreenView extends StatelessWidget {
                   ),
                 ),
               ),
+
+              /// Image
               Image.asset(
                 kSeatScreenImage,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
+
+              /// Price
               const Center(
                 child: Text(
                   'Normal (4500ks)',
@@ -85,153 +138,134 @@ class SeatScreenView extends StatelessWidget {
               ),
 
               /// Seats
-              SeatsView(
-                timeSlotId: timeSlotId,
-                bookingDate: bookingDate,
-              ),
+              InteractiveViewer(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.51,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: kMarginMedium3),
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columCount ?? 14,
+                          crossAxisSpacing: kMargin5,
+                          mainAxisSpacing: kMargin10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (seatsList[index].isSelected == true) {
+                                for (var value in seatsList) {
+                                  if (seatsList[index].id == value.id) {
+                                    setState(() {
+                                      seatsList[index].isSelected = false;
+
+                                      calculateSelectedSeatCount();
+                                      calculateSelectedSeatTotalPrice();
+                                    });
+                                  }
+                                }
+                              } else if (seatsList[index].type == "available") {
+                                for (var value in seatsList) {
+                                  if (seatsList[index].id == value.id) {
+                                    setState(() {
+                                      seatsList[index].isSelected = true;
+
+                                      calculateSelectedSeatCount();
+                                      calculateSelectedSeatTotalPrice();
+                                    });
+                                  }
+                                }
+                              }
+                            },
+
+                            /// Seat View
+                            child: SeatView(seat: seatsList[index]),
+                          );
+                        },
+                        itemCount: seatsList.length),
+                  ),
+                ),
+              )
             ],
           ),
         ),
 
         /// Seat Bottom
-        const Align(
+        Align(
           alignment: Alignment.bottomCenter,
-          child: SeatBottomView(),
+          child: SeatBottomView(
+            ticketCount: ticketCount,
+            totalPrice: totalPrice,
+          ),
         ),
       ],
     );
   }
 }
 
-/// Seats
-class SeatsView extends StatefulWidget {
-  final int timeSlotId;
-  final String bookingDate;
-  const SeatsView(
-      {super.key, required this.timeSlotId, required this.bookingDate});
-
-  @override
-  State<SeatsView> createState() => _SeatsViewState();
-}
-
-class _SeatsViewState extends State<SeatsView> {
-
-  /// TODO : To Page Level Widget
-  /// Model
-  final TmbaModel _tmbaModel = TmbaModel();
-
-  /// Seats
-  dynamic seatFlatten;
-  List<SeatVO>? seat;
-
-  HashSet selectedSeat = HashSet();
-
-  @override
-  void initState() {
-    super.initState();
-
-    print(widget.timeSlotId);
-    print(widget.bookingDate);
-
-    UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
-
-    /// Seating Plan
-    _tmbaModel
-        .getSeatingPlan(userDataFromDatabase?.token ?? '', widget.timeSlotId,
-            widget.bookingDate)
-        .then((seatList) {
-      seatFlatten = seatList.flattened;
-      seat?.add(seatFlatten);
-      setState(() {
-
-      });
-    });
-  }
+/// Seat View
+class SeatView extends StatelessWidget {
+  final SeatVO seat;
+  const SeatView({
+    super.key,
+    required this.seat,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InteractiveViewer(
-      maxScale: kMargin5,
-      child: SizedBox(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: kMarginMedium3),
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 14,
-                crossAxisSpacing: kMargin5,
-                mainAxisSpacing: kMargin10,
-              ),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (selectedSeat.contains(index)) {
-                        selectedSeat.remove(index);
-                      } else {
-                        selectedSeat.add(index);
-                      }
-                    });
-                  },
-                  child: Stack(
-                    children: [
-                      Visibility(
-                        visible: seat?[index].type == "available",
-                        child: Image.asset(
-                          kSeatIcon,
-                          width: kMargin30,
-                          height: kMargin30,
-                          color: selectedSeat.contains(index)
-                              ? kPrimaryColor
-                              : Colors.white,
-                        ),
-                      ),
-                      Visibility(
-                        visible: seat?[index].type == "taken",
-                        child: Image.asset(
-                          kSeatIcon,
-                          width: kMargin30,
-                          height: kMargin30,
-                          color: null,
-                        ),
-                      ),
-                      Visibility(
-                        visible: seat?[index].type == "space",
-                        child: const SizedBox(
-                          width: kMargin30,
-                          height: kMargin30,
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Visibility(
-                          visible: seat?[index].type == "text",
-                          child: Text(
-                            seat?[index].seatName ?? '',
-                            style: const TextStyle(
-                              color: kLoginPageDividerColor,
-                              fontSize: kTextSmall,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              itemCount: seat?.length),
+    return Stack(
+      children: [
+        Visibility(
+          visible: seat.type == "available",
+          child: Image.asset(
+            kSeatIcon,
+            width: kMargin30,
+            height: kMargin30,
+            color: (seat.isSelected ?? false) ? kPrimaryColor : Colors.white,
+          ),
         ),
-      ),
+        Visibility(
+          visible: seat.type == "taken",
+          child: Image.asset(
+            kSeatIcon,
+            width: kMargin30,
+            height: kMargin30,
+            color: null,
+          ),
+        ),
+        Visibility(
+          visible: seat.type == "space",
+          child: const SizedBox(
+            width: kMargin30,
+            height: kMargin30,
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Visibility(
+            visible: seat.type == "text",
+            child: Text(
+              seat.symbol ?? '',
+              style: const TextStyle(
+                color: kLoginPageDividerColor,
+                fontSize: kTextSmall,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 /// Seat Bottom
 class SeatBottomView extends StatelessWidget {
-  const SeatBottomView({super.key});
+  final int ticketCount;
+  final int totalPrice;
+  const SeatBottomView(
+      {super.key, required this.ticketCount, required this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +338,10 @@ class SeatBottomView extends StatelessWidget {
         ),
 
         /// Buy Ticket
-        const BuyTicketView()
+        BuyTicketView(
+          ticketCount: ticketCount,
+          totalPrice: totalPrice,
+        )
       ],
     );
   }
@@ -336,14 +373,12 @@ class _SliderWidgetViewState extends State<SliderWidgetView> {
 }
 
 /// Buy Ticket
-class BuyTicketView extends StatefulWidget {
-  const BuyTicketView({super.key});
+class BuyTicketView extends StatelessWidget {
+  final int ticketCount;
+  final int totalPrice;
+  const BuyTicketView(
+      {super.key, required this.ticketCount, required this.totalPrice});
 
-  @override
-  State<BuyTicketView> createState() => _BuyTicketViewState();
-}
-
-class _BuyTicketViewState extends State<BuyTicketView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -354,23 +389,23 @@ class _BuyTicketViewState extends State<BuyTicketView> {
         children: [
           Expanded(
             child: RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     /// TODO:
-                    text: "2 Tickets",
-                    style: TextStyle(
+                    text: "$ticketCount Tickets",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: kTextRegular3x,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: "\n",
                   ),
                   TextSpan(
-                    text: "17000KS",
-                    style: TextStyle(
+                    text: "${totalPrice}KS",
+                    style: const TextStyle(
                       color: kPrimaryColor,
                       fontSize: kTextRegular4x,
                       fontWeight: FontWeight.w700,
@@ -382,10 +417,12 @@ class _BuyTicketViewState extends State<BuyTicketView> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SnackPage()),
-              );
+              if (ticketCount != 0 && totalPrice != 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SnackPage()),
+                );
+              }
             },
             child: const TicketButtonView(
               buttonName: kBuyTicketLabel,
