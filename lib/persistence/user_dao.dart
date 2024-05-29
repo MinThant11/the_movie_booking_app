@@ -11,10 +11,10 @@ class UserDao {
 
   UserDao._internal();
 
-  // /// Clear User Data
-  // void clearUserData() async {
-  //   await getUserBox().clear();
-  // }
+  /// Clear User Data
+  void clearUserData() async {
+    await getUserBox().clear();
+  }
 
   /// Save User Data
   void saveUserData(UserVO userData) async {

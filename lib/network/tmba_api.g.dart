@@ -280,7 +280,6 @@ class _TmbaApi implements TmbaApi {
       method: 'POST',
       headers: _headers,
       extra: _extra,
-      contentType: 'application/x-www-form-urlencoded',
     )
             .compose(
               _dio.options,
@@ -294,6 +293,34 @@ class _TmbaApi implements TmbaApi {
               baseUrl,
             ))));
     final value = CheckoutRequest.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<GetCheckoutResponse> getCheckout(String bearerToken) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': bearerToken};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<GetCheckoutResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/api/v2/checkout',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = GetCheckoutResponse.fromJson(_result.data!);
     return value;
   }
 

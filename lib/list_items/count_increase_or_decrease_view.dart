@@ -1,17 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 
-class CountIncreaseOrDecrease extends StatefulWidget {
-  const CountIncreaseOrDecrease({super.key,});
-
-  @override
-  State<CountIncreaseOrDecrease> createState() => _CountIncreaseOrDecreaseState();
-}
-
-class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
-
-  int count = 1;
+class CountIncreaseOrDecrease extends StatelessWidget {
+  final int getCount;
+  final Function() add;
+  final Function() remove;
+  const CountIncreaseOrDecrease(
+      {super.key, required this.getCount, required this.add, required this.remove, });
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +18,8 @@ class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
       mainAxisSize: MainAxisSize.min,
       children: [
         /// Minus
-        InkWell(
-          onTap: (){
-            setState(() {
-              if (count > 0) {
-                count--;
-              }
-            });
-          },
+        GestureDetector(
+          onTap: remove,
           child: Container(
             width: kPlusMinusContainerSize,
             height: kPlusMinusContainerSize,
@@ -57,32 +49,35 @@ class _CountIncreaseOrDecreaseState extends State<CountIncreaseOrDecrease> {
             ),
           ),
         ),
+
         /// Spacer
         const SizedBox(
           width: kMarginCardMedium2,
         ),
+
         /// Count
-        Text(
-          "$count",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: kPrimaryColor,
-            fontSize: kTextRegular1x,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w700,
+        SizedBox(
+          width: kMarginMedium3,
+          child: Text(
+            getCount.toString(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: kPrimaryColor,
+              fontSize: kTextRegular1x,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
+
         /// Spacer
         const SizedBox(
           width: kMarginCardMedium2,
         ),
+
         /// Plus
-        InkWell(
-          onTap: (){
-            setState(() {
-              count++;
-            });
-          },
+        GestureDetector(
+          onTap: add,
           child: Container(
             width: kPlusMinusContainerSize,
             height: kPlusMinusContainerSize,

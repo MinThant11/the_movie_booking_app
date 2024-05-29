@@ -10,6 +10,8 @@ import 'home_page.dart';
 class TicketsPage extends StatelessWidget {
   const TicketsPage({super.key});
 
+  get timeSlotVO => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +52,15 @@ class TicketsPage extends StatelessWidget {
                       builder: (context) => const TicketDetailsPage()),
                 );
               },
-              child: const MiniTicketView(),
+              child: MiniTicketView(
+                timeSlotVO: timeSlotVO,
+                seats: '',
+                bookingDate: '',
+                movieId: 0,
+                selectedSnacksList: const [],
+                movieName: '',
+                posterPath: '',
+                cinema: '',),
             );
           },
           itemCount: 2,

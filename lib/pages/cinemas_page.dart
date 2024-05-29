@@ -12,7 +12,9 @@ import 'home_page.dart';
 import 'location_page.dart';
 
 class CinemasPage extends StatelessWidget {
-  const CinemasPage({super.key,});
+  const CinemasPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,12 +79,12 @@ class CinemaScreenBodyView extends StatefulWidget {
 }
 
 class _CinemaScreenBodyViewState extends State<CinemaScreenBodyView> {
-
   /// Model
   final TmbaModel _tmbaModel = TmbaModel();
 
   /// State
   ChooseDateVO? chooseDateVO;
+  String? date;
 
   /// Cinema
   List<CinemaVO> cinemaToShow = [];
@@ -91,24 +93,32 @@ class _CinemaScreenBodyViewState extends State<CinemaScreenBodyView> {
   void initState() {
     super.initState();
 
+    /// User Data From Database
     UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
+
+    date =
+        (chooseDateVO?.isSelected == true) ? chooseDateVO?.date.toString() : '';
 
     /// Cinema From Network
     _tmbaModel
-        .getCinema(userDataFromDatabase?.token ?? '', chooseDateVO?.date ?? '')
+        .getCinema(userDataFromDatabase?.token ?? '', date ?? '')
         .then((cinemaList) {
       setState(() {
         cinemaToShow = cinemaList;
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return ChooseCinema(cinema: cinemaToShow[index], bookingDate: '',);
+        return ChooseCinema(
+          cinema: cinemaToShow[index],
+          bookingDate: date ?? '', movieName: '', posterPath: '', movieId: 0,
+        );
       },
-      itemCount: 10,
+      itemCount: cinemaToShow.length,
     );
   }
 }

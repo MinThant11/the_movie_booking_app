@@ -1,23 +1,32 @@
 import 'package:intl/intl.dart';
 
 class ChooseDateVO {
-  String date = "";
+  DateTime date;
+  bool isSelected;
 
-  bool isSelected = false;
-
-  ChooseDateVO({required String date, required bool isSelected});
+  ChooseDateVO(this.date, this.isSelected);
 }
 
-List<ChooseDateVO> chooseDate() {
-  List<ChooseDateVO> dates = [];
-  final now = DateTime.now();
+List<ChooseDateVO> generateDateVOs() {
+  List<ChooseDateVO> dateVOs = [];
+  DateTime today = DateTime.now();
   for (int i = 0; i < 14; i++) {
-    var getDate = DateTime(now.year, now.month, now.day + i);
-    var date = DateFormat('yyyy-MM-dd').format(getDate);
-    dates.add(ChooseDateVO(date: date, isSelected: false));
+    DateTime futureDate = today.add(Duration(days: i));
+    dateVOs.add(ChooseDateVO(futureDate, false));
   }
-  return dates;
+  return dateVOs;
 }
+
+// List<ChooseDateVO> chooseDate() {
+//   List<ChooseDateVO> dates = [];
+//   final now = DateTime.now();
+//   for (int i = 0; i < 14; i++) {
+//     var getDate = DateTime(now.year, now.month, now.day + i);
+//     var date = DateFormat('yyyy-MM-dd').format(getDate);
+//     dates.add(ChooseDateVO(date: date, isSelected: false));
+//   }
+//   return dates;
+// }
 
 // List<String> dates(String state) {
 //   List<String> dates = [];

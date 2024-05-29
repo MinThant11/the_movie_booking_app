@@ -49,12 +49,22 @@ class TicketDetailsPage extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         child: const Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 22, top: 12, right: 22),
-              child: TicketDetailsView(
-                cancellationPolicyColor: Color(0xFFFF2E00),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 22, top: 12, right: 22),
+            //   child: TicketDetailsView(
+            //     movieName: '',
+            //     posterPath: '',
+            //     cinema: '',
+            //     cinemaTime: '',
+            //     cinemaScreen: '',
+            //     bookingDate: '',
+            //     seats: '',
+            //     ticketCount: 0,
+            //     seatTotalPrice: 0,
+            //     selectedSnacksList: [],
+            //     cancellationPolicyColor: Color(0xFFFF2E00),
+            //   ),
+            // ),
             Positioned(
               bottom: 20,
               left: 0,

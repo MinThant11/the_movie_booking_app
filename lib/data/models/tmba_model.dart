@@ -1,3 +1,4 @@
+import 'package:the_movie_booking_app/data/vos/checkout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
 import 'package:the_movie_booking_app/data/vos/city_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_type_vo.dart';
@@ -92,6 +93,11 @@ class TmbaModel {
   /// Checkout Request
   Future<CheckoutRequest> checkoutRequest(String bearerToken, CheckoutRequest checkoutRequest){
     return tmbaDataAgent.checkoutRequest(bearerToken, checkoutRequest);
+  }
+
+  /// Checkout
+  Future<CheckoutVO> getCheckout(String bearerToken) {
+    return tmbaDataAgent.getCheckout(bearerToken);
   }
 
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
 import 'package:the_movie_booking_app/list_items/cast_item_view.dart';
@@ -30,14 +32,24 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   MovieVO? movieDetails;
   List<CreditVO>? creditList;
 
+  /// Stream Subscription
+  StreamSubscription? _movieDetailsStreamSubscription;
+
   @override
   void initState() {
     super.initState();
 
     /// Get Movie Details From Database
-    MovieVO? movieDetailsFromDatabase = _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0"));
-    setState(() {
-      movieDetails = movieDetailsFromDatabase;
+    // MovieVO? movieDetailsFromDatabase =
+    //     _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0"));
+    // setState(() {
+    //   movieDetails = movieDetailsFromDatabase;
+    // });
+    _movieDetailsStreamSubscription = _model.getMovieDetailsFromDatabase(int.parse(widget.movieId ?? "0"))
+        .listen((movieDetailsFromDatabase) {
+          setState(() {
+            movieDetails = movieDetailsFromDatabase;
+          });
     });
 
     /// Get Movie Details From Network
@@ -53,6 +65,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         creditList = credit;
       });
     });
+  }
+
+  /// Cancel subscription on dispose
+  @override
+  void dispose() {
+    _movieDetailsStreamSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -188,8 +207,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           end: Alignment.bottomCenter,
                           colors: [Colors.transparent, kBackgroundColor],
                         )),
-                        child: const Center(
-                          child: BookingButton(),
+                        child: Center(
+                          child: BookingButton(
+                            movie: movieDetails,
+                          ),
                         ),
                       ),
                     ),
@@ -529,7 +550,8 @@ class CastView extends StatelessWidget {
 
 /// Booking Button
 class BookingButton extends StatelessWidget {
-  const BookingButton({super.key});
+  final MovieVO? movie;
+  const BookingButton({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -538,7 +560,11 @@ class BookingButton extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const TimeAndCinemaPage()));
+                builder: (context) => TimeAndCinemaPage(
+                      movieName: movie?.title ?? '',
+                      posterPath: movie?.getPosterPathWithBaseUrl() ?? '',
+                  movieId: movie?.id ?? 0,
+                    )));
       },
       child: const SizedBox(
         height: kBookingButtonHeight,

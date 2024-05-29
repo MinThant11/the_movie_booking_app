@@ -1,9 +1,7 @@
-import 'dart:collection';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/data/vos/seat_vo.dart';
+import 'package:the_movie_booking_app/data/vos/time_slot_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/status_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
@@ -14,10 +12,21 @@ import 'package:the_movie_booking_app/utils/images.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
 
 class SeatsPage extends StatelessWidget {
-  final int timeSlotId;
+  final int movieId;
+  final String movieName;
+  final String posterPath;
+  final String cinema;
+  final TimeSlotVO timeSlotVO;
+  final String cinemaScreen;
   final String bookingDate;
   const SeatsPage(
-      {super.key, required this.timeSlotId, required this.bookingDate});
+      {super.key,
+      required this.bookingDate,
+      required this.cinemaScreen,
+      required this.cinema,
+      required this.movieName,
+      required this.posterPath,
+        required this.timeSlotVO, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +34,12 @@ class SeatsPage extends StatelessWidget {
       backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: SeatScreenView(
-          timeSlotId: timeSlotId,
           bookingDate: bookingDate,
+          cinema: cinema,
+          cinemaScreen: cinemaScreen,
+          movieName: movieName,
+          posterPath: posterPath,
+          timeSlotVO: timeSlotVO, movieId: movieId,
         ),
       ),
     );
@@ -35,10 +48,21 @@ class SeatsPage extends StatelessWidget {
 
 /// Seat Screen
 class SeatScreenView extends StatefulWidget {
-  final int timeSlotId;
+  final int movieId;
+  final String movieName;
+  final String posterPath;
+  final String cinema;
+  final TimeSlotVO timeSlotVO;
+  final String cinemaScreen;
   final String bookingDate;
   const SeatScreenView(
-      {super.key, required this.timeSlotId, required this.bookingDate});
+      {super.key,
+      required this.bookingDate,
+      required this.cinema,
+      required this.cinemaScreen,
+      required this.movieName,
+      required this.posterPath,
+        required this.timeSlotVO, required this.movieId});
 
   @override
   State<SeatScreenView> createState() => _SeatScreenViewState();
@@ -50,6 +74,10 @@ class _SeatScreenViewState extends State<SeatScreenView> {
 
   /// Seat List
   List<SeatVO> seatsList = [];
+
+  /// Selected Seats
+  List<String> selectedSeats = [];
+  String? seats;
 
   /// State
   int? columCount;
@@ -65,8 +93,8 @@ class _SeatScreenViewState extends State<SeatScreenView> {
 
     /// Get Seating Plan From Network
     _tmbaModel
-        .getSeatingPlan(
-            userDataFromDatabase?.token ?? '', widget.timeSlotId, "2024-3-10")
+        .getSeatingPlan(userDataFromDatabase?.token ?? '', widget.timeSlotVO.cinemaDayTimeslotId ?? 0,
+            widget.bookingDate)
         .then((twoDimensionalSeatList) {
       columCount = twoDimensionalSeatList.first.length;
       setState(() {
@@ -196,6 +224,12 @@ class _SeatScreenViewState extends State<SeatScreenView> {
           child: SeatBottomView(
             ticketCount: ticketCount,
             totalPrice: totalPrice,
+            cinema: widget.cinema,
+            cinemaScreen: widget.cinemaScreen,
+            bookingDate: widget.bookingDate,
+            movieName: widget.movieName,
+            posterPath: widget.posterPath,
+            timeSlotVO: widget.timeSlotVO, movieId: widget.movieId, seatList: seatsList,
           ),
         ),
       ],
@@ -262,10 +296,27 @@ class SeatView extends StatelessWidget {
 
 /// Seat Bottom
 class SeatBottomView extends StatelessWidget {
+  final List<SeatVO> seatList;
+  final int movieId;
+  final String movieName;
+  final String posterPath;
+  final String cinema;
+  final TimeSlotVO timeSlotVO;
+  final String cinemaScreen;
+  final String bookingDate;
   final int ticketCount;
   final int totalPrice;
-  const SeatBottomView(
-      {super.key, required this.ticketCount, required this.totalPrice});
+  const SeatBottomView({
+    super.key,
+    required this.ticketCount,
+    required this.totalPrice,
+    required this.cinema,
+    required this.cinemaScreen,
+    required this.bookingDate,
+    required this.movieName,
+    required this.posterPath,
+    required this.timeSlotVO, required this.movieId, required this.seatList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +392,12 @@ class SeatBottomView extends StatelessWidget {
         BuyTicketView(
           ticketCount: ticketCount,
           totalPrice: totalPrice,
+          cinema: cinema,
+          cinemaScreen: cinemaScreen,
+          bookingDate: bookingDate,
+          movieName: movieName,
+          posterPath: posterPath,
+          timeSlotVO: timeSlotVO, movieId: movieId, seatList: seatList,
         )
       ],
     );
@@ -374,10 +431,27 @@ class _SliderWidgetViewState extends State<SliderWidgetView> {
 
 /// Buy Ticket
 class BuyTicketView extends StatelessWidget {
+  final int movieId;
+  final String movieName;
+  final String posterPath;
+  final String cinema;
+  final TimeSlotVO timeSlotVO;
+  final List<SeatVO> seatList;
+  final String cinemaScreen;
+  final String bookingDate;
   final int ticketCount;
   final int totalPrice;
-  const BuyTicketView(
-      {super.key, required this.ticketCount, required this.totalPrice});
+  const BuyTicketView({
+    super.key,
+    required this.ticketCount,
+    required this.totalPrice,
+    required this.cinema,
+    required this.cinemaScreen,
+    required this.bookingDate,
+    required this.movieName,
+    required this.posterPath,
+    required this.timeSlotVO, required this.movieId, required this.seatList,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -418,9 +492,26 @@ class BuyTicketView extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (ticketCount != 0 && totalPrice != 0) {
+
+                /// seatList => isSe == true => seat name => join(",")
+                String seats = seatList.where((seat) => seat.isSelected == true)
+                .map((seat) => seat.seatName).join(",");
+                print(seats);
+
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SnackPage()),
+                  MaterialPageRoute(
+                      builder: (context) => SnackPage(
+                            movieName: movieName,
+                            posterPath: posterPath,
+                            cinema: cinema,
+                            cinemaScreen: cinemaScreen,
+                            bookingDate: bookingDate,
+                            seats: seats,
+                            ticketCount: ticketCount,
+                            totalPrice: totalPrice,
+                        timeSlotVO: timeSlotVO, movieId: movieId,
+                          )),
                 );
               }
             },

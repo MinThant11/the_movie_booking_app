@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/data/vos/checkout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
 import 'package:the_movie_booking_app/data/vos/city_vo.dart';
 import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
@@ -223,5 +224,19 @@ class RetrofitDataAgentImpl implements TheMovieBookingDataAgent, TmbaDataAgent {
   Future<CheckoutRequest> checkoutRequest(
       String bearerToken, CheckoutRequest checkoutRequest) {
     return tmbaApi.checkoutRequest(bearerToken, checkoutRequest);
+  }
+
+  @override
+  Future<CheckoutVO> getCheckout(String bearerToken) {
+    return tmbaApi.getCheckout(bearerToken).then((response) {
+      if (response.code! >= 200 && response.code! <= 299) {
+        return response.data as CheckoutVO;
+      } else {
+        throw CustomException(ErrorVO(
+            statusCode: response.code ?? 400,
+            statusMessage: response.message ?? "Invalid",
+            success: false));
+      }
+    });
   }
 }

@@ -1,33 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
+import 'package:the_movie_booking_app/data/vos/checkout_vo.dart';
+import 'package:the_movie_booking_app/data/vos/snacks_vo.dart';
+import 'package:the_movie_booking_app/data/vos/time_slot_vo.dart';
+import 'package:the_movie_booking_app/data/vos/user_vo.dart';
+import 'package:the_movie_booking_app/network/api_constants.dart';
+import 'package:the_movie_booking_app/network/requests/checkout_request.dart';
 import 'package:the_movie_booking_app/pages/main_page.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
+import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../list_items/mini_ticket_view.dart';
 
 class TicketConfirmationPage extends StatelessWidget {
-  const TicketConfirmationPage({super.key});
+  final CheckoutRequest checkoutRequest;
+  final String movieName;
+  final String posterPath;
+  final TimeSlotVO timeSlotVO;
+  final String seats;
+  final String bookingDate;
+  final int movieId;
+  final List<SnacksVO> selectedSnacksList;
+  final String cinema;
+  const TicketConfirmationPage(
+      {super.key,
+      required this.timeSlotVO,
+      required this.seats,
+      required this.bookingDate,
+      required this.movieId,
+      required this.selectedSnacksList,
+      required this.movieName,
+      required this.posterPath,
+      required this.cinema, required this.checkoutRequest});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
-        child: ScreenView(),
+        child: ScreenView(
+          timeSlotVO: timeSlotVO,
+          seats: seats,
+          bookingDate: bookingDate,
+          movieId: movieId,
+          selectedSnacksList: selectedSnacksList,
+          movieName: movieName,
+          posterPath: posterPath,
+          cinema: cinema,
+        ),
       ),
     );
   }
 }
 
 class ScreenView extends StatefulWidget {
-  const ScreenView({super.key});
+  final String movieName;
+  final String posterPath;
+  final TimeSlotVO timeSlotVO;
+  final String seats;
+  final String bookingDate;
+  final int movieId;
+  final List<SnacksVO> selectedSnacksList;
+  final String cinema;
+  const ScreenView(
+      {super.key,
+      required this.timeSlotVO,
+      required this.seats,
+      required this.bookingDate,
+      required this.movieId,
+      required this.selectedSnacksList,
+      required this.movieName,
+      required this.posterPath,
+      required this.cinema});
 
   @override
   State<ScreenView> createState() => _ScreenViewState();
 }
 
 class _ScreenViewState extends State<ScreenView> {
+  
+  /// Model
+  final TmbaModel _tmbaModel = TmbaModel();
+
+  /// Checkout
+  CheckoutVO? checkoutVO;
+  
   bool isShowBookingSuccessImage = true;
 
   @override
@@ -39,6 +98,20 @@ class _ScreenViewState extends State<ScreenView> {
         isShowBookingSuccessImage = false;
       });
     });
+
+    /// User Data From Database
+    UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
+    
+    /// Checkout Response From Network
+    _tmbaModel.getCheckout(userDataFromDatabase?.token ?? '').then((getCheckout) {
+      setState(() {
+        checkoutVO = getCheckout;
+
+        print("Checkout1 ============> $getCheckout");
+      });
+    });
+
+    print("Checkout ============> $checkoutVO");
   }
 
   @override
@@ -63,7 +136,16 @@ class _ScreenViewState extends State<ScreenView> {
         ),
 
         /// Ticket, QR And Pin
-        const TicketAndQRView(),
+        TicketAndQRView(
+          timeSlotVO: widget.timeSlotVO,
+          seats: widget.seats,
+          bookingDate: widget.bookingDate,
+          movieId: widget.movieId,
+          selectedSnacksList: widget.selectedSnacksList,
+          movieName: widget.movieName,
+          posterPath: widget.posterPath,
+          cinema: widget.cinema, checkoutVO: checkoutVO,
+        ),
 
         /// Button
         Align(
@@ -117,17 +199,43 @@ class _ScreenViewState extends State<ScreenView> {
 }
 
 class TicketAndQRView extends StatelessWidget {
+  final CheckoutVO? checkoutVO;
+  final String movieName;
+  final String posterPath;
+  final TimeSlotVO timeSlotVO;
+  final String seats;
+  final String bookingDate;
+  final int movieId;
+  final String cinema;
+  final List<SnacksVO> selectedSnacksList;
   const TicketAndQRView({
     super.key,
+    required this.movieName,
+    required this.posterPath,
+    required this.timeSlotVO,
+    required this.seats,
+    required this.bookingDate,
+    required this.movieId,
+    required this.selectedSnacksList,
+    required this.cinema, required this.checkoutVO,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 70),
-          child: MiniTicketView(),
+        Padding(
+          padding: const EdgeInsets.only(top: 70),
+          child: MiniTicketView(
+            timeSlotVO: timeSlotVO,
+            seats: seats,
+            bookingDate: bookingDate,
+            movieId: movieId,
+            selectedSnacksList: selectedSnacksList,
+            movieName: movieName,
+            posterPath: posterPath,
+            cinema: cinema,
+          ),
         ),
         const SizedBox(
           height: 110,
@@ -135,6 +243,12 @@ class TicketAndQRView extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Image.network(
+            //   "$kTmbaImageBaseUrl${checkoutVO?.qrCode}",
+            //   width: kTimeSelectViewHeight,
+            //   height: kTimeSelectViewHeight,
+            //   fit: BoxFit.cover,
+            // ),
             QrImageView(
               data: 'WAG5LP1C',
               version: QrVersions.auto,

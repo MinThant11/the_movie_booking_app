@@ -46,3 +46,5 @@ const Color kFillingFastColor= Color(0xFFFF7A00);
 const Color kAlmostFullColor = Color(0xFFFF00B7);
 
 const Color kNoTiCircleColor = Color(0xFFFF0000);
+
+const Color kCancellationPolicyColor = Color(0xFFFF2E00);

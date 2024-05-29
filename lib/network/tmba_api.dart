@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:the_movie_booking_app/network/api_constants.dart';
 import 'package:the_movie_booking_app/network/requests/checkout_request.dart';
+import 'package:the_movie_booking_app/network/responses/get_checkout_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_cinema_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_cities_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_otp_response.dart';
@@ -39,7 +40,6 @@ abstract class TmbaApi {
     @Query(kTmbaParamDate) String date,
   );
 
-
   @GET(kTmbaEndPointGetSeatingPlan)
   Future<GetSeatingPlanResponse> getSeatingPlan(
     @Header(kTmbaHeaderAuthorization) String bearerToken,
@@ -64,9 +64,13 @@ abstract class TmbaApi {
   );
 
   @POST(kTmbaEndPointCheckout)
-  @FormUrlEncoded()
   Future<CheckoutRequest> checkoutRequest(
     @Header(kTmbaHeaderAuthorization) String bearerToken,
     @Body() CheckoutRequest checkoutRequest,
+  );
+
+  @GET(kTmbaEndPointCheckout)
+  Future<GetCheckoutResponse> getCheckout(
+    @Header(kTmbaHeaderAuthorization) String bearerToken,
   );
 }

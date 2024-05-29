@@ -13,9 +13,19 @@ import '../pages/seats_page.dart';
 // }
 
 class TimeSelectView extends StatelessWidget {
+  final int movieId;
+  final String movieName;
+  final String posterPath;
   final List<TimeSlotVO> timeSlot;
+  final String cinema;
   final String bookingDate;
-  const TimeSelectView({super.key, required this.timeSlot, required this.bookingDate});
+  const TimeSelectView(
+      {super.key,
+      required this.timeSlot,
+      required this.bookingDate,
+      required this.cinema,
+      required this.movieName,
+      required this.posterPath, required this.movieId});
 
   // final List<TimeSelectItems> sections = [
   //   TimeSelectItems(const Color(0xFFFFFFFF), "9:30 AM\n3D\nScreen 1\n21 Available",),
@@ -41,7 +51,15 @@ class TimeSelectView extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SeatsPage(timeSlotId: timeSlot[index].cinemaDayTimeslotId ?? 0, bookingDate: bookingDate)),
+                MaterialPageRoute(
+                    builder: (context) => SeatsPage(
+                          bookingDate: bookingDate,
+                          cinemaScreen: "Screen ${index + 1}",
+                          cinema: cinema,
+                          movieName: movieName,
+                          posterPath: posterPath,
+                          timeSlotVO: timeSlot[index], movieId: movieId,
+                        )),
               );
             },
             child: Container(

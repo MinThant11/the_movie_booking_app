@@ -20,40 +20,45 @@ class MovieBookingModel {
   /// Data Agent
   TheMovieBookingDataAgent mDataAgent = RetrofitDataAgentImpl();
 
-  /// Now Playing Movie
-  Future<List<MovieVO>> getNowPlayingMovies() {
-    return mDataAgent.getNowPlayingMovies(1.toString()).then((nowPlayingMovieList) async {
-
+  /// Now Playing
+  // Future<List<MovieVO>>
+  Future getNowPlayingMovies() {
+    return mDataAgent.getNowPlayingMovies(1.toString()).then((nowPlayingMovieList) {
       for (var movie in nowPlayingMovieList) {
         movie.type = kMovieTypeNowPlaying;
       }
 
       _movieDao.saveMovie(nowPlayingMovieList);
 
-      return nowPlayingMovieList;
+      // return nowPlayingMovieList;
     });
   }
 
   /// Coming Soon Movie
-  Future<List<MovieVO>> getComingSoonMovies() {
-    return mDataAgent.getComingSoonMovies(1.toString()).then((comingSoonMovieList) async {
-
+  // Future<List<MovieVO>>
+  Future getComingSoonMovies() {
+    return mDataAgent.getComingSoonMovies(1.toString()).then((comingSoonMovieList) {
       for (var movie in comingSoonMovieList) {
         movie.type = kMovieTypeComingSoon;
       }
 
       _movieDao.saveMovie(comingSoonMovieList);
 
-      return comingSoonMovieList;
+      // return comingSoonMovieList;
     });
   }
 
   /// Movie Details
+  // Future<MovieVO>
   Future<MovieVO> getMovieDetails(String movieId) {
     return mDataAgent.getMovieDetails(movieId).then((movie) async {
+      // Sync type before saving
+      MovieVO? movieFromDatabase = _movieDao.getMovieById(int.parse(movieId));
+      if (movieFromDatabase != null) {
+        movie.type = movieFromDatabase.type ?? "";
+      }
 
       _movieDao.saveSingleMovie(movie);
-
       return movie;
     });
   }
@@ -66,18 +71,27 @@ class MovieBookingModel {
   /// --------------------- GET DAO --------------------------- ///
 
   /// Get Now Playing Movie From Database
-  List<MovieVO> getNowPlayingFromDatabase() {
-    return _movieDao.getMovieByType(kMovieTypeNowPlaying);
+  // List<MovieVO> getNowPlayingFromDatabase() {
+  //   return _movieDao.getMovieByType(kMovieTypeNowPlaying);
+  // }
+  Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase() {
+    return _movieDao.watchMovieBox().map((_) => _movieDao.getMovieByType(kMovieTypeNowPlaying));
   }
 
   /// Get Coming Soon Movie From Database
-  List<MovieVO> getComingSoonMovieFromDatabase() {
-    return _movieDao.getMovieByType(kMovieTypeComingSoon);
+  // List<MovieVO> getComingSoonMovieFromDatabase() {
+  //   return _movieDao.getMovieByType(kMovieTypeComingSoon);
+  // }
+  Stream<List<MovieVO>> getComingSoonMoviesFromDatabase() {
+    return _movieDao.watchMovieBox().map((_) => _movieDao.getMovieByType(kMovieTypeComingSoon));
   }
 
   /// Get Movie Details From Database
-  MovieVO? getMovieByIdFromDatabase(int movieId) {
-    return _movieDao.getMovieById(movieId);
+  // MovieVO? getMovieByIdFromDatabase(int movieId) {
+  //   return _movieDao.getMovieById(movieId);
+  // }
+  Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
+    return _movieDao.watchMovieBox().map((_) => _movieDao.getMovieById(movieId));
   }
 
 }

@@ -1,3 +1,4 @@
+import 'package:the_movie_booking_app/data/vos/checkout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
 import 'package:the_movie_booking_app/data/vos/city_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_type_vo.dart';
@@ -27,5 +28,7 @@ abstract class TmbaDataAgent {
   Future<List<PaymentTypeVO>> getPaymentTypes(String bearerToken);
 
   Future<CheckoutRequest> checkoutRequest(String bearerToken, CheckoutRequest checkoutRequest);
+
+  Future<CheckoutVO> getCheckout(String bearerToken);
 
 }

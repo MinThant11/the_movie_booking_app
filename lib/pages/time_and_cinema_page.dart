@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/data/vos/choose_date_vo.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
@@ -13,7 +15,13 @@ import 'package:the_movie_booking_app/utils/strings.dart';
 import '../utils/images.dart';
 
 class TimeAndCinemaPage extends StatelessWidget {
-  const TimeAndCinemaPage({super.key});
+  final int movieId;
+  final String movieName;
+  final String posterPath;
+  const TimeAndCinemaPage({
+    super.key,
+    required this.movieName, required this.posterPath, required this.movieId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +78,20 @@ class TimeAndCinemaPage extends StatelessWidget {
           ),
         ],
       ),
-      body: const ScreenBodyView(),
+      body: ScreenBodyView(movieName: movieName, posterPath: posterPath, movieId: movieId,),
     );
   }
 }
 
 /// ScreenViewList
 class ScreenBodyView extends StatefulWidget {
+  final int movieId;
+  final String movieName;
+  final String posterPath;
   const ScreenBodyView({
     super.key,
+    required this.movieName,
+    required this.posterPath, required this.movieId,
   });
 
   @override
@@ -92,30 +105,35 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
   /// Cinema
   List<CinemaVO> cinemaToShow = [];
 
+  /// User Token
+  String? token;
+
+  /// State
+  dynamic selectedIndex;
+
+  String? bookingDate;
+
   @override
   void initState() {
     super.initState();
 
-    UserVO? userDataFromDatabase = _model.getUserDataFromDatabase();
+    /// Choose Date
+    selectedIndex = 0;
+    generateDateVOs().first.isSelected = true;
 
-    var date = chooseDate().map((e) => (e.isSelected = true) ? e.date : '');
+    /// User Data From Database
+    UserVO? userDataFromDatabase = _model.getUserDataFromDatabase();
+    token = userDataFromDatabase?.token;
+
+    bookingDate =
+        DateFormat('yyyy-MM-dd').format(generateDateVOs()[selectedIndex].date);
 
     /// Cinema From Network
-    /// With Default Date
-    _model
-        .getCinema(userDataFromDatabase?.token ?? '', "2024-3-10")
-        .then((cinemaList) {
+    _model.getCinema(token ?? '', bookingDate ?? '').then((cinemaList) {
       setState(() {
         cinemaToShow = cinemaList;
       });
     });
-
-    ///
-    print(chooseDate().first.date);
-    print("bookingDate : ${date.toString()}");
-    print("isSelected : ${chooseDate().first.isSelected}");
-    print("bearerToken : ${userDataFromDatabase?.token}");
-
   }
 
   @override
@@ -123,8 +141,147 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
     return CustomScrollView(
       slivers: [
         /// Choose Date
-        const SliverToBoxAdapter(
-          child: ChooseDateView(),
+        SliverToBoxAdapter(
+          child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: kMargin10),
+              height: kMargin95,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                          if (selectedIndex == index) {
+                            generateDateVOs()[selectedIndex].isSelected = true;
+                          }
+
+                          bookingDate = DateFormat('yyyy-MM-dd')
+                              .format(generateDateVOs()[selectedIndex].date);
+
+                          /// Cinema From Network
+                          _model
+                              .getCinema(token ?? '', bookingDate ?? '')
+                              .then((cinemaList) {
+                            setState(() {
+                              cinemaToShow = cinemaList;
+                            });
+                          });
+                        });
+                      },
+
+                      /// Date Time Ticket View
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: kMarginMedium2),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Image.asset(
+                                kChooseDateBottom,
+                                width: kMargin72,
+                                height: kMargin40,
+                                fit: BoxFit.fill,
+                                color: (selectedIndex == index)
+                                    ? kPrimaryColor
+                                    : kChooseDateColor,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                width: kMargin72,
+                                height: kMargin66,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(kMarginMedium),
+                                    topRight: Radius.circular(kMarginMedium),
+                                  ),
+                                  color: (selectedIndex == index)
+                                      ? kPrimaryColor
+                                      : kChooseDateColor,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 6,
+                              left: 24.5,
+                              child: Container(
+                                width: kMarginMedium4,
+                                height: kMargin5,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(kMarginMedium),
+                                    color: kBackgroundColor),
+                              ),
+                            ),
+                            Visibility(
+                              visible: (index == 0),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: kMarginMedium3),
+                                child: SizedBox(
+                                  width: kMargin72,
+                                  child: Text(
+                                    "Today${DateFormat('\nMMM\nd').format(generateDateVOs()[index].date)}",
+                                    textAlign: TextAlign.center,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: kTextRegular,
+                                        fontWeight: FontWeight.w900,
+                                        height: 1.6),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: (index == 1),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: kMarginMedium3),
+                                child: SizedBox(
+                                  width: kMargin72,
+                                  child: Text(
+                                    "Tomorrow${DateFormat('\nMMM\nd').format(generateDateVOs()[index].date)}",
+                                    textAlign: TextAlign.center,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: kTextRegular,
+                                        fontWeight: FontWeight.w900,
+                                        height: 1.6),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: (index != 0 && index != 1),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: kMarginMedium3),
+                                child: SizedBox(
+                                  width: kMargin72,
+                                  child: Text(
+                                    DateFormat('E\nMMM\nd')
+                                        .format(generateDateVOs()[index].date),
+                                    textAlign: TextAlign.center,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: kTextRegular,
+                                        fontWeight: FontWeight.w900,
+                                        height: 1.6),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ));
+                },
+                itemCount: generateDateVOs().length,
+              )),
         ),
 
         /// Quality
@@ -143,8 +300,10 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
             (context, index) {
               return ChooseCinema(
                 cinema: cinemaToShow[index],
-                /// Default Date
-                bookingDate: "2024-3-10",
+                bookingDate: bookingDate ?? '',
+                movieName: widget.movieName,
+                posterPath: widget.posterPath,
+                movieId: widget.movieId,
               );
             },
             childCount: cinemaToShow.length,
@@ -155,124 +314,76 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
   }
 }
 
-/// Choose Date
-class ChooseDateView extends StatefulWidget {
-  const ChooseDateView({
+/// Date Time Ticket View
+class DateTimeTicketView extends StatelessWidget {
+  final ChooseDateVO chooseDate;
+  const DateTimeTicketView({
     super.key,
+    required this.chooseDate,
   });
 
   @override
-  State<ChooseDateView> createState() => _ChooseDateViewState();
-}
-
-class _ChooseDateViewState extends State<ChooseDateView> {
-
-  /// State
-  dynamic selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedIndex = 0;
-    chooseDate().first.isSelected = true;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: kMargin10),
-        height: kMargin95,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            // chooseDate?.map((e) {
-            //   if (index == 0) {
-            //     e.date =
-            //         "Today${DateFormat('\nMMM\nd').format(e.date as DateTime)}";
-            //   } else if (index == 1) {
-            //     e.date =
-            //         "Tomorrow${DateFormat('\nMMM\nd').format(e.date as DateTime)}";
-            //   } else {
-            //     e.date = DateFormat('E\nMMM\nd').format(e.date as DateTime);
-            //   }
-            // });
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedIndex = index;
-                  if (selectedIndex == index) {
-                    chooseDate()[selectedIndex].isSelected = true;
-                  }
-                });
-              },
-
-              /// Date Time Ticket View
-              child: Padding(
-                padding: const EdgeInsets.only(right: kMarginMedium2),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Image.asset(
-                        kChooseDateBottom,
-                        width: kMargin72,
-                        height: kMargin40,
-                        fit: BoxFit.fill,
-                        color: (index == selectedIndex)
-                            ? kPrimaryColor
-                            : kChooseDateColor,
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        width: kMargin72,
-                        height: kMargin66,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(kMarginMedium),
-                            topRight: Radius.circular(kMarginMedium),
-                          ),
-                          color: (index == selectedIndex)
-                              ? kPrimaryColor
-                              : kChooseDateColor,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 6,
-                      left: 24.5,
-                      child: Container(
-                        width: kMarginMedium4,
-                        height: kMargin5,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(kMarginMedium),
-                            color: kBackgroundColor),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: kMarginMedium3),
-                      child: SizedBox(
-                        width: kMargin72,
-                        child: Text(
-                          chooseDate()[index].date,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: kTextRegular,
-                              fontWeight: FontWeight.w900,
-                              height: 1.6),
-                        ),
-                      ),
-                    ),
-                  ],
+    return Padding(
+      padding: const EdgeInsets.only(right: kMarginMedium2),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Image.asset(
+              kChooseDateBottom,
+              width: kMargin72,
+              height: kMargin40,
+              fit: BoxFit.fill,
+              color: (chooseDate.isSelected) ? kPrimaryColor : kChooseDateColor,
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              width: kMargin72,
+              height: kMargin66,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(kMarginMedium),
+                  topRight: Radius.circular(kMarginMedium),
                 ),
+                color: (chooseDate.isSelected == true)
+                    ? kPrimaryColor
+                    : kChooseDateColor,
               ),
-            );
-          },
-          itemCount: chooseDate().length,
-        ));
+            ),
+          ),
+          Positioned(
+            top: 6,
+            left: 24.5,
+            child: Container(
+              width: kMarginMedium4,
+              height: kMargin5,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(kMarginMedium),
+                  color: kBackgroundColor),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: kMarginMedium3),
+            child: SizedBox(
+              width: kMargin72,
+              child: Text(
+                chooseDate.date.toString(),
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: kTextRegular,
+                    fontWeight: FontWeight.w900,
+                    height: 1.6),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -358,10 +469,17 @@ class ChooseCinemaStatusView extends StatelessWidget {
 
 /// Choose Cinema
 class ChooseCinema extends StatefulWidget {
+  final int movieId;
+  final String movieName;
+  final String posterPath;
   final CinemaVO cinema;
   final String bookingDate;
   const ChooseCinema(
-      {super.key, required this.cinema, required this.bookingDate});
+      {super.key,
+      required this.cinema,
+      required this.bookingDate,
+      required this.movieName,
+      required this.posterPath, required this.movieId});
 
   @override
   State<ChooseCinema> createState() => _ChooseCinemaState();
@@ -476,6 +594,9 @@ class _ChooseCinemaState extends State<ChooseCinema> {
                 child: TimeSelectView(
                   timeSlot: widget.cinema.timeSlots ?? [],
                   bookingDate: widget.bookingDate,
+                  cinema: widget.cinema.cinema ?? '',
+                  movieName: widget.movieName,
+                  posterPath: widget.posterPath, movieId: widget.movieId,
                 ),
               ),
 

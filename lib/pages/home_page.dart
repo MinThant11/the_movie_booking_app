@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
@@ -139,28 +141,52 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
   /// Movies To Show
   List<MovieVO> movieToShow = [];
 
+  StreamSubscription? _nowPlayingMoviesSubscription;
+  StreamSubscription? _comingSoonMoviesSubscription;
+
+
   @override
   void initState() {
     super.initState();
 
     /// Now Playing Movies From Database
-    List<MovieVO> nowPlayingMoviesFromDatabase = _model.getNowPlayingFromDatabase();
-    setState(() {
+    // List<MovieVO> nowPlayingMoviesFromDatabase = _model.getNowPlayingMoviesFromDatabase();
+    // setState(() {
+    //   nowPlayingMovies = nowPlayingMoviesFromDatabase;
+    //   movieToShow = nowPlayingMoviesFromDatabase;
+    // });
+    _nowPlayingMoviesSubscription = _model.getNowPlayingMoviesFromDatabase().listen((nowPlayingMoviesFromDatabase) {
       nowPlayingMovies = nowPlayingMoviesFromDatabase;
-      movieToShow = nowPlayingMoviesFromDatabase;
+      if (movieToShow.isEmpty) {
+        setState(() {
+          movieToShow = nowPlayingMoviesFromDatabase;
+        });
+      }
     });
 
+
     /// Coming Soon Movies From Database
-    List<MovieVO> comingSoonMoviesFromDatabase = _model.getComingSoonMovieFromDatabase();
-    comingSoonMovies = comingSoonMoviesFromDatabase;
+    // List<MovieVO> comingSoonMoviesFromDatabase = _model.getComingSoonMoviesFromDatabase();
+    // comingSoonMovies = comingSoonMoviesFromDatabase;
+    _comingSoonMoviesSubscription = _model.getComingSoonMoviesFromDatabase().listen((comingSoonMoviesFromDatabase) {
+      comingSoonMovies = comingSoonMoviesFromDatabase;
+    });
 
     /// Now Playing Movies From Network
-    _model.getNowPlayingMovies().then((nowPlayingMovies) {
-      setState(() {
-        this.nowPlayingMovies = nowPlayingMovies;
-        movieToShow = nowPlayingMovies;
-      });
-    }).catchError((error) {
+    // _model.getNowPlayingMovies().then((nowPlayingMovies) {
+    //   setState(() {
+    //     this.nowPlayingMovies = nowPlayingMovies;
+    //     movieToShow = nowPlayingMovies;
+    //   });
+    // }).catchError((error) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //       content: Text(error.toString()),
+    //     ),
+    //   );
+    // });
+    _model.getNowPlayingMovies().then((_) {}).catchError((error) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -170,9 +196,18 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
     });
 
     /// Coming Soon Movies From Network
-    _model.getComingSoonMovies().then((comingSoonMovies) {
-      this.comingSoonMovies = comingSoonMovies;
-    });
+    // _model.getComingSoonMovies().then((comingSoonMovies) {
+    //   this.comingSoonMovies = comingSoonMovies;
+    // });
+    _model.getComingSoonMovies().then((_) {});
+  }
+
+  /// Cancel subscription on dispose
+  @override
+  void dispose() {
+    _nowPlayingMoviesSubscription?.cancel();
+    _comingSoonMoviesSubscription?.cancel();
+    super.dispose();
   }
 
   @override
