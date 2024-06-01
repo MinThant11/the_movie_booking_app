@@ -10,7 +10,7 @@ import 'package:the_movie_booking_app/persistence/type_converters/production_cou
 import 'package:the_movie_booking_app/persistence/type_converters/spoken_language_list_type_converter.dart';
 import 'dart:async';
 
-part 'movie_booking_database.g.dart';
+// part 'movie_booking_database.g.dart';
 
 @TypeConverters([
   CollectionVOConverter,
@@ -32,4 +32,9 @@ abstract class MovieBookingDatabase extends FloorDatabase {
   }
 
   MovieDao get movieDao;
+}
+
+/// to delete and build_runner
+class $FloorMovieBookingDatabase {
+  static databaseBuilder(String s) {}
 }

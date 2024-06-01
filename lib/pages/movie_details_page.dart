@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
 import 'package:the_movie_booking_app/list_items/cast_item_view.dart';
@@ -30,23 +32,26 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   MovieVO? movieDetails;
   List<CreditVO>? creditList;
 
+  StreamSubscription? movieDetailsSubscription;
+
   @override
   void initState() {
     super.initState();
     
     /// Get Movie Details From Database
-    _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0")).then((movie) {
+    // _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0")).than((movie) {
+    //   setState(() {
+    //     movieDetails = movie;
+    //   });
+    // });
+    movieDetailsSubscription = _model.getMovieByIdFromDatabase(int.parse(widget.movieId ?? "0")).listen((movie) {
       setState(() {
         movieDetails = movie;
       });
     });
 
     /// Get Movie Details From Network
-    _model.getMovieDetails(widget.movieId ?? "").then((movie) {
-      setState(() {
-        movieDetails = movie;
-      });
-    });
+    _model.getMovieDetails(widget.movieId ?? "").then((_) {});
 
     /// Get Credits By Movie From Network
     _model.getCreditsByMovie(widget.movieId ?? "").then((credit) {

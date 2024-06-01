@@ -11,8 +11,8 @@ abstract class MovieDao {
   Future<void> insertMovie(MovieVO movie);
 
   @Query("SELECT * FROM movies WHERE id=:movieId")
-  Future<MovieVO?> getMovieById(int movieId);
+  Stream<MovieVO?> getMovieById(int movieId);
 
   @Query("SELECT * FROM movies WHERE type=:type")
-  Future<List<MovieVO>> getMoviesByType(String type);
+  Stream<List<MovieVO>> getMoviesByType(String type);
 }
