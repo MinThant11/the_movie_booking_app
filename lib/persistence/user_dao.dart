@@ -24,7 +24,7 @@ class UserDao {
 
   /// Get User Data
   UserVO? getUserData() {
-    return getUserBox().values.first;
+    return getUserBox().values.firstOrNull;
   }
 
   /// User Box
