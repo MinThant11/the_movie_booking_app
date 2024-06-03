@@ -20,6 +20,11 @@ class MovieBookingModel {
   /// Data Agent
   TheMovieBookingDataAgent mDataAgent = RetrofitDataAgentImpl();
 
+  /// Search Movie
+  Future<List<MovieVO>> searchMovies(String query) {
+    return mDataAgent.searchMovies(query);
+  }
+
   /// Now Playing
   // Future<List<MovieVO>>
   Future getNowPlayingMovies() {

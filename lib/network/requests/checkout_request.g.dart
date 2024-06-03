@@ -9,11 +9,11 @@ part of 'checkout_request.dart';
 CheckoutRequest _$CheckoutRequestFromJson(Map<String, dynamic> json) =>
     CheckoutRequest(
       json['name'] as String?,
-      json['cinema_day_timeslot_id'] as int?,
+      (json['cinema_day_timeslot_id'] as num?)?.toInt(),
       json['seat_number'] as String?,
       json['booking_date'] as String?,
-      json['movie_id'] as int?,
-      json['payment_type_id'] as int?,
+      (json['movie_id'] as num?)?.toInt(),
+      (json['payment_type_id'] as num?)?.toInt(),
       (json['snacks'] as List<dynamic>?)
           ?.map((e) => SnacksVO.fromJson(e as Map<String, dynamic>))
           .toList(),

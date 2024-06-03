@@ -42,4 +42,10 @@ class HttpDataAgentImpl extends TheMovieBookingDataAgent{
     // TODO: implement getNowPlayingMovies
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<MovieVO>> searchMovies(String query) {
+    // TODO: implement searchMovies
+    throw UnimplementedError();
+  }
 }

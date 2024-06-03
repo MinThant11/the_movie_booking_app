@@ -9,7 +9,7 @@ part of 'get_snack_categories_response.dart';
 GetSnackCategoriesResponse _$GetSnackCategoriesResponseFromJson(
         Map<String, dynamic> json) =>
     GetSnackCategoriesResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
           ?.map((e) => SnackCategoryVO.fromJson(e as Map<String, dynamic>))

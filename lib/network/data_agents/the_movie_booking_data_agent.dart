@@ -11,4 +11,6 @@ abstract class TheMovieBookingDataAgent {
 
   Future<List<CreditVO>> getCreditsByMovie(String movieId);
 
+  Future<List<MovieVO>> searchMovies(String query);
+
 }

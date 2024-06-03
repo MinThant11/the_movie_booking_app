@@ -54,7 +54,7 @@ class CityVOAdapter extends TypeAdapter<CityVO> {
 // **************************************************************************
 
 CityVO _$CityVOFromJson(Map<String, dynamic> json) => CityVO(
-      json['id'] as int?,
+      (json['id'] as num?)?.toInt(),
       json['name'] as String?,
       json['created_at'] as String?,
       json['updated_at'] as String?,

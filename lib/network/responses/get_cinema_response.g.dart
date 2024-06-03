@@ -8,7 +8,7 @@ part of 'get_cinema_response.dart';
 
 GetCinemaResponse _$GetCinemaResponseFromJson(Map<String, dynamic> json) =>
     GetCinemaResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
           ?.map((e) => CinemaVO.fromJson(e as Map<String, dynamic>))

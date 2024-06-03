@@ -26,14 +26,14 @@ class _TheMovieBookingApi implements TheMovieBookingApi {
     String language,
     String page,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'api_key': apiKey,
       r'language': language,
       r'page': page,
     };
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<MovieListResponse>(Options(
       method: 'GET',
@@ -62,14 +62,14 @@ class _TheMovieBookingApi implements TheMovieBookingApi {
     String language,
     String page,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'api_key': apiKey,
       r'language': language,
       r'page': page,
     };
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<MovieListResponse>(Options(
       method: 'GET',
@@ -98,13 +98,13 @@ class _TheMovieBookingApi implements TheMovieBookingApi {
     String apiKey,
     String language,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'api_key': apiKey,
       r'language': language,
     };
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<MovieVO>(Options(
       method: 'GET',
@@ -133,14 +133,14 @@ class _TheMovieBookingApi implements TheMovieBookingApi {
     String language,
     String page,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'api_key': apiKey,
       r'language': language,
       r'page': page,
     };
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>?>(
         _setStreamType<GetCreditsByMovieResponse>(Options(
       method: 'GET',
@@ -161,6 +161,39 @@ class _TheMovieBookingApi implements TheMovieBookingApi {
     final value = _result.data == null
         ? null
         : GetCreditsByMovieResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<MovieListResponse> searchMovies(
+    String apiKey,
+    String query,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'api_key': apiKey,
+      r'query': query,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<MovieListResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/3/search/movie',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = MovieListResponse.fromJson(_result.data!);
     return value;
   }
 

@@ -8,17 +8,17 @@ part of 'credit_vo.dart';
 
 CreditVO _$CreditVOFromJson(Map<String, dynamic> json) => CreditVO(
       adult: json['adult'] as bool?,
-      gender: json['gender'] as int?,
-      id: json['id'] as int?,
+      gender: (json['gender'] as num?)?.toInt(),
+      id: (json['id'] as num?)?.toInt(),
       knowForDepartment: json['known_for_department'] as String?,
       name: json['name'] as String?,
       originalName: json['original_name'] as String?,
       popularity: (json['popularity'] as num?)?.toDouble(),
       profilePath: json['profile_path'] as String?,
-      castId: json['cast_id'] as int?,
+      castId: (json['cast_id'] as num?)?.toInt(),
       character: json['character'] as String?,
       creditId: json['credit_id'] as String?,
-      order: json['order'] as int?,
+      order: (json['order'] as num?)?.toInt(),
       department: json['department'] as String?,
       job: json['job'] as String?,
     );

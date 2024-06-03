@@ -8,7 +8,7 @@ part of 'payment_type_vo.dart';
 
 PaymentTypeVO _$PaymentTypeVOFromJson(Map<String, dynamic> json) =>
     PaymentTypeVO(
-      json['id'] as int?,
+      (json['id'] as num?)?.toInt(),
       json['title'] as String?,
       json['icon'] as String?,
       json['created_at'] as String?,

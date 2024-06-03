@@ -9,7 +9,7 @@ part of 'get_payment_types_response.dart';
 GetPaymentTypesResponse _$GetPaymentTypesResponseFromJson(
         Map<String, dynamic> json) =>
     GetPaymentTypesResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
           ?.map((e) => PaymentTypeVO.fromJson(e as Map<String, dynamic>))

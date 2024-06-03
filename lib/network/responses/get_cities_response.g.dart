@@ -8,7 +8,7 @@ part of 'get_cities_response.dart';
 
 GetCitiesResponse _$GetCitiesResponseFromJson(Map<String, dynamic> json) =>
     GetCitiesResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
           ?.map((e) => CityVO.fromJson(e as Map<String, dynamic>))

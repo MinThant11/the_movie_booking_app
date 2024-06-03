@@ -9,7 +9,7 @@ part of 'get_seating_plan_response.dart';
 GetSeatingPlanResponse _$GetSeatingPlanResponseFromJson(
         Map<String, dynamic> json) =>
     GetSeatingPlanResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       (json['data'] as List<dynamic>?)
           ?.map((e) => (e as List<dynamic>)

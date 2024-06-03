@@ -7,7 +7,7 @@ part of 'error_vo.dart';
 // **************************************************************************
 
 ErrorVO _$ErrorVOFromJson(Map<String, dynamic> json) => ErrorVO(
-      statusCode: json['status_code'] as int,
+      statusCode: (json['status_code'] as num).toInt(),
       statusMessage: json['status_message'] as String,
       success: json['success'] as bool,
     );

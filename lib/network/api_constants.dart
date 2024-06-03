@@ -9,11 +9,13 @@ const String kEndPointGetNowPlaying = "/3/movie/now_playing";
 const String kEndPointGetUpcoming = "/3/movie/upcoming";
 const String kEndPointMovieDetails = "/3/movie";
 const String kEndPointGetCreditsByMovie= "/3/movie";
+const String kEndPointSearchMovie= "/3/search/movie";
 
 /// Parameters
 const String kParamApiKey = "api_key";
 const String kParamLanguage = "language";
 const String kParamPage = "page";
+const String kParamQuery = "query";
 
 /// Constant Values
 const String kApiKey = "f2dbf563f9d90bd192f301b7f2d97d70";

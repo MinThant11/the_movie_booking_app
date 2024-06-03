@@ -7,15 +7,15 @@ part of 'checkout_vo.dart';
 // **************************************************************************
 
 CheckoutVO _$CheckoutVOFromJson(Map<String, dynamic> json) => CheckoutVO(
-      json['id'] as int?,
+      (json['id'] as num?)?.toInt(),
       json['booking_no'] as String?,
       json['booking_date'] as String?,
       json['row'] as String?,
       json['seat'] as String?,
-      json['total_seat'] as int?,
+      (json['total_seat'] as num?)?.toInt(),
       json['total'] as String?,
-      json['movie_id'] as int?,
-      json['cinema_id'] as int?,
+      (json['movie_id'] as num?)?.toInt(),
+      (json['cinema_id'] as num?)?.toInt(),
       json['username'] as String?,
       json['timeslot'] == null
           ? null

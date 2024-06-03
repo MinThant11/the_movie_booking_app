@@ -7,7 +7,7 @@ part of 'cinema_vo.dart';
 // **************************************************************************
 
 CinemaVO _$CinemaVOFromJson(Map<String, dynamic> json) => CinemaVO(
-      json['cinema_id'] as int?,
+      (json['cinema_id'] as num?)?.toInt(),
       json['cinema'] as String?,
       (json['timeslots'] as List<dynamic>?)
           ?.map((e) => TimeSlotVO.fromJson(e as Map<String, dynamic>))

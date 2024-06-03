@@ -8,7 +8,7 @@ part of 'get_checkout_response.dart';
 
 GetCheckoutResponse _$GetCheckoutResponseFromJson(Map<String, dynamic> json) =>
     GetCheckoutResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       json['data'] == null
           ? null

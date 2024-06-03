@@ -63,11 +63,11 @@ class UserVOAdapter extends TypeAdapter<UserVO> {
 // **************************************************************************
 
 UserVO _$UserVOFromJson(Map<String, dynamic> json) => UserVO(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
-      totalExpense: json['total_expense'] as int?,
+      totalExpense: (json['total_expense'] as num?)?.toInt(),
       profileImage: json['profile_image'] as String?,
     );
 

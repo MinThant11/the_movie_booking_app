@@ -22,7 +22,7 @@ class _TmbaApi implements TmbaApi {
 
   @override
   Future<GetOtpResponse> getOtp(String phone) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {'phone': phone};
@@ -53,7 +53,7 @@ class _TmbaApi implements TmbaApi {
     String phone,
     String otp,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {
@@ -84,10 +84,10 @@ class _TmbaApi implements TmbaApi {
 
   @override
   Future<GetCitiesResponse?> getCities() async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>?>(_setStreamType<GetCitiesResponse>(Options(
       method: 'GET',
@@ -115,11 +115,11 @@ class _TmbaApi implements TmbaApi {
     String bearerToken,
     String date,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'date': date};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<GetCinemaResponse>(Options(
       method: 'GET',
@@ -147,14 +147,14 @@ class _TmbaApi implements TmbaApi {
     int cinemaDayTimeslotId,
     String bookingDate,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'cinema_day_timeslot_id': cinemaDayTimeslotId,
       r'booking_date': bookingDate,
     };
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetSeatingPlanResponse>(Options(
       method: 'GET',
@@ -179,11 +179,11 @@ class _TmbaApi implements TmbaApi {
   @override
   Future<GetSnackCategoriesResponse> getSnackCategories(
       String bearerToken) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetSnackCategoriesResponse>(Options(
       method: 'GET',
@@ -210,11 +210,11 @@ class _TmbaApi implements TmbaApi {
     String bearerToken,
     int categoryId,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'category_id': categoryId};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<GetSnacksResponse>(Options(
       method: 'GET',
@@ -238,11 +238,11 @@ class _TmbaApi implements TmbaApi {
 
   @override
   Future<GetPaymentTypesResponse> getPaymentTypes(String bearerToken) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetPaymentTypesResponse>(Options(
       method: 'GET',
@@ -269,7 +269,7 @@ class _TmbaApi implements TmbaApi {
     String bearerToken,
     CheckoutRequest checkoutRequest,
   ) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
@@ -298,11 +298,11 @@ class _TmbaApi implements TmbaApi {
 
   @override
   Future<GetCheckoutResponse> getCheckout(String bearerToken) async {
-    const _extra = <String, dynamic>{};
+    final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<GetCheckoutResponse>(Options(
       method: 'GET',

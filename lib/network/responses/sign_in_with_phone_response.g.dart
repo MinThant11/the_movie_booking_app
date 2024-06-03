@@ -9,7 +9,7 @@ part of 'sign_in_with_phone_response.dart';
 SignInWithPhoneResponse _$SignInWithPhoneResponseFromJson(
         Map<String, dynamic> json) =>
     SignInWithPhoneResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
       json['data'] == null
           ? null

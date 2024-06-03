@@ -39,4 +39,10 @@ abstract class TheMovieBookingApi {
       @Query(kParamLanguage) String language,
       @Query(kParamPage) String page,
       );
+
+  @GET(kEndPointSearchMovie)
+  Future<MovieListResponse> searchMovies(
+      @Query(kParamApiKey) String apiKey,
+      @Query(kParamQuery) String query,
+      );
 }

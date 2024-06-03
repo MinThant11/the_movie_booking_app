@@ -8,7 +8,7 @@ part of 'get_otp_response.dart';
 
 GetOtpResponse _$GetOtpResponseFromJson(Map<String, dynamic> json) =>
     GetOtpResponse(
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       json['message'] as String?,
     );
 

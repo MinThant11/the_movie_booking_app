@@ -239,4 +239,10 @@ class RetrofitDataAgentImpl implements TheMovieBookingDataAgent, TmbaDataAgent {
       }
     });
   }
+
+  @override
+  Future<List<MovieVO>> searchMovies(String query) {
+    // TODO: implement searchMovies
+    throw UnimplementedError();
+  }
 }
