@@ -1,5 +1,6 @@
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/network/data_agents/retrofit_data_agent_impl.dart';
+import 'package:the_movie_booking_app/persistence/credit_dao.dart';
 import 'package:the_movie_booking_app/persistence/movie_dao.dart';
 import '../../network/data_agents/the_movie_booking_data_agent.dart';
 import '../vos/credit_vo.dart';
@@ -16,6 +17,7 @@ class MovieBookingModel {
 
   ///Dao
   final MovieDao _movieDao = MovieDao();
+  final CreditDao _creditDao = CreditDao();
 
   /// Data Agent
   TheMovieBookingDataAgent mDataAgent = RetrofitDataAgentImpl();
@@ -60,7 +62,7 @@ class MovieBookingModel {
       // Sync type before saving
       MovieVO? movieFromDatabase = _movieDao.getMovieById(int.parse(movieId));
       if (movieFromDatabase != null) {
-        movie.type = movieFromDatabase.type ?? "";
+        movie.type = movieFromDatabase.type;
       }
 
       _movieDao.saveSingleMovie(movie);
@@ -69,8 +71,11 @@ class MovieBookingModel {
   }
 
   /// Credit By Movie
-  Future<List<CreditVO>> getCreditsByMovie(String movieId) {
-    return mDataAgent.getCreditsByMovie(movieId);
+  /// <List<CreditVO>>
+  Future getCreditsByMovie(String movieId) {
+    return mDataAgent.getCreditsByMovie(movieId).then((castList) {
+      _creditDao.saveCast(castList);
+    });
   }
 
   /// --------------------- GET DAO --------------------------- ///
@@ -98,5 +103,10 @@ class MovieBookingModel {
   Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
     return _movieDao.watchMovieBox().map((_) => _movieDao.getMovieById(movieId));
   }
+
+  Stream<List<CreditVO>> getCastsFromDatabase() {
+    return _creditDao.watchCreditBox().map((_) => _creditDao.getCast());
+  }
+
 
 }

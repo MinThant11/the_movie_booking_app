@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:the_movie_booking_app/data/models/tmba_model.dart';
@@ -215,13 +217,13 @@ class _PinPutAndConfirmOTPState extends State<PinPutAndConfirmOTP> {
                   debugPrint("OTP : $inputOTP");
 
                   /// Sign In With Phone
-                  _model.signInWithPhone( widget.mobileNumber ?? '', inputOTP ?? '').then((data) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LocationPage()));
-                    return data;
-                  });
+                  _model.signInWithPhone( widget.mobileNumber ?? '', inputOTP ?? '').then((_) {});
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LocationPage()));
+
                 } else {
                   return;
                 }

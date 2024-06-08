@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -180,6 +182,16 @@ class _SnackScreenBodyViewState extends State<SnackScreenBodyView> {
   bool isShowItems = false;
   int totalPrice = 0;
 
+  /// Stream Subscription
+  StreamSubscription? _snacksStreamSubscription;
+
+
+  @override
+  void dispose() {
+    _snacksStreamSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -196,12 +208,20 @@ class _SnackScreenBodyViewState extends State<SnackScreenBodyView> {
       });
     });
 
-    /// Snacks From Network
-    _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((snacks) {
+    /// Get Snacks From Database
+    _snacksStreamSubscription = _tmbaModel.getSnacksFromDatabase().listen((snacks) {
       setState(() {
         snacksList = snacks;
       });
     });
+
+    /// Snacks From Network
+    _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((_) {});
+    // _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((snacks) {
+    //   setState(() {
+    //     snacksList = snacks;
+    //   });
+    // });
   }
 
   void addCount(SnacksVO snacks) {

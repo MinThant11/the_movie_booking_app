@@ -14,7 +14,7 @@ class SearchMovingPage extends StatefulWidget {
   State<SearchMovingPage> createState() => _SearchMovingPageState();
 }
 
-class _SearchMovingPageState extends State<SearchMovingPage> {
+class _SearchMovingPageState extends State<SearchMovingPage>  {
   final SearchMovieBloc _searchMovieBloc = SearchMovieBloc();
 
   @override
@@ -56,16 +56,16 @@ class _SearchMovingPageState extends State<SearchMovingPage> {
                     width: 8,
                   ),
 
-                  /// Search
-                  const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-
-                  /// Spacer
-                  const SizedBox(
-                    width: 14,
-                  ),
+                  // /// Search
+                  // const Icon(
+                  //   Icons.search,
+                  //   color: Colors.white,
+                  // ),
+                  //
+                  // /// Spacer
+                  // const SizedBox(
+                  //   width: 14,
+                  // ),
 
                   /// Input - Text Field
                   SizedBox(
@@ -90,30 +90,30 @@ class _SearchMovingPageState extends State<SearchMovingPage> {
                     ),
                   ),
 
-                  /// Spacer
-                  const Spacer(),
+                  // /// Spacer
+                  // const Spacer(),
+                  //
+                  // /// Filter
+                  // Image.asset(
+                  //   kFilterIcon,
+                  //   color: kPrimaryColor,
+                  //   width: 17,
+                  //   height: 17,
+                  // ),
 
-                  /// Filter
-                  Image.asset(
-                    kFilterIcon,
-                    color: kPrimaryColor,
-                    width: 17,
-                    height: 17,
-                  ),
-
-                  /// Spacer
-                  const SizedBox(
-                    width: 14,
-                  ),
+                  // /// Spacer
+                  // const SizedBox(
+                  //   width: 14,
+                  // ),
                 ],
               ),
             ),
 
             /// Drop Down
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: DropDownView(),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20),
+            //   child: DropDownView(),
+            // ),
 
             /// Movie View
             StreamBuilder(

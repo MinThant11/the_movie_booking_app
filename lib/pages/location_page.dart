@@ -198,7 +198,7 @@ class _CitiesListViewState extends State<CitiesListView> {
             Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => MainPage(
-                        city: cityList[index].name ?? "",
+                        city: cityList[index].name ?? '',
                       )),
             );
           },

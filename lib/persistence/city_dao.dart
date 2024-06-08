@@ -13,7 +13,7 @@ class CityDao {
 
   /// Save City
   void saveCity(List<CityVO> cities) async {
-    Map<int, CityVO> cityMap = { for (var city in cities) (city.id ?? 0): city };
+    Map<int, CityVO> cityMap = { for (var city in cities) (city.id ?? 0) : city };
     return getCityBox().putAll(cityMap);
   }
 

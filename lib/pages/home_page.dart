@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
                 width: kMarginMedium,
               ),
               Text(
-                city ?? '',
+                city ?? 'Yangon',
                 style: const TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic,

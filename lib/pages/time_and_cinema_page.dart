@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -113,6 +115,16 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
 
   String? bookingDate;
 
+  /// Stream Subscription
+  StreamSubscription? _cinemasStreamSubscription;
+
+
+  @override
+  void dispose() {
+    _cinemasStreamSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -128,12 +140,21 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
     bookingDate =
         DateFormat('yyyy-MM-dd').format(generateDateVOs()[selectedIndex].date);
 
-    /// Cinema From Network
-    _model.getCinema(token ?? '', bookingDate ?? '').then((cinemaList) {
+    /// Get Cinema From Database
+    _cinemasStreamSubscription = _model.getCinemaFromDatabase()
+    .listen((cinemaFromDatabase) {
       setState(() {
-        cinemaToShow = cinemaList;
+        cinemaToShow = cinemaFromDatabase;
       });
     });
+
+    /// Cinema From Network
+    _model.getCinema(token ?? '', bookingDate ?? '').then((_) {});
+    // _model.getCinema(token ?? '', bookingDate ?? '').then((cinemaList) {
+    //   setState(() {
+    //     cinemaToShow = cinemaList;
+    //   });
+    // });
   }
 
   @override
@@ -159,14 +180,23 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
                           bookingDate = DateFormat('yyyy-MM-dd')
                               .format(generateDateVOs()[selectedIndex].date);
 
-                          /// Cinema From Network
-                          _model
-                              .getCinema(token ?? '', bookingDate ?? '')
-                              .then((cinemaList) {
+                          /// Get Cinema From Database
+                          _cinemasStreamSubscription = _model.getCinemaFromDatabase()
+                              .listen((cinemaFromDatabase) {
                             setState(() {
-                              cinemaToShow = cinemaList;
+                              cinemaToShow = cinemaFromDatabase;
                             });
                           });
+
+                          /// Cinema From Network
+                          _model.getCinema(token ?? '', bookingDate ?? '').then((_) {});
+                          // _model
+                          //     .getCinema(token ?? '', bookingDate ?? '')
+                          //     .then((cinemaList) {
+                          //   setState(() {
+                          //     cinemaToShow = cinemaList;
+                          //   });
+                          // });
                         });
                       },
 

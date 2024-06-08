@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:the_movie_booking_app/data/vos/cinema_vo.dart';
 import 'package:the_movie_booking_app/data/vos/city_vo.dart';
+import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
+import 'package:the_movie_booking_app/data/vos/payment_type_vo.dart';
+import 'package:the_movie_booking_app/data/vos/snacks_vo.dart';
+import 'package:the_movie_booking_app/data/vos/time_slot_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/logo_page.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';
@@ -26,10 +31,19 @@ void main() async {
   Hive.registerAdapter(SpokenLanguageVOAdapter());
   Hive.registerAdapter(UserVOAdapter());
   Hive.registerAdapter(CityVOAdapter());
+  Hive.registerAdapter(CreditVOAdapter());
+  Hive.registerAdapter(CinemaVOAdapter());
+  Hive.registerAdapter(TimeSlotVOAdapter());
+  Hive.registerAdapter(SnacksVOAdapter());
+  Hive.registerAdapter(PaymentTypeVOAdapter());
 
   await Hive.openBox<MovieVO>(kBoxNameMovieVO);
   await Hive.openBox<UserVO>(kBoxNameUserVO);
   await Hive.openBox<CityVO>(kBoxNameCityVO);
+  await Hive.openBox<CreditVO>(kBoxNameCreditVO);
+  await Hive.openBox<CinemaVO>(kBoxNameCinemaVO);
+  await Hive.openBox<SnacksVO>(kBoxNameSnacksVO);
+  await Hive.openBox<PaymentTypeVO>(kBoxNamePaymentTypeVO);
 
   runApp(const MovieBookingApp());
 

@@ -122,6 +122,18 @@ class RetrofitDataAgentImpl implements TheMovieBookingDataAgent, TmbaDataAgent {
     }
   }
 
+  // ToDo//:
+  @override
+  Future<List<MovieVO>> searchMovies(String query) {
+    return mApi.searchMovies(kApiKey, query)
+        .asStream()
+        .map((response) => response.results ?? [])
+        .first
+        .catchError((error) {
+      throw _createException(error);
+    });
+  }
+
   /// ------------------------------- TMBA ----------------------------------- ///
 
   /// Cinema
@@ -214,7 +226,7 @@ class RetrofitDataAgentImpl implements TheMovieBookingDataAgent, TmbaDataAgent {
         phone: response?.phone ?? "",
         totalExpense: response?.totalExpense ?? 0,
         profileImage: response?.profileImage ?? "",
-        token: "Bearer ${signInResponse.token ?? " "}",
+        token: "Bearer ${signInResponse.token ?? ""}",
       );
     }).first;
   }
@@ -238,11 +250,5 @@ class RetrofitDataAgentImpl implements TheMovieBookingDataAgent, TmbaDataAgent {
             success: false));
       }
     });
-  }
-
-  @override
-  Future<List<MovieVO>> searchMovies(String query) {
-    // TODO: implement searchMovies
-    throw UnimplementedError();
   }
 }

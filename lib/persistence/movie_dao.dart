@@ -12,6 +12,10 @@ class MovieDao {
 
   MovieDao._internal();
 
+  Stream<void> watchMovieBox() {
+    return getMovieBox().watch();
+  }
+
   void saveMovie(List<MovieVO> movies) async {
     Map<int, MovieVO> movieMap = { for (var movie in movies) (movie.id ?? 0) : movie };
     await getMovieBox().putAll(movieMap);
@@ -19,10 +23,6 @@ class MovieDao {
 
   void saveSingleMovie(MovieVO movie) async {
     return getMovieBox().put(movie.id, movie);
-  }
-
-  Stream<void> watchMovieBox() {
-    return getMovieBox().watch();
   }
 
   List<MovieVO> getMovieByType(String type) {
@@ -36,4 +36,5 @@ class MovieDao {
   Box<MovieVO> getMovieBox() {
     return Hive.box<MovieVO>(kBoxNameMovieVO);
   }
+
 }

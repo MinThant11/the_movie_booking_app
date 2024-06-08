@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/data/vos/payment_type_vo.dart';
@@ -118,6 +120,15 @@ class _TicketBodyScreenViewState extends State<TicketBodyScreenView> {
   /// Payment Types
   List<PaymentTypeVO> paymentTypes = [];
 
+  /// Stream Subscription
+  StreamSubscription? _paymentTypesStreamSubscription;
+
+  @override
+  void dispose() {
+    _paymentTypesStreamSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -126,14 +137,23 @@ class _TicketBodyScreenViewState extends State<TicketBodyScreenView> {
     UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
     bearerToken = userDataFromDatabase?.token;
 
-    /// Payment Types From Network
-    _tmbaModel
-        .getPaymentTypes(userDataFromDatabase?.token ?? '')
-        .then((paymentTypesFromNetwork) {
+    /// Get Payment Types From Database
+    _paymentTypesStreamSubscription =
+        _tmbaModel.getPaymentTypesFromDatabase().listen((paymentTypeFromDatabase) {
       setState(() {
-        paymentTypes = paymentTypesFromNetwork;
+        paymentTypes = paymentTypeFromDatabase;
       });
     });
+
+    /// Payment Types From Network
+    _tmbaModel.getPaymentTypes(userDataFromDatabase?.token ?? '').then((_) {});
+    // _tmbaModel
+    //     .getPaymentTypes(userDataFromDatabase?.token ?? '')
+    //     .then((paymentTypesFromNetwork) {
+    //   setState(() {
+    //     paymentTypes = paymentTypesFromNetwork;
+    //   });
+    // });
   }
 
   @override
@@ -263,7 +283,8 @@ class _TicketBodyScreenViewState extends State<TicketBodyScreenView> {
 
                       /// Checkout To Network
                       _tmbaModel
-                          .checkoutRequest(bearerToken ?? '', checkoutRequest).then((checkoutRequest) {
+                          .checkoutRequest(bearerToken ?? '', checkoutRequest)
+                          .then((checkoutRequest) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -3,6 +3,83 @@
 part of 'credit_vo.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CreditVOAdapter extends TypeAdapter<CreditVO> {
+  @override
+  final int typeId = 8;
+
+  @override
+  CreditVO read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return CreditVO(
+      adult: fields[0] as bool?,
+      gender: fields[1] as int?,
+      id: fields[2] as int?,
+      knowForDepartment: fields[3] as String?,
+      name: fields[4] as String?,
+      originalName: fields[5] as String?,
+      popularity: fields[6] as double?,
+      profilePath: fields[7] as String?,
+      castId: fields[8] as int?,
+      character: fields[9] as String?,
+      creditId: fields[10] as String?,
+      order: fields[11] as int?,
+      department: fields[12] as String?,
+      job: fields[13] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, CreditVO obj) {
+    writer
+      ..writeByte(14)
+      ..writeByte(0)
+      ..write(obj.adult)
+      ..writeByte(1)
+      ..write(obj.gender)
+      ..writeByte(2)
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.knowForDepartment)
+      ..writeByte(4)
+      ..write(obj.name)
+      ..writeByte(5)
+      ..write(obj.originalName)
+      ..writeByte(6)
+      ..write(obj.popularity)
+      ..writeByte(7)
+      ..write(obj.profilePath)
+      ..writeByte(8)
+      ..write(obj.castId)
+      ..writeByte(9)
+      ..write(obj.character)
+      ..writeByte(10)
+      ..write(obj.creditId)
+      ..writeByte(11)
+      ..write(obj.order)
+      ..writeByte(12)
+      ..write(obj.department)
+      ..writeByte(13)
+      ..write(obj.job);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CreditVOAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

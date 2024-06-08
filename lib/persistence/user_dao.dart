@@ -11,6 +11,10 @@ class UserDao {
 
   UserDao._internal();
 
+  // Stream<void> watchUserBox() {
+  //   return getUserBox().watch();
+  // }
+
   /// Clear User Data
   void clearUserData() async {
     await getUserBox().clear();

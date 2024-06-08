@@ -34,6 +34,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   /// Stream Subscription
   StreamSubscription? _movieDetailsStreamSubscription;
+  StreamSubscription? _castsStreamSubscription;
 
   @override
   void initState() {
@@ -52,6 +53,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           });
     });
 
+    /// Get Credits By Movie From Database
+    _castsStreamSubscription = _model.getCastsFromDatabase()
+    .listen((castsFromDatabase) {
+      setState(() {
+        creditList = castsFromDatabase;
+      });
+    });
+
     /// Get Movie Details From Network
     _model.getMovieDetails(widget.movieId ?? "").then((movie) {
       setState(() {
@@ -60,17 +69,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     });
 
     /// Get Credits By Movie From Network
-    _model.getCreditsByMovie(widget.movieId ?? "").then((credit) {
-      setState(() {
-        creditList = credit;
-      });
-    });
+    _model.getCreditsByMovie(widget.movieId ?? '').then((_) {});
+    // _model.getCreditsByMovie(widget.movieId ?? "").then((credit) {
+    //   setState(() {
+    //     creditList = credit;
+    //   });
+    // });
   }
 
   /// Cancel subscription on dispose
   @override
   void dispose() {
     _movieDetailsStreamSubscription?.cancel();
+    _castsStreamSubscription?.cancel();
     super.dispose();
   }
 
