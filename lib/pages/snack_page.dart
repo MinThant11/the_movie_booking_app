@@ -208,20 +208,12 @@ class _SnackScreenBodyViewState extends State<SnackScreenBodyView> {
       });
     });
 
-    /// Get Snacks From Database
-    _snacksStreamSubscription = _tmbaModel.getSnacksFromDatabase().listen((snacks) {
+    /// Snacks From Network
+    _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((snacks) {
       setState(() {
         snacksList = snacks;
       });
     });
-
-    /// Snacks From Network
-    _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((_) {});
-    // _tmbaModel.getSnacks(userDataFromDatabase?.token ?? '', 0).then((snacks) {
-    //   setState(() {
-    //     snacksList = snacks;
-    //   });
-    // });
   }
 
   void addCount(SnacksVO snacks) {

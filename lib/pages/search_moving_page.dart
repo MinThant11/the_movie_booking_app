@@ -116,41 +116,43 @@ class _SearchMovingPageState extends State<SearchMovingPage>  {
             // ),
 
             /// Movie View
-            StreamBuilder(
-                stream: _searchMovieBloc.movieStreamController.stream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data != null) {
-                    return GridView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisExtent: kMovieListItemHeight,
-                        mainAxisSpacing: kMarginMedium3,
-                        crossAxisSpacing: kMarginMedium3,
-                      ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MovieDetailsPage(
-                                        isComingSoonSelected: false,
-                                        movieId: snapshot.data![index].id?.toString() ?? "",
-                                    )));
-                          },
-                          child: MovieListItemView(
-                            isComingSoonSelected: false,
-                            movie: snapshot.data![index],
-                          ),
-                        );
-                      },
-                      itemCount: snapshot.data!.length,
-                    );
-                  } else {
-                    return const SizedBox.shrink();
+            Expanded(
+              child: StreamBuilder(
+                  stream: _searchMovieBloc.movieStreamController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: kMovieListItemHeight,
+                          mainAxisSpacing: kMarginMedium3,
+                          crossAxisSpacing: kMarginMedium3,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MovieDetailsPage(
+                                          isComingSoonSelected: false,
+                                          movieId: snapshot.data![index].id?.toString() ?? "",
+                                      )));
+                            },
+                            child: MovieListItemView(
+                              isComingSoonSelected: false,
+                              movie: snapshot.data![index],
+                            ),
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
                   }
-                }
+              ),
             )
           ],
         ),

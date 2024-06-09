@@ -7,11 +7,6 @@ const kHiveTypeIdProductionCountryVO = 4;
 const kHiveTypeIdSpokenLanguageVO = 5;
 const kHiveTypeIdUserVO = 6;
 const kHiveTypeIdCityVO = 7;
-const kHiveTypeIdCreditVO = 8;
-const kHiveTypeIdCinemaVO = 9;
-const kHiveTypeIdTimeSlotVO = 10;
-const kHiveTypeIdSnacksVO = 11;
-const kHiveTypeIdPaymentTypeVO = 12;
 
 /// Adapters
 const kAdapterNameMovieVO = "MovieVOAdapter";
@@ -22,11 +17,6 @@ const kAdapterNameProductionCountryVO = "ProductionCountryVOAdapter";
 const kAdapterNameSpokenLanguageVO = "SpokenLanguageVOAdapter";
 const kAdapterNameUserVO = "UserVOAdapter";
 const kAdapterNameCityVO = "CityVOAdapter";
-const kAdapterNameCreditVO = "CreditVOAdapter";
-const kAdapterNameCinemaVO = "CinemaVOAdapter";
-const kAdapterNameTimeSlotVO = "TimeSlotVOAdapter";
-const kAdapterNameSnacksVO = "SnacksVOAdapter";
-const kAdapterNamePaymentTypeVO = "PaymentTypeVOAdapter";
 
 /// Box Name
 const kBoxNameMovieVO = "kBoxNameMovieVO";
@@ -35,4 +25,3 @@ const kBoxNameCityVO = "kBoxNameCityVO";
 const kBoxNameCreditVO = "kBoxNameCreditVO";
 const kBoxNameCinemaVO = "kBoxNameCinemaVO";
 const kBoxNameSnacksVO = "kBoxNameSnacksVO";
-const kBoxNamePaymentTypeVO = "kBoxNamePaymentTypeVO";

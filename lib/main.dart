@@ -31,19 +31,10 @@ void main() async {
   Hive.registerAdapter(SpokenLanguageVOAdapter());
   Hive.registerAdapter(UserVOAdapter());
   Hive.registerAdapter(CityVOAdapter());
-  Hive.registerAdapter(CreditVOAdapter());
-  Hive.registerAdapter(CinemaVOAdapter());
-  Hive.registerAdapter(TimeSlotVOAdapter());
-  Hive.registerAdapter(SnacksVOAdapter());
-  Hive.registerAdapter(PaymentTypeVOAdapter());
 
   await Hive.openBox<MovieVO>(kBoxNameMovieVO);
   await Hive.openBox<UserVO>(kBoxNameUserVO);
   await Hive.openBox<CityVO>(kBoxNameCityVO);
-  await Hive.openBox<CreditVO>(kBoxNameCreditVO);
-  await Hive.openBox<CinemaVO>(kBoxNameCinemaVO);
-  await Hive.openBox<SnacksVO>(kBoxNameSnacksVO);
-  await Hive.openBox<PaymentTypeVO>(kBoxNamePaymentTypeVO);
 
   runApp(const MovieBookingApp());
 

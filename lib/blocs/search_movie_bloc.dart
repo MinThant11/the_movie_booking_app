@@ -17,6 +17,7 @@ class SearchMovieBloc {
         .debounceTime(const Duration(milliseconds: 500))
         .listen((query) {
       if (query.isNotEmpty) {
+        print("=============> $query");
         _makeSearchMovieNetworkCall(query);
       }
     });
@@ -24,8 +25,10 @@ class SearchMovieBloc {
 
   void _makeSearchMovieNetworkCall(String query) {
     _model.searchMovies(query).then((searchResults) {
+      print(" Search Result =========> $searchResults");
       movieStreamController.sink.add(searchResults);
     }).catchError((error) {
+      print("Error ============> $Error");
       movieStreamController.addError(error);
     });
   }

@@ -137,23 +137,14 @@ class _TicketBodyScreenViewState extends State<TicketBodyScreenView> {
     UserVO? userDataFromDatabase = _tmbaModel.getUserDataFromDatabase();
     bearerToken = userDataFromDatabase?.token;
 
-    /// Get Payment Types From Database
-    _paymentTypesStreamSubscription =
-        _tmbaModel.getPaymentTypesFromDatabase().listen((paymentTypeFromDatabase) {
+    /// Payment Types From Network
+    _tmbaModel
+        .getPaymentTypes(userDataFromDatabase?.token ?? '')
+        .then((paymentTypesFromNetwork) {
       setState(() {
-        paymentTypes = paymentTypeFromDatabase;
+        paymentTypes = paymentTypesFromNetwork;
       });
     });
-
-    /// Payment Types From Network
-    _tmbaModel.getPaymentTypes(userDataFromDatabase?.token ?? '').then((_) {});
-    // _tmbaModel
-    //     .getPaymentTypes(userDataFromDatabase?.token ?? '')
-    //     .then((paymentTypesFromNetwork) {
-    //   setState(() {
-    //     paymentTypes = paymentTypesFromNetwork;
-    //   });
-    // });
   }
 
   @override

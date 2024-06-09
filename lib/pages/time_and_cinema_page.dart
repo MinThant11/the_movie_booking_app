@@ -140,21 +140,12 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
     bookingDate =
         DateFormat('yyyy-MM-dd').format(generateDateVOs()[selectedIndex].date);
 
-    /// Get Cinema From Database
-    _cinemasStreamSubscription = _model.getCinemaFromDatabase()
-    .listen((cinemaFromDatabase) {
+    /// Cinema From Network
+    _model.getCinema(token ?? '', bookingDate ?? '').then((cinemaList) {
       setState(() {
-        cinemaToShow = cinemaFromDatabase;
+        cinemaToShow = cinemaList;
       });
     });
-
-    /// Cinema From Network
-    _model.getCinema(token ?? '', bookingDate ?? '').then((_) {});
-    // _model.getCinema(token ?? '', bookingDate ?? '').then((cinemaList) {
-    //   setState(() {
-    //     cinemaToShow = cinemaList;
-    //   });
-    // });
   }
 
   @override
@@ -180,23 +171,14 @@ class _ScreenBodyViewState extends State<ScreenBodyView> {
                           bookingDate = DateFormat('yyyy-MM-dd')
                               .format(generateDateVOs()[selectedIndex].date);
 
-                          /// Get Cinema From Database
-                          _cinemasStreamSubscription = _model.getCinemaFromDatabase()
-                              .listen((cinemaFromDatabase) {
+                          /// Cinema From Network
+                          _model
+                              .getCinema(token ?? '', bookingDate ?? '')
+                              .then((cinemaList) {
                             setState(() {
-                              cinemaToShow = cinemaFromDatabase;
+                              cinemaToShow = cinemaList;
                             });
                           });
-
-                          /// Cinema From Network
-                          _model.getCinema(token ?? '', bookingDate ?? '').then((_) {});
-                          // _model
-                          //     .getCinema(token ?? '', bookingDate ?? '')
-                          //     .then((cinemaList) {
-                          //   setState(() {
-                          //     cinemaToShow = cinemaList;
-                          //   });
-                          // });
                         });
                       },
 
