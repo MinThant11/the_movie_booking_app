@@ -1,16 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:the_movie_booking_app/blocs/home_bloc.dart';
-import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
-import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
 import 'package:the_movie_booking_app/pages/location_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
 import 'package:the_movie_booking_app/pages/search_moving_page.dart';
-import 'package:the_movie_booking_app/scoped_model/home_model.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
