@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:the_movie_booking_app/blocs/movie_details_bloc.dart';
 import 'package:the_movie_booking_app/list_items/cast_item_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
 import 'package:the_movie_booking_app/pages/time_and_cinema_page.dart';
-import 'package:the_movie_booking_app/scoped_model/movie_details_model.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
@@ -26,170 +25,171 @@ class MovieDetailsPage extends StatefulWidget {
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   /// Model
-  late MovieDetailsModel _model;
+  late MovieDetailsBloc _bloc;
 
   @override
   void initState() {
-    _model = MovieDetailsModel(widget.movieId ?? '');
+    _bloc = MovieDetailsBloc(widget.movieId ?? '');
     super.initState();
   }
 
   /// Cancel subscription on dispose
   @override
   void dispose() {
-    _model.onDisposed();
+    _bloc.onDisposed();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<MovieDetailsModel>(
-      model: _model,
-      child: Scaffold(
-        backgroundColor: kBackgroundColor,
-        body: ScopedModelDescendant<MovieDetailsModel>(
-          builder: (context, child, model) => SafeArea(
-            child: (model.movieDetails == null)
-                ? const Center(
-                  child: CircularProgressIndicator(
-                      color: kPrimaryColor,
-                    ),
-                )
-                : Stack(
-                    children: [
-                      /// Body
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            /// Movie Large Image, Small Image and Info
-                            MovieLargeImageSmallImageAndInfoView(
-                              movie: model.movieDetails,
-                            ),
+    return Scaffold(
+      backgroundColor: kBackgroundColor,
+      body: StreamBuilder<MovieVO?>(
+        stream: _bloc.movieDetailsSubject,
+        builder: (context, snapShot) => SafeArea(
+          child: (snapShot.data == null)
+              ? const Center(
+                child: CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+              )
+              : Stack(
+                  children: [
+                    /// Body
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          /// Movie Large Image, Small Image and Info
+                          MovieLargeImageSmallImageAndInfoView(
+                            movie: snapShot.data,
+                          ),
 
-                            /// Spacer
-                            const SizedBox(
-                              height: kMarginMedium2,
-                            ),
+                          /// Spacer
+                          const SizedBox(
+                            height: kMarginMedium2,
+                          ),
 
-                            /// Censor Rating, Release Data and Duration
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: kMarginMedium2),
-                              child: CensorRatingReleaseDataAndDurationView(
-                                movie: model.movieDetails,
-                              ),
+                          /// Censor Rating, Release Data and Duration
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: kMarginMedium2),
+                            child: CensorRatingReleaseDataAndDurationView(
+                              movie: snapShot.data,
                             ),
+                          ),
 
-                            /// Releasing Date
-                            Visibility(
-                              visible: widget.isComingSoonSelected,
-                              child: const Padding(
-                                padding: EdgeInsets.only(
-                                    left: kMarginMedium2,
-                                    right: kMarginMedium2,
-                                    top: kMargin30),
-                                child: ReleasingDateView(),
-                              ),
+                          /// Releasing Date
+                          Visibility(
+                            visible: widget.isComingSoonSelected,
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                  left: kMarginMedium2,
+                                  right: kMarginMedium2,
+                                  top: kMargin30),
+                              child: ReleasingDateView(),
                             ),
+                          ),
 
-                            /// Story Line View
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: kMarginMedium2, vertical: kMargin30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Story Line",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: kTextRegular),
-                                  ),
-                                  const SizedBox(
-                                    height: kMarginMedium,
-                                  ),
-                                  Text(
-                                    model.movieDetails?.overview ?? "",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: kTextRegular),
-                                  )
-                                ],
-                              ),
+                          /// Story Line View
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: kMarginMedium2, vertical: kMargin30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Story Line",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: kTextRegular),
+                                ),
+                                const SizedBox(
+                                  height: kMarginMedium,
+                                ),
+                                Text(
+                                  snapShot.data?.overview ?? "",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: kTextRegular),
+                                )
+                              ],
                             ),
+                          ),
 
-                            /// Cast View
-                            Visibility(
-                              visible: !(model.creditList?.isEmpty ?? true),
+                          /// Cast View
+                          StreamBuilder<List<CreditVO>?>(
+                            stream: _bloc.creditListSubject,
+                            builder: (context, creditListSnapShot) => Visibility(
+                              visible: !(creditListSnapShot.data?.isEmpty ?? true),
                               child: CastView(
-                                creditList: model.creditList ?? [],
-                              ),
-                            ),
-
-                            const SizedBox(
-                              height: 148,
-                            )
-                          ],
-                        ),
-                      ),
-
-                      /// App Bar
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kMarginMedium, vertical: kMarginMedium),
-                        child: Row(
-                          children: [
-                            /// Back Icon
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.chevron_left,
-                                color: Colors.white,
-                                size: kMarginXLarge,
-                              ),
-                            ),
-
-                            /// Spacer
-                            const Spacer(),
-
-                            /// Share Icon
-                            const Icon(
-                              Icons.share,
-                              color: Colors.white,
-                              size: kMarginLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      /// Bottom Gradient and booking Button
-                      Visibility(
-                        visible: !widget.isComingSoonSelected,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            height: kMovieDetailsBottomContainerHeight,
-                            decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, kBackgroundColor],
-                            )),
-                            child: Center(
-                              child: BookingButton(
-                                movie: model.movieDetails,
+                                creditList: creditListSnapShot.data ?? [],
                               ),
                             ),
                           ),
+
+                          const SizedBox(
+                            height: 148,
+                          )
+                        ],
+                      ),
+                    ),
+
+                    /// App Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kMarginMedium, vertical: kMarginMedium),
+                      child: Row(
+                        children: [
+                          /// Back Icon
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.chevron_left,
+                              color: Colors.white,
+                              size: kMarginXLarge,
+                            ),
+                          ),
+
+                          /// Spacer
+                          const Spacer(),
+
+                          /// Share Icon
+                          const Icon(
+                            Icons.share,
+                            color: Colors.white,
+                            size: kMarginLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    /// Bottom Gradient and booking Button
+                    Visibility(
+                      visible: !widget.isComingSoonSelected,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: kMovieDetailsBottomContainerHeight,
+                          decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, kBackgroundColor],
+                          )),
+                          child: Center(
+                            child: BookingButton(
+                              movie: snapShot.data,
+                            ),
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-          ),
+                      ),
+                    )
+                  ],
+                ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:the_movie_booking_app/blocs/home_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_booking_model.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
@@ -17,90 +18,73 @@ import 'package:the_movie_booking_app/utils/strings.dart';
 
 import '../data/vos/movie_vo.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   final String? city;
   const HomePage({super.key, this.city});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  /// Model
-  final HomeModel _model = HomeModel();
-
-  @override
-  void dispose() {
-    _model.onDisposed();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ScopedModel<HomeModel>(
-      model: _model,
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kBackgroundColor,
+      appBar: AppBar(
+        centerTitle: false,
+        automaticallyImplyLeading: false,
         backgroundColor: kBackgroundColor,
-        appBar: AppBar(
-          centerTitle: false,
-          automaticallyImplyLeading: false,
-          backgroundColor: kBackgroundColor,
-          surfaceTintColor: kBackgroundColor,
-          title: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LocationPage()),
-              );
-            },
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: kMarginMedium,
+        surfaceTintColor: kBackgroundColor,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LocationPage()),
+            );
+          },
+          child: Row(
+            children: [
+              const SizedBox(
+                width: kMarginMedium,
+              ),
+              Image.asset(
+                kLocationArrowIcon,
+                width: kLocationIconSize,
+                height: kLocationIconSize,
+              ),
+              const SizedBox(
+                width: kMarginMedium,
+              ),
+              Text(
+                city ?? 'Yangon',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w700,
+                  fontSize: kTextRegular,
                 ),
-                Image.asset(
-                  kLocationArrowIcon,
-                  width: kLocationIconSize,
-                  height: kLocationIconSize,
-                ),
-                const SizedBox(
-                  width: kMarginMedium,
-                ),
-                Text(
-                  widget.city ?? 'Yangon',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.w700,
-                    fontSize: kTextRegular,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          actions: [
-            const SearchMovieIconView(),
-            const SizedBox(
-              width: kMarginXLarge,
-            ),
-            const Icon(
-              Icons.notifications,
-              color: Colors.white,
-              size: kMarginLarge,
-            ),
-            const SizedBox(
-              width: kMarginMedium2,
-            ),
-            Image.asset(
-              kScanIcon,
-            ),
-            const SizedBox(
-              width: kHomeScreenAppBarRightMargin,
-            )
-          ],
         ),
-        body: const HomeScreenBodyView(),
+        actions: [
+          const SearchMovieIconView(),
+          const SizedBox(
+            width: kMarginXLarge,
+          ),
+          const Icon(
+            Icons.notifications,
+            color: Colors.white,
+            size: kMarginLarge,
+          ),
+          const SizedBox(
+            width: kMarginMedium2,
+          ),
+          Image.asset(
+            kScanIcon,
+          ),
+          const SizedBox(
+            width: kHomeScreenAppBarRightMargin,
+          )
+        ],
       ),
+      body: const HomeScreenBodyView(),
     );
   }
 }
@@ -137,8 +121,23 @@ class _SearchMovieIconViewState extends State<SearchMovieIconView> {
   }
 }
 
-class HomeScreenBodyView extends StatelessWidget {
+class HomeScreenBodyView extends StatefulWidget {
   const HomeScreenBodyView({super.key});
+
+  @override
+  State<HomeScreenBodyView> createState() => _HomeScreenBodyViewState();
+}
+
+class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
+
+  /// Model
+  final HomeBloc _bloc = HomeBloc();
+
+  @override
+  void dispose() {
+    _bloc.onDisposed();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +157,12 @@ class HomeScreenBodyView extends StatelessWidget {
 
         /// Now Showing and Coming soon Tab Bar
         SliverToBoxAdapter(
-          child: ScopedModelDescendant<HomeModel>(
-            builder: (context, child, model) => NowShowingAndComingSoonTabBar(
-              selectedText: model.selectedText,
+          child: StreamBuilder<String>(
+            stream: _bloc.selectedTextSubject,
+            builder: (context, snapShot) => NowShowingAndComingSoonTabBar(
+              selectedText: snapShot.data ?? '',
               onTapNowShowingOrComingSoon: (text) {
-                model.onTapNowShowingOrComingSoon(text);
+                _bloc.onTapNowShowingOrComingSoon(text);
               },
             ),
           ),
@@ -176,8 +176,10 @@ class HomeScreenBodyView extends StatelessWidget {
         ),
 
         /// Movie List GridView
-        ScopedModelDescendant<HomeModel>(
-          builder: (context, child, model) => (model.movieToShow.isEmpty)
+        StreamBuilder<List<MovieVO>>(
+          stream: _bloc.movieToShowSubject,
+          builder: (context, snapShot) =>
+          (snapShot.data?.isEmpty ?? true)
               ? const SliverToBoxAdapter(
                   child: Center(
                     child: CircularProgressIndicator(
@@ -197,22 +199,22 @@ class HomeScreenBodyView extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => MovieDetailsPage(
                                   movieId:
-                                      model.movieToShow[index].id?.toString() ??
+                                      snapShot.data?[index].id?.toString() ??
                                           "",
                                   isComingSoonSelected:
-                                      model.selectedText == kComingSoonLabel,
+                                      _bloc.selectedTextSubject.value == kComingSoonLabel,
                                 ),
                               ),
                             );
                           },
                           child: MovieListItemView(
                             isComingSoonSelected:
-                                model.selectedText == kComingSoonLabel,
-                            movie: model.movieToShow[index],
+                                _bloc.selectedTextSubject.value == kComingSoonLabel,
+                            movie: snapShot.data![index],
                           ),
                         );
                       },
-                      childCount: model.movieToShow.length,
+                      childCount: snapShot.data?.length ?? 0,
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
