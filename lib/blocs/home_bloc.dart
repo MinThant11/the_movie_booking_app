@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
-
 import '../data/models/movie_booking_model.dart';
 import '../data/vos/movie_vo.dart';
 
-class HomeBloc {
+class HomeBloc extends ChangeNotifier {
   /// Model
   final MovieBookingModel _model = MovieBookingModel();
 
   /// Now Showing Or Coming Soon
-  BehaviorSubject<String> selectedTextSubject = BehaviorSubject();
+  String selectedText = kNowShowingLabel;
 
   /// Now Playing Movies
   List<MovieVO> nowPlayingMovies = [];
@@ -20,22 +19,21 @@ class HomeBloc {
   List<MovieVO> comingSoonMovies = [];
 
   /// Movies To Show
-  BehaviorSubject<List<MovieVO>> movieToShowSubject = BehaviorSubject();
+  List<MovieVO> movieToShow = [];
 
   /// Stream Subscription
   StreamSubscription? _nowPlayingMoviesSubscription;
   StreamSubscription? _comingSoonMoviesSubscription;
 
   HomeBloc() {
-    selectedTextSubject.add(kNowShowingLabel);
-
     /// Now Playing Movies From Database
     _nowPlayingMoviesSubscription = _model
         .getNowPlayingMoviesFromDatabase()
         .listen((nowPlayingMoviesFromDatabase) {
       nowPlayingMovies = nowPlayingMoviesFromDatabase;
-      if (movieToShowSubject.valueOrNull?.isEmpty ?? true) {
-        movieToShowSubject.add(nowPlayingMoviesFromDatabase);
+      if (movieToShow.isEmpty) {
+        movieToShow = nowPlayingMoviesFromDatabase;
+        notifyListeners();
       }
     });
 
@@ -55,19 +53,23 @@ class HomeBloc {
 
   void onTapNowShowingOrComingSoon(String text) {
     /// Set Now Playing Or Coming Soon
-    selectedTextSubject.add(text);
+    selectedText = text;
 
     /// Set Movies
     if (text == kNowShowingLabel) {
-      movieToShowSubject.add(nowPlayingMovies);
+      movieToShow = nowPlayingMovies;
     } else {
-      movieToShowSubject.add(comingSoonMovies);
+      movieToShow = comingSoonMovies;
     }
+
+    notifyListeners();
   }
 
   /// Cancel subscription on dispose
-  void onDisposed() {
+  @override
+  void dispose() {
     _nowPlayingMoviesSubscription?.cancel();
     _comingSoonMoviesSubscription?.cancel();
+    super.dispose();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie_booking_app/blocs/movie_details_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:the_movie_booking_app/list_items/cast_item_view.dart';
 import 'package:the_movie_booking_app/list_items/ticket_button_view.dart';
 import 'package:the_movie_booking_app/pages/time_and_cinema_page.dart';
@@ -9,187 +9,165 @@ import 'package:the_movie_booking_app/utils/images.dart';
 import '../data/vos/credit_vo.dart';
 import '../data/vos/movie_vo.dart';
 import '../list_items/censor_rating_release_data_and_duration_view.dart';
+import '../redux/app_state.dart';
 
-class MovieDetailsPage extends StatefulWidget {
-  final bool isComingSoonSelected;
-
+class MovieDetailsPage extends StatelessWidget {
   /// Will receive from previous screen
+  final bool isComingSoonSelected;
   final String? movieId;
   const MovieDetailsPage(
       {super.key, required this.isComingSoonSelected, required this.movieId});
 
   @override
-  State<MovieDetailsPage> createState() => _MovieDetailsPageState();
-}
-
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
-
-  /// Model
-  late MovieDetailsBloc _bloc;
-
-  @override
-  void initState() {
-    _bloc = MovieDetailsBloc(widget.movieId ?? '');
-    super.initState();
-  }
-
-  /// Cancel subscription on dispose
-  @override
-  void dispose() {
-    _bloc.onDisposed();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: StreamBuilder<MovieVO?>(
-        stream: _bloc.movieDetailsSubject,
-        builder: (context, snapShot) => SafeArea(
-          child: (snapShot.data == null)
+      body: StoreConnector<AppState, MovieVO?>(
+        converter: (store) => store.state.movieDetails,
+        builder: (context, movieDetails,) => SafeArea(
+          child: (movieDetails == null)
               ? const Center(
-                child: CircularProgressIndicator(
-                    color: kPrimaryColor,
-                  ),
-              )
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            ),
+          )
               : Stack(
+            children: [
+              /// Body
+              SingleChildScrollView(
+                child: Column(
                   children: [
-                    /// Body
-                    SingleChildScrollView(
+                    /// Movie Large Image, Small Image and Info
+                    MovieLargeImageSmallImageAndInfoView(
+                      movie: movieDetails,
+                    ),
+
+                    /// Spacer
+                    const SizedBox(
+                      height: kMarginMedium2,
+                    ),
+
+                    /// Censor Rating, Release Data and Duration
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kMarginMedium2),
+                      child: CensorRatingReleaseDataAndDurationView(
+                        movie: movieDetails,
+                      ),
+                    ),
+
+                    /// Releasing Date
+                    Visibility(
+                      visible: isComingSoonSelected,
+                      child: const Padding(
+                        padding: EdgeInsets.only(
+                            left: kMarginMedium2,
+                            right: kMarginMedium2,
+                            top: kMargin30),
+                        child: ReleasingDateView(),
+                      ),
+                    ),
+
+                    /// Story Line View
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kMarginMedium2, vertical: kMargin30),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /// Movie Large Image, Small Image and Info
-                          MovieLargeImageSmallImageAndInfoView(
-                            movie: snapShot.data,
+                          const Text(
+                            "Story Line",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: kTextRegular),
                           ),
-
-                          /// Spacer
                           const SizedBox(
-                            height: kMarginMedium2,
+                            height: kMarginMedium,
                           ),
-
-                          /// Censor Rating, Release Data and Duration
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: kMarginMedium2),
-                            child: CensorRatingReleaseDataAndDurationView(
-                              movie: snapShot.data,
-                            ),
-                          ),
-
-                          /// Releasing Date
-                          Visibility(
-                            visible: widget.isComingSoonSelected,
-                            child: const Padding(
-                              padding: EdgeInsets.only(
-                                  left: kMarginMedium2,
-                                  right: kMarginMedium2,
-                                  top: kMargin30),
-                              child: ReleasingDateView(),
-                            ),
-                          ),
-
-                          /// Story Line View
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: kMarginMedium2, vertical: kMargin30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Story Line",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: kTextRegular),
-                                ),
-                                const SizedBox(
-                                  height: kMarginMedium,
-                                ),
-                                Text(
-                                  snapShot.data?.overview ?? "",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: kTextRegular),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          /// Cast View
-                          StreamBuilder<List<CreditVO>?>(
-                            stream: _bloc.creditListSubject,
-                            builder: (context, creditListSnapShot) => Visibility(
-                              visible: !(creditListSnapShot.data?.isEmpty ?? true),
-                              child: CastView(
-                                creditList: creditListSnapShot.data ?? [],
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 148,
+                          Text(
+                            movieDetails.overview ?? "",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: kTextRegular),
                           )
                         ],
                       ),
                     ),
 
-                    /// App Bar
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: kMarginMedium, vertical: kMarginMedium),
-                      child: Row(
-                        children: [
-                          /// Back Icon
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.chevron_left,
-                              color: Colors.white,
-                              size: kMarginXLarge,
-                            ),
-                          ),
-
-                          /// Spacer
-                          const Spacer(),
-
-                          /// Share Icon
-                          const Icon(
-                            Icons.share,
-                            color: Colors.white,
-                            size: kMarginLarge,
-                          ),
-                        ],
+                    /// Cast View
+                    StoreConnector<AppState, List<CreditVO>?>(
+                      converter: (store) => store.state.creditList,
+                      builder: (context, creditList) => Visibility(
+                        visible: !(creditList?.isEmpty ?? true),
+                        child: CastView(
+                          creditList: creditList ?? [],
+                        ),
                       ),
                     ),
 
-                    /// Bottom Gradient and booking Button
-                    Visibility(
-                      visible: !widget.isComingSoonSelected,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: kMovieDetailsBottomContainerHeight,
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.transparent, kBackgroundColor],
-                          )),
-                          child: Center(
-                            child: BookingButton(
-                              movie: snapShot.data,
-                            ),
-                          ),
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 148,
                     )
                   ],
                 ),
+              ),
+
+              /// App Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kMarginMedium, vertical: kMarginMedium),
+                child: Row(
+                  children: [
+                    /// Back Icon
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.chevron_left,
+                        color: Colors.white,
+                        size: kMarginXLarge,
+                      ),
+                    ),
+
+                    /// Spacer
+                    const Spacer(),
+
+                    /// Share Icon
+                    const Icon(
+                      Icons.share,
+                      color: Colors.white,
+                      size: kMarginLarge,
+                    ),
+                  ],
+                ),
+              ),
+
+              /// Bottom Gradient and booking Button
+              Visibility(
+                visible: !isComingSoonSelected,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: kMovieDetailsBottomContainerHeight,
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, kBackgroundColor],
+                        )),
+                    child: Center(
+                      child: BookingButton(
+                        movie: movieDetails,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

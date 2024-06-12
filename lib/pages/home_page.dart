@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:the_movie_booking_app/blocs/home_bloc.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
 import 'package:the_movie_booking_app/pages/location_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
 import 'package:the_movie_booking_app/pages/search_moving_page.dart';
+import 'package:the_movie_booking_app/redux/actions/fetch_credit_list_from_network_action.dart';
+import 'package:the_movie_booking_app/redux/actions/fetch_movie_details_from_network_action.dart';
+import 'package:the_movie_booking_app/redux/actions/listen_to_credit_list_action.dart';
+import 'package:the_movie_booking_app/redux/actions/listen_to_movie_details_action.dart';
+import 'package:the_movie_booking_app/redux/actions/received_movie_details_action.dart';
+import 'package:the_movie_booking_app/redux/actions/received_movie_id_action.dart';
+import 'package:the_movie_booking_app/redux/actions/switch_movies_action.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/dimens.dart';
 import 'package:the_movie_booking_app/utils/images.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
-
 import '../data/vos/movie_vo.dart';
+import '../redux/app_state.dart';
 
 class HomePage extends StatelessWidget {
   final String? city;
@@ -58,7 +65,21 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          const SearchMovieIconView(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchMovingPage(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.search,
+              color: Colors.white,
+              size: kMarginLarge,
+            ),
+          ),
           const SizedBox(
             width: kMarginXLarge,
           ),
@@ -83,55 +104,8 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class SearchMovieIconView extends StatefulWidget {
-  const SearchMovieIconView({
-    super.key,
-  });
-
-  @override
-  State<SearchMovieIconView> createState() => _SearchMovieIconViewState();
-}
-
-class _SearchMovieIconViewState extends State<SearchMovieIconView> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SearchMovingPage(),
-            ),
-          );
-        });
-      },
-      child: const Icon(
-        Icons.search,
-        color: Colors.white,
-        size: kMarginLarge,
-      ),
-    );
-  }
-}
-
-class HomeScreenBodyView extends StatefulWidget {
+class HomeScreenBodyView extends StatelessWidget {
   const HomeScreenBodyView({super.key});
-
-  @override
-  State<HomeScreenBodyView> createState() => _HomeScreenBodyViewState();
-}
-
-class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
-
-  /// Model
-  final HomeBloc _bloc = HomeBloc();
-
-  @override
-  void dispose() {
-    _bloc.onDisposed();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,12 +125,14 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
 
         /// Now Showing and Coming soon Tab Bar
         SliverToBoxAdapter(
-          child: StreamBuilder<String>(
-            stream: _bloc.selectedTextSubject,
-            builder: (context, snapShot) => NowShowingAndComingSoonTabBar(
-              selectedText: snapShot.data ?? '',
+          child: StoreConnector<AppState, String>(
+            converter: (store) => store.state.selectedMovieType,
+            builder: (context, movieType,) =>
+                NowShowingAndComingSoonTabBar(
+              selectedText: movieType,
               onTapNowShowingOrComingSoon: (text) {
-                _bloc.onTapNowShowingOrComingSoon(text);
+                var store = StoreProvider.of<AppState>(context, listen: false);
+                store.dispatch(SwitchMoviesAction(movieType: text));
               },
             ),
           ),
@@ -170,56 +146,63 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
         ),
 
         /// Movie List GridView
-        StreamBuilder<List<MovieVO>>(
-          stream: _bloc.movieToShowSubject,
-          builder: (context, snapShot) =>
-          (snapShot.data?.isEmpty ?? true)
-              ? const SliverToBoxAdapter(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                )
-              : SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
-                  sliver: SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MovieDetailsPage(
-                                  movieId:
-                                      snapShot.data?[index].id?.toString() ??
-                                          "",
-                                  isComingSoonSelected:
-                                      _bloc.selectedTextSubject.value == kComingSoonLabel,
-                                ),
+        StoreConnector<AppState, List<MovieVO>>(
+          converter: (store) => store.state.moviesToShow,
+            builder: (context, movieToShow) {
+            var store = StoreProvider.of<AppState>(context, listen: false);
+              return (movieToShow.isEmpty)
+                  ? const SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: kPrimaryColor,
+                        ),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: kMarginLarge),
+                      sliver: SliverGrid(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                store.dispatch(ReceivedMovieIdAction(movieToShow[index].id?.toString() ?? ""));
+                                store.dispatch(FetchMovieDetailsFromNetworkAction());
+                                store.dispatch(FetchCreditListFromNetworkAction());
+                                store.dispatch(ListenToMovieDetailsAction());
+                                store.dispatch(ListenToCreditListAction());
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MovieDetailsPage(
+                                      movieId:
+                                          movieToShow[index].id?.toString() ??
+                                              "",
+                                      isComingSoonSelected:
+                                          store.state.selectedMovieType == kComingSoonLabel,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: MovieListItemView(
+                                isComingSoonSelected:
+                                    store.state.selectedMovieType == kComingSoonLabel,
+                                movie: movieToShow[index],
                               ),
                             );
                           },
-                          child: MovieListItemView(
-                            isComingSoonSelected:
-                                _bloc.selectedTextSubject.value == kComingSoonLabel,
-                            movie: snapShot.data![index],
-                          ),
-                        );
-                      },
-                      childCount: snapShot.data?.length ?? 0,
-                    ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisExtent: kMovieListItemHeight,
-                      mainAxisSpacing: kMarginMedium3,
-                      crossAxisSpacing: kMarginMedium3,
-                    ),
-                  ),
-                ),
-        ),
+                          childCount: movieToShow.length,
+                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: kMovieListItemHeight,
+                          mainAxisSpacing: kMarginMedium3,
+                          crossAxisSpacing: kMarginMedium3,
+                        ),
+                      ),
+                    );
+            }),
 
         /// Spacer
         const SliverToBoxAdapter(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/list_items/mini_ticket_view.dart';
+import 'package:the_movie_booking_app/pages/search_moving_page.dart';
 import 'package:the_movie_booking_app/pages/ticket_details_page.dart';
 
 import '../utils/colors.dart';
@@ -22,7 +23,21 @@ class TicketsPage extends StatelessWidget {
           backgroundColor: kBackgroundColor,
           surfaceTintColor: kBackgroundColor,
           actions: [
-            const SearchMovieIconView(),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchMovingPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: kMarginLarge,
+              ),
+            ),
             const SizedBox(
               width: kMarginXLarge,
             ),
@@ -60,7 +75,8 @@ class TicketsPage extends StatelessWidget {
                 selectedSnacksList: const [],
                 movieName: '',
                 posterPath: '',
-                cinema: '',),
+                cinema: '',
+              ),
             );
           },
           itemCount: 2,
