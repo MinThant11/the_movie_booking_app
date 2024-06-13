@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:the_movie_booking_app/blocs/home_bloc.dart';
 import 'package:the_movie_booking_app/list_items/movie_list_item_view.dart';
@@ -18,101 +19,91 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      appBar: AppBar(
-        centerTitle: false,
-        automaticallyImplyLeading: false,
+    return ChangeNotifierProvider(
+      create: (context) => HomeBloc(),
+      child: Scaffold(
         backgroundColor: kBackgroundColor,
-        surfaceTintColor: kBackgroundColor,
-        title: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const LocationPage()),
-            );
-          },
-          child: Row(
-            children: [
-              const SizedBox(
-                width: kMarginMedium,
-              ),
-              Image.asset(
-                kLocationArrowIcon,
-                width: kLocationIconSize,
-                height: kLocationIconSize,
-              ),
-              const SizedBox(
-                width: kMarginMedium,
-              ),
-              Text(
-                city ?? 'Yangon',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w700,
-                  fontSize: kTextRegular,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          GestureDetector(
+        appBar: AppBar(
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          backgroundColor: kBackgroundColor,
+          surfaceTintColor: kBackgroundColor,
+          title: GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchMovingPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const LocationPage()),
               );
             },
-            child: const Icon(
-              Icons.search,
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: kMarginMedium,
+                ),
+                Image.asset(
+                  kLocationArrowIcon,
+                  width: kLocationIconSize,
+                  height: kLocationIconSize,
+                ),
+                const SizedBox(
+                  width: kMarginMedium,
+                ),
+                Text(
+                  city ?? 'Yangon',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w700,
+                    fontSize: kTextRegular,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchMovingPage(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: kMarginLarge,
+              ),
+            ),
+            const SizedBox(
+              width: kMarginXLarge,
+            ),
+            const Icon(
+              Icons.notifications,
               color: Colors.white,
               size: kMarginLarge,
             ),
-          ),
-          const SizedBox(
-            width: kMarginXLarge,
-          ),
-          const Icon(
-            Icons.notifications,
-            color: Colors.white,
-            size: kMarginLarge,
-          ),
-          const SizedBox(
-            width: kMarginMedium2,
-          ),
-          Image.asset(
-            kScanIcon,
-          ),
-          const SizedBox(
-            width: kHomeScreenAppBarRightMargin,
-          )
-        ],
+            const SizedBox(
+              width: kMarginMedium2,
+            ),
+            Image.asset(
+              kScanIcon,
+            ),
+            const SizedBox(
+              width: kHomeScreenAppBarRightMargin,
+            )
+          ],
+        ),
+        body: const HomeScreenBodyView(),
       ),
-      body: const HomeScreenBodyView(),
     );
   }
 }
 
-class HomeScreenBodyView extends StatefulWidget {
+class HomeScreenBodyView extends StatelessWidget {
   const HomeScreenBodyView({super.key});
-
-  @override
-  State<HomeScreenBodyView> createState() => _HomeScreenBodyViewState();
-}
-
-class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
-  /// Model
-  final HomeBloc _bloc = HomeBloc();
-
-  @override
-  void dispose() {
-    _bloc.onDisposed();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +123,13 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
 
         /// Now Showing and Coming soon Tab Bar
         SliverToBoxAdapter(
-          child: StreamBuilder<String>(
-            stream: _bloc.selectedTextSubject,
-            builder: (context, snapShot) => NowShowingAndComingSoonTabBar(
-              selectedText: snapShot.data ?? '',
+          child: Selector<HomeBloc, String>(
+            selector: (context, bloc) => bloc.selectedText,
+            builder: (context, selectedText, child) => NowShowingAndComingSoonTabBar(
+              selectedText: selectedText,
               onTapNowShowingOrComingSoon: (text) {
-                _bloc.onTapNowShowingOrComingSoon(text);
+                var bloc = context.read<HomeBloc>();
+                bloc.onTapNowShowingOrComingSoon(text);
               },
             ),
           ),
@@ -151,56 +143,57 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
         ),
 
         /// Movie List GridView
-        StreamBuilder<List<MovieVO>>(
-          stream: _bloc.movieToShowSubject,
-          builder: (context, snapShot) => (snapShot.data?.isEmpty ?? true)
-              ? const SliverToBoxAdapter(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                )
-              : SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
-                  sliver: SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
+        Selector<HomeBloc, List<MovieVO>>(
+          selector: (context, bloc) => bloc.movieToShow,
+          builder: (context, movieToShow, child) {
+            var bloc = context.read<HomeBloc>();
+            return (movieToShow.isEmpty)
+                ? const SliverToBoxAdapter(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: kPrimaryColor,
+                ),
+              ),
+            )
+                : SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: kMarginLarge),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MovieDetailsPage(
-                                  movieId:
-                                      snapShot.data?[index].id?.toString() ??
-                                          "",
-                                  isComingSoonSelected:
-                                      _bloc.selectedTextSubject.value ==
-                                          kComingSoonLabel,
-                                ),
-                              ),
-                            );
-                          },
-                          child: MovieListItemView(
-                            isComingSoonSelected:
-                                _bloc.selectedTextSubject.value ==
-                                    kComingSoonLabel,
-                            movie: snapShot.data![index],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MovieDetailsPage(
+                              movieId:
+                              movieToShow[index].id?.toString() ??
+                                  "",
+                              isComingSoonSelected:
+                              bloc.selectedText == kComingSoonLabel,
+                            ),
                           ),
                         );
                       },
-                      childCount: snapShot.data?.length ?? 0,
-                    ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisExtent: kMovieListItemHeight,
-                      mainAxisSpacing: kMarginMedium3,
-                      crossAxisSpacing: kMarginMedium3,
-                    ),
-                  ),
+                      child: MovieListItemView(
+                        isComingSoonSelected:
+                        bloc.selectedText == kComingSoonLabel,
+                        movie: movieToShow[index],
+                      ),
+                    );
+                  },
+                  childCount: movieToShow.length,
                 ),
+                gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisExtent: kMovieListItemHeight,
+                  mainAxisSpacing: kMarginMedium3,
+                  crossAxisSpacing: kMarginMedium3,
+                ),
+              ),
+            );
+          }
         ),
 
         /// Spacer
