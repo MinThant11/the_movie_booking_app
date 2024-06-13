@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:the_movie_booking_app/data/models/tmba_model.dart';
+import 'package:the_movie_booking_app/data/vos/city_vo.dart';
 import 'package:the_movie_booking_app/utils/strings.dart';
 
 import '../data/models/movie_booking_model.dart';
@@ -25,6 +28,7 @@ class HomeBloc {
   /// Stream Subscription
   StreamSubscription? _nowPlayingMoviesSubscription;
   StreamSubscription? _comingSoonMoviesSubscription;
+  StreamSubscription? _citySubjectSubscription;
 
   HomeBloc() {
     selectedTextSubject.add(kNowShowingLabel);

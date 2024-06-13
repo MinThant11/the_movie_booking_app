@@ -12,7 +12,6 @@ import 'package:the_movie_booking_app/pages/logo_page.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';
 import 'package:the_movie_booking_app/utils/colors.dart';
 import 'package:the_movie_booking_app/utils/fonts.dart';
-
 import 'data/vos/collection_vo.dart';
 import 'data/vos/genre_vo.dart';
 import 'data/vos/production_company_vo.dart';

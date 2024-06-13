@@ -58,7 +58,21 @@ class HomePage extends StatelessWidget {
           ),
         ),
         actions: [
-          const SearchMovieIconView(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchMovingPage(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.search,
+              color: Colors.white,
+              size: kMarginLarge,
+            ),
+          ),
           const SizedBox(
             width: kMarginXLarge,
           ),
@@ -83,38 +97,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class SearchMovieIconView extends StatefulWidget {
-  const SearchMovieIconView({
-    super.key,
-  });
-
-  @override
-  State<SearchMovieIconView> createState() => _SearchMovieIconViewState();
-}
-
-class _SearchMovieIconViewState extends State<SearchMovieIconView> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SearchMovingPage(),
-            ),
-          );
-        });
-      },
-      child: const Icon(
-        Icons.search,
-        color: Colors.white,
-        size: kMarginLarge,
-      ),
-    );
-  }
-}
-
 class HomeScreenBodyView extends StatefulWidget {
   const HomeScreenBodyView({super.key});
 
@@ -123,7 +105,6 @@ class HomeScreenBodyView extends StatefulWidget {
 }
 
 class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
-
   /// Model
   final HomeBloc _bloc = HomeBloc();
 
@@ -172,8 +153,7 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
         /// Movie List GridView
         StreamBuilder<List<MovieVO>>(
           stream: _bloc.movieToShowSubject,
-          builder: (context, snapShot) =>
-          (snapShot.data?.isEmpty ?? true)
+          builder: (context, snapShot) => (snapShot.data?.isEmpty ?? true)
               ? const SliverToBoxAdapter(
                   child: Center(
                     child: CircularProgressIndicator(
@@ -196,14 +176,16 @@ class _HomeScreenBodyViewState extends State<HomeScreenBodyView> {
                                       snapShot.data?[index].id?.toString() ??
                                           "",
                                   isComingSoonSelected:
-                                      _bloc.selectedTextSubject.value == kComingSoonLabel,
+                                      _bloc.selectedTextSubject.value ==
+                                          kComingSoonLabel,
                                 ),
                               ),
                             );
                           },
                           child: MovieListItemView(
                             isComingSoonSelected:
-                                _bloc.selectedTextSubject.value == kComingSoonLabel,
+                                _bloc.selectedTextSubject.value ==
+                                    kComingSoonLabel,
                             movie: snapShot.data![index],
                           ),
                         );
@@ -338,16 +320,6 @@ class NowShowingAndComingSoonTabBar extends StatelessWidget {
     );
   }
 }
-
-// bool nowShowingOrComingSoon() {
-//   bool isNowShowing = false;
-//   NowShowingAndComingSoonTabBar(
-//     onTapNowShowingOrComingSoon: (text) {
-//       isNowShowing = kComingSoonLabel == text;
-//     },
-//   );
-//   return isNowShowing;
-// }
 
 class NowShowingOrComingSoonButtonView extends StatelessWidget {
   final bool isSelected;

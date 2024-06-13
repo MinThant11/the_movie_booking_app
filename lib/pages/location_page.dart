@@ -86,27 +86,16 @@ class LocationPage extends StatelessWidget {
                           ),
 
                           /// Icon
-                          GestureDetector(
-                            // onTap: () {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => const MainPage(
-                            //               city: '', bearerToken: '',
-                            //             )),
-                            //   );
-                            // },
-                            child: Container(
-                              height: 50,
-                              padding: const EdgeInsets.all(kMarginMedium),
-                              decoration: BoxDecoration(
-                                color: kPrimaryColor,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Image.asset(
-                                kLocationArrowIcon,
-                                color: const Color(0xFF3B3B3B),
-                              ),
+                          Container(
+                            height: 50,
+                            padding: const EdgeInsets.all(kMarginMedium),
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Image.asset(
+                              kLocationArrowIcon,
+                              color: const Color(0xFF3B3B3B),
                             ),
                           ),
                         ],

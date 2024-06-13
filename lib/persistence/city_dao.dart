@@ -11,14 +11,14 @@ class CityDao {
 
   CityDao._internal();
 
-  /// Save City
-  void saveCity(List<CityVO> cities) async {
+  /// Save City List
+  void saveCityList(List<CityVO> cities) async {
     Map<int, CityVO> cityMap = { for (var city in cities) (city.id ?? 0) : city };
     return getCityBox().putAll(cityMap);
   }
 
-  /// Get City
-  List<CityVO> getCity() {
+  /// Get City List
+  List<CityVO> getCityList() {
     return getCityBox().values.map((city) => city).toList();
   }
 

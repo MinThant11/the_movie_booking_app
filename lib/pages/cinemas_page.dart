@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/tmba_model.dart';
 import 'package:the_movie_booking_app/data/vos/choose_date_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
+import 'package:the_movie_booking_app/pages/search_moving_page.dart';
 import 'package:the_movie_booking_app/pages/time_and_cinema_page.dart';
 
 import '../data/vos/cinema_vo.dart';
 import '../utils/colors.dart';
 import '../utils/dimens.dart';
 import '../utils/images.dart';
-import 'home_page.dart';
 import 'location_page.dart';
 
 class CinemasPage extends StatelessWidget {
@@ -57,8 +57,22 @@ class CinemasPage extends StatelessWidget {
             ],
           ),
         ),
-        actions: const [
-          SearchMovieIconView(),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchMovingPage(),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.search,
+              color: Colors.white,
+              size: kMarginLarge,
+            ),
+          ),
           SizedBox(
             width: kHomeScreenAppBarRightMargin,
           )

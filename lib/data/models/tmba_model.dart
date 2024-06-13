@@ -49,15 +49,12 @@ class TmbaModel {
   UserVO? getUserDataFromDatabase() {
     return _userDao.getUserData();
   }
-  // Stream<UserVO?> getUserDataFromDatabase() {
-  //   return _userDao.watchUserBox().map((_) => _userDao.getUserData());
-  // }
 
   /// Cities
   Future<List<CityVO>> getCities() {
     return tmbaDataAgent.getCities().then((citiesList) async {
 
-      _cityDao.saveCity(citiesList);
+      _cityDao.saveCityList(citiesList);
 
       return citiesList;
     });
@@ -65,7 +62,7 @@ class TmbaModel {
 
   /// Get Cities From Database
   List<CityVO> getCitiesFromDatabase() {
-    return _cityDao.getCity();
+    return _cityDao.getCityList();
   }
 
   /// Cinema
