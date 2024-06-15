@@ -112,7 +112,8 @@ class MovieDetailsPage extends StatelessWidget {
 
                             const SizedBox(
                               height: 148,
-                            )
+                            ),
+
                           ],
                         ),
                       ),
@@ -147,7 +148,6 @@ class MovieDetailsPage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       /// Bottom Gradient and booking Button
                       Visibility(
                         visible: !isComingSoonSelected,

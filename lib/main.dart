@@ -19,6 +19,7 @@ import 'data/vos/production_country_vo.dart';
 import 'data/vos/spoken_language_vo.dart';
 
 void main() async {
+
   await Hive.initFlutter();
 
   Hive.registerAdapter(MovieVOAdapter());
